@@ -29,13 +29,14 @@
         <cite>Outdoors flamenco</cite>
         <p>
             In a traditional flamenco show format, we include guitar solos and flamenco dancing. Your guests will be
-            sure to remember your event. All the members are professional flamenco musicians with international experience. Enjoy our flamenco events, and surprise your friends and family
+            sure to remember your event. All the members are professional flamenco musicians with international
+            experience. Enjoy our flamenco events, and surprise your friends and family
             members. Get in touch to discuss a solution.
 
         </p>
         <img src="./images/small-venue-flamenco.png" class="img-fluid" alt="Small Venue Flamenco">
         <cite>Small Venue Flamenco</cite>
-        
+
 
 
 
@@ -44,11 +45,43 @@
 
         <p>
 
-           
+
             Learn from Brisbane flamenco guitar teachers. Our guitar teachers have professional experience performing
             and teaching flamenco and have studied for many years in Spain. Get in touch to discover the flamenco rhythm
             and secrets to the incredible Spanish guitar.
         </p>
+
+
+
+        <div class="container">
+            <div class="row">
+                <h2>Capos</h2>
+                <div class="card-deck">
+
+                    <% caposArray.forEach(capo => { %>
+                    <div class="col-lg-6">
+                        <div class="card ">
+                            <img src="<%= capo.images.image %>" class="card-img-top" alt="<%= %>">
+
+
+                            <div class="card-body">
+                                <p class="card-text"><small class="text-muted">$<%= capo.product.price %></small></p>
+                                <h5 class="card-title"><%= capo.product.title %></h5>
+                                <%- capo.product.paypalBtn %>
+                                <p class="card-text" style="font-size: 20px;"><%= capo.product.description %></p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
     </div>
 </div>
 
