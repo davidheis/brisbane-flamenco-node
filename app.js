@@ -37,6 +37,10 @@ app.get('/contact', (req, res) => {
     res.render('contact');
 });
 
+app.get('/capos', (req, res) => {
+    res.render('capos', {caposArray: Object.values(allCapos)});
+});
+
 app.get('*', (req, res) => {
     const query_params = {
         "site_type": "news",
@@ -49,18 +53,9 @@ app.get('*', (req, res) => {
         }
         webhoseioClient.query('filterWebContent', query_params)
     .then(newsBody => {
-        res.render('index', { 
-            caposArray: Object.values(allCapos),
-             newsBody: newsBody.posts
-         })
-        // console.log(output['posts'][0]['text']); // Print the text of the first post
-        // console.log(output['posts'][0]['published']); // Print the text of the first post publication date
+        res.render('index', {newsBody: newsBody.posts})
     });
-    // newsBody.posts[0].url
-    // newsBody.posts[0].title
-    // newsBody.posts[0].text
-    // newsBody.posts[0].thread.main_image"
-    // 
+  
     });
 // Object.values() this gets the value of objects and puts them in an array 
 // Object.keys() gets keys and puts the in an array

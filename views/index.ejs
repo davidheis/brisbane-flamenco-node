@@ -1,14 +1,62 @@
 <%- include('./includes/header.ejs') %>
 <link rel="stylesheet" href="/css/index.css">
+<title>Brisbane Professional Flamenco Events</title>
+<meta name="apple-mobile-web-app-title" content="Brisbane Professional Flamenco Events">
+<!--apple-mobile-web-app-capable no browser URL text field at the top of the screen or button bar at the bottom of the screen-->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<!--if you want to use the entire screen, set the status bar style to translucent black-->
+<!--For example, the following HTML sets the background color of the status bar to black-->
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!--It is a 120-156 characters page description-->
+<meta name="theme-color" content="#ffffff">
+<meta name="description"
+  content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
+<meta name="keywords" content="flamenco, events, shows, brisbane, flamenco guitar and dance, Flamenco guitar lessons">
+<!--FACEBOOK-->
+<!-- <meta property="og:image" content="/assets/ilovehoney-logo.jpg"> -->
+<meta property="og:site_name" content="Brisbane Flamenco">
+<meta property="og:url" content="https://brisbaneflamenco.com.au/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Professional Flamenco Events">
+<meta property="og:description"
+  content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
+<!--FACEBOOK END-->
+<meta name="twitter:site" content="@brisbaneflamenco">
+<meta name="twitter:creator" content="@DavidHeisner">
+<!-- twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Professional Flamenco Events">
+<meta name="twitter:description"
+  content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
+<!-- <meta name="twitter:image" content="/assets/ilovehoney-logo.jpg"> -->
+<!--FOR SEO SHOULD HAVE THIS ROOT URL-->
+<link rel="canonical" href="https://brisbaneflamenco.com.au/">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<script type="application/ld+json">
+    {
+      "@context": "http://schema.org/",
+        "@type": "LocalBusiness",
+          "name": "Brisbane Flamenco",
+          "priceRange": "$60 - $1000",
+          "description": "Brisbane flamenco performances for weddings and functions, with guitarists and dancers. Flamenco guitar lessons",
+          "currenciesAccepted": "AUD",
+          "openingHours": "Mo,Tu,We,Th,Fr,Sat 08:00-20:00",
+  "telephone": "+61415072353",
+          "paymentAccepted":"Cash",
+          "url": "https://www.brisbaneflamenco.com.au",
+          "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Greenbank",
+    "addressRegion": "QLD",
+    "postalCode": "4124",
+    "streetAddress": "74-82 Moody Road"
+  }
+    }
+  </script>
 </head>
-
 <%- include('./includes/nav.ejs') %>
-
-
 <div id="mainContainer">
     <div class="jumbotron">
-
-
         <h1>Flamenco Events In Brisbane</h1>
         <p>
             Give your guests a once in a lifetime Spanish experience they will never forget. Finding an original type of
@@ -24,9 +72,7 @@
             restaurants, tablaos, theatres, festivals, events, business launches, Brisbane tapas bars and Southbank
             restaurants, private homes and much more all over QLD. We offer a few formats, solo Spanish guitar, flamenco
             guitar duo, and a traditional Spanish show including flamenco dance and percussion.
-
         </p>
-
         <img src="./images/flamenco-outside.png" class="img-fluid" alt="Outdoors flamenco">
         <cite>Outdoors flamenco</cite>
         <p>
@@ -34,38 +80,26 @@
             sure to remember your event. All the members are professional flamenco musicians with international
             experience. Enjoy our flamenco events, and surprise your friends and family
             members. Get in touch to discuss a solution.
-
         </p>
         <img src="./images/small-venue-flamenco.png" class="img-fluid" alt="Small Venue Flamenco">
         <cite>Small Venue Flamenco</cite>
-
-
-
-
         <h5>¡Olé!</h5>
         <h2> Brisbane Flamenco Guitar Lessons</h2>
-
         <p>
-
-
             Learn from Brisbane flamenco guitar teachers. Our guitar teachers have professional experience performing
             and teaching flamenco and have studied for many years in Spain. Get in touch to discover the flamenco rhythm
             and secrets to the incredible Spanish guitar.
         </p>
     </div>
 </div>
-
-
 <div class="container ">
     <div class="row">
         <h2>Latest News From Spain</h2>
         <div class="card-deck">
-
             <% newsBody.forEach( newsPost => { %>
             <div class="col-lg-6" style="margin-bottom: 60px;">
                 <div class="card ">
                     <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.title %>">
-
                     <div class="card-body">
                         <a href="<%= newsPost.url %>">
                             <h5 class="card-title"><%= newsPost.title %></h5>
@@ -77,38 +111,7 @@
                 </div>
             </div>
             <% }) %>
-
         </div>
     </div>
-
 </div>
-
-
-<div class="container">
-    <div class="row">
-        <h2>Capos</h2>
-        <div class="card-deck">
-
-            <% caposArray.forEach(capo => { %>
-            <div class="col-lg-6" style="margin-bottom: 60px;">
-                <div class="card ">
-                    <img src="<%= capo.images.image %>" class="card-img-top" alt="<%= %>">
-
-
-                    <div class="card-body">
-                        <p class="card-text"><small class="text-muted">$<%= capo.product.price %></small></p>
-                        <h5 class="card-title"><%= capo.product.title %></h5>
-                        <%- capo.product.paypalBtn %>
-                        <p class="card-text" style="font-size: 20px;"><%= capo.product.description %></p>
-
-                    </div>
-                </div>
-            </div>
-            <% }) %>
-
-        </div>
-    </div>
-
-</div>
-
 <%- include('./includes/footer.ejs') %>

@@ -1,0 +1,74 @@
+<%- include('./includes/header.ejs') %>
+<link rel="stylesheet" href="/css/capos.css">
+<title>Flamenco Capos</title>
+<meta name="apple-mobile-web-app-title" content="Flamenco capos">
+<!--apple-mobile-web-app-capable no browser URL text field at the top of the screen or button bar at the bottom of the screen-->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<!--if you want to use the entire screen, set the status bar style to translucent black-->
+<!--For example, the following HTML sets the background color of the status bar to black-->
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!--It is a 120-156 characters page description-->
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Flamenco guitar capos">
+<meta name="keywords" content="flamenco, Flamenco capos">
+<!--FACEBOOK-->
+<!-- <meta property="og:image" content="/assets/ilovehoney-logo.jpg"> -->
+<meta property="og:site_name" content="Flamenco capos">
+<meta property="og:url" content="https://brisbaneflamenco.com.au/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Flamenco capos">
+<meta property="og:description" content="Flamenco guitar capos">
+<!--FACEBOOK END-->
+<meta name="twitter:site" content="@brisbaneflamenco">
+<!-- twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flamenco guitar capos">
+<meta name="twitter:description" content="Flamenco guitar capos">
+<!-- <meta name="twitter:image" content="/assets/ilovehoney-logo.jpg"> -->
+<!--FOR SEO SHOULD HAVE THIS ROOT URL-->
+<link rel="canonical" href="https://brisbaneflamenco.com.au/">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<script type="application/ld+json">
+    {
+      "@context": "http://schema.org/",
+        "@type": "LocalBusiness",
+          "name": "Flamenco guitar capos",
+          "priceRange": "$60 - $1000",
+          "description": "Flamenco guitar capos",
+          "currenciesAccepted": "AUD",
+          "openingHours": "Mo,Tu,We,Th,Fr,Sat 08:00-20:00",
+  "telephone": "+61415072353",
+          "paymentAccepted":"Cash",
+          "url": "https://www.brisbaneflamenco.com.au/capos",
+          "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Greenbank",
+    "addressRegion": "QLD",
+    "postalCode": "4124",
+    "streetAddress": "74-82 Moody Road"
+  }
+    }
+  </script>
+</head>
+<%- include('./includes/nav.ejs') %>
+<div class="container">
+  <div class="row">
+    <h2>Handmade Flamenco Capos</h2>
+    <div class="card-deck">
+      <% caposArray.forEach(capo => { %>
+      <div class="col-lg-6" style="margin-bottom: 60px;">
+        <div class="card ">
+          <img src="<%= capo.images.image %>" class="card-img-top" alt="<%= %>">
+          <div class="card-body">
+            <p class="card-text"><small class="text-muted">$<%= capo.product.price %></small></p>
+            <h5 class="card-title"><%= capo.product.title %></h5>
+            <%- capo.product.paypalBtn %>
+            <p class="card-text" style="font-size: 20px;"><%= capo.product.description %></p>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+<%- include('./includes/footer.ejs') %>
