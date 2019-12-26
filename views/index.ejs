@@ -4,8 +4,10 @@
 
 <%- include('./includes/nav.ejs') %>
 
+
 <div id="mainContainer">
     <div class="jumbotron">
+
 
         <h1>Flamenco Events In Brisbane</h1>
         <p>
@@ -50,40 +52,63 @@
             and teaching flamenco and have studied for many years in Spain. Get in touch to discover the flamenco rhythm
             and secrets to the incredible Spanish guitar.
         </p>
-
-
-
-        <div class="container">
-            <div class="row">
-                <h2>Capos</h2>
-                <div class="card-deck">
-
-                    <% caposArray.forEach(capo => { %>
-                    <div class="col-lg-6">
-                        <div class="card ">
-                            <img src="<%= capo.images.image %>" class="card-img-top" alt="<%= %>">
-
-
-                            <div class="card-body">
-                                <p class="card-text"><small class="text-muted">$<%= capo.product.price %></small></p>
-                                <h5 class="card-title"><%= capo.product.title %></h5>
-                                <%- capo.product.paypalBtn %>
-                                <p class="card-text" style="font-size: 20px;"><%= capo.product.description %></p>
-
-                            </div>
-                        </div>
-                    </div>
-                    <% }) %>
-
-                </div>
-            </div>
-
-        </div>
-
-
-
     </div>
 </div>
 
+
+<div class="container ">
+    <div class="row">
+        <h2>Latest News From Spain</h2>
+        <div class="card-deck">
+
+            <% newsBody.forEach( newsPost => { %>
+            <div class="col-lg-6" style="margin-bottom: 60px;">
+                <div class="card ">
+                    <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.title %>">
+
+                    <div class="card-body">
+                        <a href="<%= newsPost.url %>">
+                            <h5 class="card-title"><%= newsPost.title %></h5>
+                        </a>
+                        <p class="card-text" style="font-size: 20px;">
+                            <%= newsPost.text.slice(0, 200) %>...
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <h2>Capos</h2>
+        <div class="card-deck">
+
+            <% caposArray.forEach(capo => { %>
+            <div class="col-lg-6" style="margin-bottom: 60px;">
+                <div class="card ">
+                    <img src="<%= capo.images.image %>" class="card-img-top" alt="<%= %>">
+
+
+                    <div class="card-body">
+                        <p class="card-text"><small class="text-muted">$<%= capo.product.price %></small></p>
+                        <h5 class="card-title"><%= capo.product.title %></h5>
+                        <%- capo.product.paypalBtn %>
+                        <p class="card-text" style="font-size: 20px;"><%= capo.product.description %></p>
+
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+
+        </div>
+    </div>
+
+</div>
 
 <%- include('./includes/footer.ejs') %>
