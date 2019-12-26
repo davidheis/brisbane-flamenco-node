@@ -4,6 +4,13 @@ nav {
     border-bottom: 2px solid red;
 }
 body {
-    background: rgb(255, 235, 235);
+    background: rgb(241, 240, 250);
     
+}
+
+.footer > ul {
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    color: rgb(0, 0, 77);
 }

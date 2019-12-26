@@ -10,7 +10,7 @@
 <!--It is a 120-156 characters page description-->
 <meta name="theme-color" content="#ffffff">
 <meta name="description"
-  content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
+    content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
 <meta name="keywords" content="flamenco, events, shows, brisbane, flamenco guitar and dance, Flamenco guitar lessons">
 <!--FACEBOOK-->
 <!-- <meta property="og:image" content="/assets/ilovehoney-logo.jpg"> -->
@@ -19,7 +19,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Professional Flamenco Events">
 <meta property="og:description"
-  content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
+    content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
 <!--FACEBOOK END-->
 <meta name="twitter:site" content="@brisbaneflamenco">
 <meta name="twitter:creator" content="@DavidHeisner">
@@ -27,7 +27,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Professional Flamenco Events">
 <meta name="twitter:description"
-  content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
+    content="Flamenco shows in private homes, theatres, festivals, events, business launches and much more all over the world. We offer a few formats, solo flamenco guitar, flamenco guitar duo, and a traditional flamenco show including dance and percussion. Flamenco guitar lessons">
 <!-- <meta name="twitter:image" content="/assets/ilovehoney-logo.jpg"> -->
 <!--FOR SEO SHOULD HAVE THIS ROOT URL-->
 <link rel="canonical" href="https://brisbaneflamenco.com.au/">
@@ -94,10 +94,12 @@
 </div>
 <div class="container ">
     <div class="row">
+        <% if(newsBody) { %>
         <h2>Latest News From Spain</h2>
         <div class="card-deck">
-            <% newsBody.forEach( newsPost => { %>
-            <div class="col-lg-6" style="margin-bottom: 60px;">
+
+            <%  newsBody.forEach( newsPost => { %>
+            <div class="col-lg-6" style="margin-bottom: 60px">
                 <div class="card ">
                     <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.title %>">
                     <div class="card-body">
@@ -111,6 +113,7 @@
                 </div>
             </div>
             <% }) %>
+            <% } %>
         </div>
     </div>
 </div>

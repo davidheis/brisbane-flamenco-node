@@ -41,7 +41,19 @@ app.get('/capos', (req, res) => {
     res.render('capos', {caposArray: Object.values(allCapos)});
 });
 
-app.get('*', (req, res) => {
+app.get('/returns', (req, res) => {
+    res.render('returns');
+});
+
+app.get('/what-is-flamenco', (req, res) => {
+    res.render('what-is-flamenco');
+});
+app.get('/spanish-guitar', (req, res) => {
+    title = "The Spanish Flamenco Guitar"
+    res.render('spanish-guitar',{title: title});
+});
+
+app.get('/*', (req, res) => {
     const query_params = {
         "site_type": "news",
         "language": "spanish",
@@ -60,8 +72,6 @@ app.get('*', (req, res) => {
 // Object.values() this gets the value of objects and puts them in an array 
 // Object.keys() gets keys and puts the in an array
 // Object.entries(obj) makes array of key value pairs
-    
-
 app.listen(port);
 
 
