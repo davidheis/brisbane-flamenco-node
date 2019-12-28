@@ -59,6 +59,7 @@ app.get('/*', (req, res) => {
         "language": "spanish",
         "sort": "crawled",
         "size": "6",
+        "spam_score": "0",
         "format": "json",
         "thread.country":"ES"
         // "site_category": "music"
