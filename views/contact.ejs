@@ -32,6 +32,15 @@
 <!--FOR SEO SHOULD HAVE THIS ROOT URL-->
 <link rel="canonical" href="https://brisbaneflamenco.com.au/">
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
+<!-- recaptcha -->
+<script type="text/javascript">
+  var onloadCallback = function () {
+    grecaptcha.render('html_element', {
+      'sitekey': '6LdkbssUAAAAAJUSgftazFoImDRQGx1ipAHdkTKc'
+    });
+  };
+</script>
 </head>
 <%- include('./includes/nav.ejs') %>
 <div class="container">
@@ -54,7 +63,13 @@
       <!-- <textarea type="text" class="form-control" id="message"> -->
       <textarea required class="form-control" name="message" id="message" cols="30" rows="10"></textarea>
     </div>
+    <!-- ternary operator to display error message if captcha not clicked -->
+    <p style="color:red;display:<%= typeof captchaboolean != 'undefined' ? 'block' : 'none'  %>">Please check this box</p>
+    <div id="html_element"></div>
+    <br>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+</script>
 <%- include('./includes/footer.ejs') %>
