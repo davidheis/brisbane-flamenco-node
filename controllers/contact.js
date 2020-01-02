@@ -21,7 +21,7 @@ exports.sendContactPageEmail = (req, res, next) => {
                 const msg = {
                     to: 'dheis24@gmail.com',
                     from: req.body.email,
-                    subject: req.body.subject,
+                    subject: `${req.body.subject} - from flamenco site`,
                     text: req.body.message,
                     html: req.body.message,
                 };
