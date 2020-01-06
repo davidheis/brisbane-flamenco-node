@@ -105,14 +105,18 @@
         <div class="card-deck">
 
             <%  newsBody.forEach( newsPost => { %>
-            <div class="col-lg-6" style="margin-bottom: 60px">
+            <div class="col-lg-6 newsCard" >
                 <div class="card ">
-                    <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.title %>">
+                    <!-- with api filter https* some images show as  source (unknown) and are empty strings but still show the image alt and looks bad so filter it out -->
+                    <% if(newsPost.thread.main_image.length > 0) { %>
+                        <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.title %>">
+                    <% } %>
+                    
                     <div class="card-body">
                         <a href="<%= newsPost.url %>">
                             <h5 class="card-title"><%= newsPost.title %></h5>
                         </a>
-                        <p class="card-text" style="font-size: 20px;">
+                        <p class="card-text">
                             <%= newsPost.text.slice(0, 200) %>...
                         </p>
                     </div>

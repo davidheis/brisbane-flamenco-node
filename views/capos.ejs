@@ -90,14 +90,14 @@
     <h2>Handmade Flamenco Capos</h2>
     <div class="card-deck">
       <% caposArray.forEach(capo => { %>
-      <div class="col-lg-6" style="margin-bottom: 60px;">
+      <div class="col-lg-6 capoCardDiv" >
         <div class="card ">
           <img src="<%= capo.images.image %>" class="card-img-top" alt="<%= %>">
           <div class="card-body">
             <p class="card-text"><small class="text-muted">$<%= capo.product.price %></small></p>
             <h5 class="card-title"><%= capo.product.title %></h5>
             <%- capo.product.paypalBtn %>
-            <p class="card-text" style="font-size: 20px;"><%= capo.product.description %></p>
+            <p class="card-text cardDesc"><%= capo.product.description %></p>
           </div>
         </div>
       </div>
