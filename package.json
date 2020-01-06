@@ -13,7 +13,6 @@
     "@sendgrid/mail": "^6.4.0",
     "aws-sdk": "^2.596.0",
     "body-parser": "^1.19.0",
-    "bootstrap": "^4.4.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
