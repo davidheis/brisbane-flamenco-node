@@ -18,16 +18,42 @@ exports.sendContactPageEmail = (req, res, next) => {
             }
             if (captchaboolean === true) {
                 // send using sendgrid 
-                const msg = {
-                    to: 'dheis24@gmail.com',
+
+
+                const emails = [{
+                    to: 'info@brisbaneflamenco.com.au',
                     from: req.body.email,
-                    subject: `${req.body.subject} - from flamenco site`,
+                    subject: `${req.body.subject} - brisbaneflamenco`,
                     text: req.body.message,
                     html: req.body.message,
-                };
-                sgMail.send(msg)
+                },
+                {
+                    to: req.body.email,
+                    from: 'info@brisbaneflamenco.com.au',
+                    subject: 'Thankyou - We will respond soon',
+                    text: 'Thankyou for contacting brisbaneflamenco.com.au. We will respond as soon as possible. Best regards. David',
+                    html: `<p>Thankyou for contacting brisbaneflamenco.com.au. </p>
+                    <p>We will respond as soon as possible</p>
+                    <p>Best regards</p>
+                    <p>David</p>`,
+                }
+                ]
+                sgMail.send(emails)
                     .then(() => { res.redirect('/') })
                     .catch(err => console.log(err))
+
+
+
+                // const msg = {
+                //     to: 'dheis24@gmail.com',
+                //     from: req.body.email,
+                //     subject: `${req.body.subject} - from flamenco site`,
+                //     text: req.body.message,
+                //     html: req.body.message,
+                // };
+                // sgMail.send(msg)
+                //     .then(() => { res.redirect('/') })
+                //     .catch(err => console.log(err))
             }
         });
 }
