@@ -29,7 +29,7 @@ app.set('views', 'views');
 
 app.post('/contact', contactsController.sendContactPageEmail);
 app.get('/contact', (req, res) => {
-    res.render('contact');
+    res.render('contact', {captchaboolean:true});
 });
 app.get('/capos', (req, res) => {
     res.render('capos', {caposArray: Object.values(allCapos)});
