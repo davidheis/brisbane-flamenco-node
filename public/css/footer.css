@@ -1,0 +1,17 @@
+#footer{
+    
+    height: 300px;;
+    background: #bdb4dd;
+    display: flex;
+    flex-wrap: wrap;
+flex-direction: column;
+justify-content: flex-end;
+margin-top: 40px;
+}
+
+#footerLinkContainer{
+    display: flex;
+    flex-wrap: wrap;
+flex-direction: row;
+justify-content: space-evenly;
+}

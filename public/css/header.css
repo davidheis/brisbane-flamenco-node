@@ -5,12 +5,7 @@ nav {
 }
 body {
     background: rgb(241, 240, 250);
-    
+    line-height: 1.77;
+    font-weight: 600;
 }
 
-.footer > ul {
-    display: flex;
-    justify-content: space-around;
-    list-style-type: none;
-    color: rgb(0, 0, 77);
-}
