@@ -72,7 +72,7 @@
                 <a href="<%= newsPost.url %>">
                     <h2 class="card-title"><%= newsPost.thread.title_full %></h2>
                 </a>
-                <h5>Published <%= new Date(newsPost.published).toUTCString() %></h5>
+                <cite>Published <%= new Date(newsPost.published).toUTCString() %></cite>
                 <div><%- newsPost.text %></div>
                 <!-- </div> -->
 

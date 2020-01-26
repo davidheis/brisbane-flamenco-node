@@ -110,7 +110,7 @@
                             <a href="<%= newsPost.url %>">
                                 <h5 "><%= newsPost.thread.title_full %></h5>
                             </a>
-                            <h5>Published <%= new Date(newsPost.published).toUTCString() %></h5>
+                            <cite>Published <%= new Date(newsPost.published).toUTCString() %></cite>
                             <p >
                                 <%- newsPost.text.slice(0, 200) %>...
                             </p>
