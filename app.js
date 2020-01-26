@@ -48,7 +48,7 @@ app.get('/flamenco-news', (req, res) => {
     const query_params = {
         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
         "ts": "1579180138371",
-        "sort": "crawled",
+        "sort": "published",
         "size": "50",
         "format": "json"
         }
@@ -61,7 +61,7 @@ app.get('/*', (req, res) => {
     const query_params = {
         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
         "ts": "1579180138371",
-        "sort": "crawled",
+        "sort": "published",
         "size": "5",
         "format": "json"
         }

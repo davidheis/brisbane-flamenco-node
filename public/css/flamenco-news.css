@@ -1,0 +1,10 @@
+#newsContainer{
+    display: flex;
+    flex-wrap: wrap;
+flex-direction: row;
+justify-content: space-evenly;
+}
+.newsItem{
+    max-width: 500px;
+    min-width: 250px;
+}

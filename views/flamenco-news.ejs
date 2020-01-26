@@ -9,8 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <!--It is a 120-156 characters page description-->
 <meta name="theme-color" content="#ffffff">
-<meta name="description"
-    content="Flamenco News">
+<meta name="description" content="Flamenco News">
 <meta name="keywords" content="flamenco, events, shows, brisbane, flamenco guitar and dance, Flamenco guitar lessons">
 <!--FACEBOOK-->
 <!-- <meta property="og:image" content="/assets/ilovehoney-logo.jpg"> -->
@@ -18,16 +17,14 @@
 <meta property="og:url" content="https://brisbaneflamenco.com.au/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Flamenco News">
-<meta property="og:description"
-    content="Flamenco News">
+<meta property="og:description" content="Flamenco News">
 <!--FACEBOOK END-->
 <meta name="twitter:site" content="@brisbaneflamenco">
 <meta name="twitter:creator" content="@DavidHeisner">
 <!-- twitter -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flamenco News">
-<meta name="twitter:description"
-    content="Flamenco News">
+<meta name="twitter:description" content="Flamenco News">
 <!-- <meta name="twitter:image" content="/assets/ilovehoney-logo.jpg"> -->
 <!--FOR SEO SHOULD HAVE THIS ROOT URL-->
 <link rel="canonical" href="https://brisbaneflamenco.com.au/">
@@ -56,37 +53,38 @@
 </head>
 <%- include('./includes/nav.ejs') %>
 <h2>Latest Flamenco News</h2>
-<div class="container ">
-    <div class="row">
+<!-- <div class="container "> -->
+    <!-- <div class="row"> -->
         <% if(newsBody) { %>
-        
-        <div class="card-deck">
+
+        <div id="newsContainer">
 
             <%  newsBody.forEach( newsPost => { %>
-                <% if(newsPost.thread.main_image.length > 0) { %>
-            <div class="col-lg-6 newsCard" >
-                <div class="card ">
-                    <!-- with api filter https* some images show as  source (unknown) and are empty strings but still show the image alt and looks bad so filter it out -->
-                   
-                        <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.thread.title %>">
-                    
-                    
-                    <div class="card-body">
-                        <a href="<%= newsPost.url %>">
-                            <h5 class="card-title"><%= newsPost.thread.title_full %></h5>
-                        </a>
-                      
-                        <div ><%- newsPost.text %></div>
-                    </div>
-                   
+            <% if(newsPost.thread.main_image.length > 0 && newsPost.text.length > 10) { %>
+            <div class="newsItem">
+                <!-- <div class="card "> -->
+                <!-- with api filter https* some images show as  source (unknown) and are empty strings but still show the image alt and looks bad so filter it out -->
 
-                </div>
+                <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.thread.title %>">
+
+
+                <!-- <div class="card-body"> -->
+                <a href="<%= newsPost.url %>">
+                    <h2 class="card-title"><%= newsPost.thread.title_full %></h2>
+                </a>
+                <h5>Published <%= new Date(newsPost.published).toUTCString() %></h5>
+                <div><%- newsPost.text %></div>
+                <!-- </div> -->
+
+
+                <!-- </div> -->
             </div>
             <% } %>
             <% }) %>
-            <% } %>
         </div>
-    </div>
+        <% } %>
+
+    <!-- </div> -->
 </div>
 <script src="/scripts/flamenco-news.js"></script>
 <%- include('./includes/footer.ejs') %>
