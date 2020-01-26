@@ -25,9 +25,9 @@ justify-content: space-evenly;
 }
 @media screen and (max-width:880px) {
     .newsItems{
-        max-width: 600px;
+        max-width: 100%;
     }
     .newsItems img{
-        max-width: 600px;
+        max-width: 100%;
     }
 }
