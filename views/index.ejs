@@ -55,81 +55,68 @@
   </script>
 </head>
 <%- include('./includes/nav.ejs') %>
-<div id="mainContainer">
-    <div class="jumbotron">
-        <h1>Flamenco Events In Brisbane</h1>
-        <p>
-            Give your guests a once in a lifetime Spanish experience they will never forget. Finding an original type of
-            entertainment for your event can be daunting. Flamenco is always a safe bet for Brisbane events with its
-            magical ambiance and hypnotizing sounds. But finding a professional flamenco band can be difficult, outside
-            of Spain.
-        </p>
-        <img src="./images/flamenco-small-group.jpg" class="img-fluid" alt="Small gathering with flamenco">
-        <cite>Small gathering with flamenco</cite>
-        <p>
-            Flamenco can be very versatile, which makes it excellent for any event. We will tailor the best flamenco
-            show for you depending on your requirements to ensure you're satisfied. We work in Brisbane Spanish
-            restaurants, tablaos, theatres, festivals, events, business launches, Brisbane tapas bars and Southbank
-            restaurants, private homes and much more all over QLD. We offer a few formats, solo Spanish guitar, flamenco
-            guitar duo, and a traditional Spanish show including flamenco dance and percussion.
-        </p>
-        <!-- <img src="./images/flamenco-outside.png" class="img-fluid" alt="Outdoors flamenco"> -->
-        <video preload="metadata" controls width="100%" playsinline>
-            <source src="/videos/david-playing-flamenco.webm" type="video/webm">
-                <source src="/videos/david-playing-flamenco.mp4" type="video/mp4">
-            
-            <p>Your browser doesn't support HTML5 video.</p>
-          </video>
-
-        <cite>Outdoors flamenco</cite>
-        <p>
-            In a traditional flamenco show format, we include guitar solos and flamenco dancing. Your guests will be
-            sure to remember your event. All the members are professional flamenco musicians with international
-            experience. Enjoy our flamenco events, and surprise your friends and family
-            members. Get in touch to discuss a solution.
-        </p>
-        <img src="./images/small-venue-flamenco.png" class="img-fluid" alt="Small Venue Flamenco">
-        <cite>Small Venue Flamenco</cite>
-        <h5>¡Olé!</h5>
-        <h2> Brisbane Flamenco Guitar Lessons</h2>
-        <p>
-            Learn from Brisbane flamenco guitar teachers. Our guitar teachers have professional experience performing
-            and teaching flamenco and have studied for many years in Spain. Get in touch to discover the flamenco rhythm
-            and secrets to the incredible Spanish guitar.
-        </p>
-    </div>
-</div>
-<div class="container ">
-    <div class="row">
-        <% if(newsBody) { %>
-        <!-- <h2>Latest News From Spain</h2> -->
-        <div class="card-deck">
-
-            <%  newsBody.forEach( newsPost => { %>
-                <% if(newsPost.thread.main_image.length > 0 && newsPost.text.length > 10) { %>
-            <div class="col-lg-6 newsCard" >
-                <div class="card ">
-                    <!-- with api filter https* some images show as  source (unknown) and are empty strings but still show the image alt and looks bad so filter it out -->
-                   
-                        <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.thread.title %>">
-                    
-                    
-                    <div class="card-body">
-                        <a href="<%= newsPost.url %>">
-                            <h5 class="card-title"><%= newsPost.thread.title_full %></h5>
-                        </a>
-                        <p class="card-text">
-                            <%= newsPost.text.slice(0, 200) %>...
-                        </p>
-                    </div>
-                   
-
-                </div>
-            </div>
-            <% } %>
-            <% }) %>
-            <% } %>
+<div id="homeContainer">
+    <!-- <div id="mainContainer"> -->
+        <div class="blurb">
+            <h1>Flamenco Events In Brisbane</h1>
+            <p>
+                Give your guests a once in a lifetime Spanish experience they will never forget. Finding an original type of
+                entertainment for your event can be daunting. Flamenco is always a safe bet for Brisbane events with its
+                magical ambiance and hypnotizing sounds. But finding a professional flamenco band can be difficult, outside
+                of Spain.
+            </p>
+            <img src="./images/flamenco-small-group.jpg" alt="Small gathering with flamenco">
+            <cite>Small gathering with flamenco</cite>
+            <p>
+                Flamenco can be very versatile, which makes it excellent for any event. We will tailor the best flamenco
+                show for you depending on your requirements to ensure you're satisfied. We work in Brisbane Spanish
+                restaurants, tablaos, theatres, festivals, events, business launches, Brisbane tapas bars and Southbank
+                restaurants, private homes and much more all over QLD. We offer a few formats, solo Spanish guitar, flamenco
+                guitar duo, and a traditional Spanish show including flamenco dance and percussion.
+            </p>
+            <!-- <img src="./images/flamenco-outside.png" class="img-fluid" alt="Outdoors flamenco"> -->
+            <video preload="metadata" controls width="100%" playsinline>
+                <source src="/videos/david-playing-flamenco.webm" type="video/webm">
+                    <source src="/videos/david-playing-flamenco.mp4" type="video/mp4">
+                
+                <p>Your browser doesn't support HTML5 video.</p>
+              </video>
+    
+            <cite>Outdoors flamenco</cite>
+            <p>
+                In a traditional flamenco show format, we include guitar solos and flamenco dancing. Your guests will be
+                sure to remember your event. All the members are professional flamenco musicians with international
+                experience. Enjoy our flamenco events, and surprise your friends and family
+                members. Get in touch to discuss a solution.
+            </p>
+            <img src="./images/small-venue-flamenco.png" alt="Small Venue Flamenco">
+            <cite>Small Venue Flamenco</cite>
+            <h5>¡Olé!</h5>
+            <h2> Brisbane Flamenco Guitar Lessons</h2>
+            <p>
+                Learn from Brisbane flamenco guitar teachers. Our guitar teachers have professional experience performing
+                and teaching flamenco and have studied for many years in Spain. Get in touch to discover the flamenco rhythm
+                and secrets to the incredible Spanish guitar.
+            </p>
         </div>
-    </div>
+            <% if(newsBody) { %>
+            
+            <div class="newsItems">
+                <h2>Latest Flamenco News</h2>
+                <%  newsBody.forEach( newsPost => { %>
+                    <% if(newsPost.thread.main_image.length > 0 && newsPost.text.length > 10) { %>
+                        <!-- with api filter https* some images show as  source (unknown) and are empty strings but still show the image alt and looks bad so filter it out -->
+                            <img src="<%= newsPost.thread.main_image %>"  alt="<%= newsPost.thread.title %>">
+                            <a href="<%= newsPost.url %>">
+                                <h5 "><%= newsPost.thread.title_full %></h5>
+                            </a>
+                            <h5>Published <%= new Date(newsPost.published).toUTCString() %></h5>
+                            <p >
+                                <%- newsPost.text.slice(0, 200) %>...
+                            </p>
+                <% } %>
+                <% }) %>
+                <% } %>
+            </div>
 </div>
 <%- include('./includes/footer.ejs') %>

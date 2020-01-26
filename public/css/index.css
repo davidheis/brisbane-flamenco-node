@@ -1,11 +1,27 @@
 
-#mainContainer {
-    margin: 0 auto;
-    max-width: 700px;
+#homeContainer {
+    display: flex;
+    flex-wrap: wrap;
+flex-direction: row;
+justify-content: space-evenly;
 }
-.newsCard{
-    margin-bottom: 60px;
+.blurb{
+    max-width: 600px;
 }
-.newsCard p{
-    font-size: 20px;
+.blurb img{
+    max-width: 600px;
+}
+.newsItems{
+    max-width: 200px;
+}
+.newsItems img{
+    max-width: 200px;
+}
+@media screen and (max-width:880px) {
+    .newsItems{
+        max-width: 600px;
+    }
+    .newsItems img{
+        max-width: 600px;
+    }
 }
