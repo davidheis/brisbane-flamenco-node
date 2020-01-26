@@ -44,11 +44,25 @@ app.get('/spanish-guitar', (req, res) => {
     title = "The Spanish Flamenco Guitar"
     res.render('spanish-guitar',{title: title});
 });
+app.get('/flamenco-news', (req, res) => {
+    const query_params = {
+        "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
+        "ts": "1579180138371",
+        "sort": "crawled",
+        "size": "50",
+        "format": "json"
+        }
+        webhoseioClient.query('filterWebContent', query_params)
+    .then(newsBody => {
+        res.render('flamenco-news', {newsBody: newsBody.posts})
+    });
+});
 app.get('/*', (req, res) => {
     const query_params = {
-        "q": "thread.url:https* spam_score:<0.6 site_type:news language:spanish thread.country:ES",
+        "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
+        "ts": "1579180138371",
         "sort": "crawled",
-        "size": "6",
+        "size": "5",
         "format": "json"
         }
         webhoseioClient.query('filterWebContent', query_params)
