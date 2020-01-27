@@ -2,3 +2,4 @@ aws-config.json
 node_modules
 .env
 public/favicons/old_favicons
+csp

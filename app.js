@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const webhoseio = require('webhoseio');
 const contactsController = require('./controllers/contact')
-const webhoseioClient = webhoseio.config({token: '592afc32-9f3a-4a8b-9ed2-027d06228fae'});
+const webhoseioClient = webhoseio.config({ token: '592afc32-9f3a-4a8b-9ed2-027d06228fae' });
 // require('bootstrap')
 const fs = require('fs');
 // const helmet = require('helmet')
@@ -23,8 +23,8 @@ let allCapos = JSON.parse(rawCapodata);
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
-    type: ['json', 'application/csp-report','application/json']
-  }))
+    type: ['json', 'application/csp-report', 'application/json']
+}))
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,10 +34,10 @@ app.set('views', 'views');
 
 app.post('/contact', contactsController.sendContactPageEmail);
 app.get('/contact', (req, res) => {
-    res.render('contact', {captchaboolean:true});
+    res.render('contact', { captchaboolean: true });
 });
 app.get('/capos', (req, res) => {
-    res.render('capos', {caposArray: Object.values(allCapos)});
+    res.render('capos', { caposArray: Object.values(allCapos) });
 });
 app.get('/returns', (req, res) => {
     res.render('returns');
@@ -47,7 +47,7 @@ app.get('/what-is-flamenco', (req, res) => {
 });
 app.get('/spanish-guitar', (req, res) => {
     title = "The Spanish Flamenco Guitar"
-    res.render('spanish-guitar',{title: title});
+    res.render('spanish-guitar', { title: title });
 });
 app.get('/flamenco-news', (req, res) => {
     const query_params = {
@@ -56,26 +56,28 @@ app.get('/flamenco-news', (req, res) => {
         "sort": "published",
         "size": "50",
         "format": "json"
-        }
-        webhoseioClient.query('filterWebContent', query_params)
-    .then(newsBody => {
-        res.render('flamenco-news', {newsBody: newsBody.posts})
-    });
+    }
+    webhoseioClient.query('filterWebContent', query_params)
+        .then(newsBody => {
+            res.render('flamenco-news', { newsBody: newsBody.posts })
+        });
 });
 app.post('/csp', (req, res) => {
+    // use date as file name to know when error occured 
+    const date = new Date().toISOString();
     if (req.body) {
         const cspObj = JSON.stringify(req.body)
-      fs.appendFile(path.join(__dirname, 'csp'), cspObj, (err) => {
-        if (err) throw err;
-      });
+        fs.appendFile(path.join(__dirname, 'csp', date), cspObj, (err) => {
+            if (err) throw err;
+        });
 
     } else {
-        fs.appendFile(path.join(__dirname, 'csp'), 'CSP Violation: No data received!', (err) => {
+        fs.appendFile(path.join(__dirname, 'csp', date), 'CSP Violation: No data received!', (err) => {
             if (err) throw err;
-          });
+        });
     }
     res.status(204).end()
-    })
+})
 app.get('/*', (req, res) => {
     const query_params = {
         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
@@ -83,12 +85,12 @@ app.get('/*', (req, res) => {
         "sort": "published",
         "size": "5",
         "format": "json"
-        }
-        webhoseioClient.query('filterWebContent', query_params)
-    .then(newsBody => {
-        res.render('index', {newsBody: newsBody.posts})
-    });
-    });
+    }
+    webhoseioClient.query('filterWebContent', query_params)
+        .then(newsBody => {
+            res.render('index', { newsBody: newsBody.posts })
+        });
+});
 // Object.values() this gets the value of objects and puts them in an array 
 // Object.keys() gets keys and puts the in an array
 // Object.entries(obj) makes array of key value pairs
