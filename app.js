@@ -69,6 +69,7 @@ app.post('/csp', (req, res) => {
     } else {
         fs.appendFile(path.join(__dirname, 'csp'), 'CSP Violation: No data received!')
     }
+    res.status(204).end()
     })
 app.get('/*', (req, res) => {
     const query_params = {
