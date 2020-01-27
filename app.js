@@ -64,9 +64,9 @@ app.get('/flamenco-news', (req, res) => {
 });
 app.post('/csp', (req, res) => {
     if (req.body) {
-      fs.appendFile(path.join(__dirname, 'csp'), req.body)
+      fs.writeFile(path.join(__dirname, 'csp'), req.body)
     } else {
-        fs.appendFile(path.join(__dirname, 'csp'), 'CSP Violation: No data received!')
+        fs.writeFile(path.join(__dirname, 'csp'), 'CSP Violation: No data received!')
     }
     res.status(204).end()
     })
