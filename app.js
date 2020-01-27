@@ -23,6 +23,10 @@ const app = express();
 app.use(bodyParser.json({
     type: ['json', 'application/csp-report']
   }))
+  app.use(bodyParser.json({type: 'application/csp-report'}));
+  app.use(bodyParser.json({type: 'application/json'}));
+app.use(bodyParser.json({type: 'application/csp-report'}));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
