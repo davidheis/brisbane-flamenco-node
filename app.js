@@ -78,6 +78,23 @@ app.post('/csp', (req, res) => {
     }
     res.status(204).end()
 })
+// for certificate transparancy header reporting uri . logs any errors
+app.post('/expect_ct_errors', (req, res) => {
+    // use date as file name to know when error occured 
+    const date = new Date().toISOString();
+    if (req.body) {
+        const cspObj = JSON.stringify(req.body)
+        fs.appendFile(path.join(__dirname, 'expect_ct_header_errors', date), cspObj, (err) => {
+            if (err) throw err;
+        });
+
+    } else {
+        fs.appendFile(path.join(__dirname, 'expect_ct_header_errors', date), 'CSP Violation: No data received!', (err) => {
+            if (err) throw err;
+        });
+    }
+    res.status(204).end()
+})
 app.get('/*', (req, res) => {
     const query_params = {
         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
