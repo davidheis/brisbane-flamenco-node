@@ -63,7 +63,7 @@ app.get('/flamenco-news', (req, res) => {
     });
 });
 app.post('/csp', (req, res) => {
-    console.log("in csp port route")
+    console.log(req.body)
     // if (req.body) {
     //   fs.appendFile(path.join(__dirname, 'csp'), req.body)
     // } else {
