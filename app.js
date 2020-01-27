@@ -9,7 +9,7 @@ const contactsController = require('./controllers/contact')
 const webhoseioClient = webhoseio.config({token: '592afc32-9f3a-4a8b-9ed2-027d06228fae'});
 // require('bootstrap')
 const fs = require('fs');
-const helmet = require('helmet')
+// const helmet = require('helmet')
 let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
 
@@ -21,7 +21,7 @@ let allCapos = JSON.parse(rawCapodata);
 // // end firebase
 
 const app = express();
-app.use(helmet())
+// app.use(helmet())
 app.use(bodyParser.json({
     type: ['json', 'application/csp-report','application/json']
   }))
