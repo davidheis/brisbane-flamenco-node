@@ -63,13 +63,12 @@ app.get('/flamenco-news', (req, res) => {
     });
 });
 app.post('/csp', (req, res) => {
-    console.log(req.body)
-    // if (req.body) {
-    //   fs.appendFile(path.join(__dirname, 'csp'), req.body)
-    // } else {
-    //     fs.appendFile(path.join(__dirname, 'csp'), 'CSP Violation: No data received!')
-    // }
-    // res.status(204).end()
+    if (req.body) {
+      fs.appendFile(path.join(__dirname, 'csp'), req.body)
+    } else {
+        fs.appendFile(path.join(__dirname, 'csp'), 'CSP Violation: No data received!')
+    }
+    res.status(204).end()
     })
 app.get('/*', (req, res) => {
     const query_params = {
