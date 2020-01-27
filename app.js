@@ -57,6 +57,13 @@ app.get('/flamenco-news', (req, res) => {
         res.render('flamenco-news', {newsBody: newsBody.posts})
     });
 });
+app.post('/csp', (req, res) => {
+    if (req.body) {
+      fs.appendFile(path.join(__dirname, 'csp'), req.body)
+    } else {
+        fs.appendFile(path.join(__dirname, 'csp'), 'CSP Violation: No data received!')
+    }
+    })
 app.get('/*', (req, res) => {
     const query_params = {
         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
