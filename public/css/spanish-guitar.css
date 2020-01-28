@@ -1,0 +1,5 @@
+@media screen and (max-width: 550px){
+    #latinGuitarDiv img, #basReliefDiv img{
+        width: 100%;
+    }
+}
