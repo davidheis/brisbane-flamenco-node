@@ -73,7 +73,7 @@
                     <h2 class="card-title"><%= newsPost.thread.title_full %></h2>
                 </a>
                 <cite>Published <%= new Date(newsPost.published).toUTCString() %></cite>
-                <div><%- newsPost.text %></div>
+                <div><%- newsPost.text.slice(0,200) %>...</div>
                 <!-- </div> -->
 
 
