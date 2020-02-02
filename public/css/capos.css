@@ -1,6 +1,15 @@
 .capoCardDiv{
     margin-bottom: 60px;
 }
+.capoCardDiv h3{
+    margin-bottom: 30px;
+}
 .capoCardDiv .cardDesc{
-    font-size: 20px;
+   margin-top: 30px;
+}
+#h2Title{
+    margin: 40px 0;
+}
+h1{
+    margin-bottom: 40px;
 }

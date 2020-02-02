@@ -58,6 +58,7 @@
 <div class="container">
   <div class="row">
     <div class="jumbotron">
+      <h1>Buy Flamenco Capos</h1>
       <p>
         A Capo is a simple device which clamps onto the neck of your instrument in any position you choose to shorten the playable
         length of the strings. The pitch of the guitar is altered by half a step for each fret. Playing with a capo affects only
@@ -87,7 +88,7 @@
       </p>
     </div>
       
-    <h2>Handmade Flamenco Capos</h2>
+    <h2 id="h2Title">Handmade Traditional Flamenco Capos</h2>
     <div class="card-deck">
       <% caposArray.forEach(capo => { %>
       <div class="col-lg-6 capoCardDiv" >
@@ -95,7 +96,7 @@
           <img src="<%= capo.images.image %>" class="card-img-top" alt="<%= %>">
           <div class="card-body">
             <p class="card-text"><small class="text-muted">$<%= capo.product.price %></small></p>
-            <h5 class="card-title"><%= capo.product.title %></h5>
+            <h3 class="card-title"><%= capo.product.title %></h3>
             <%- capo.product.paypalBtn %>
             <p class="card-text cardDesc"><%= capo.product.description %></p>
           </div>

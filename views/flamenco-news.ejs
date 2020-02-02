@@ -52,7 +52,7 @@
   </script>
 </head>
 <%- include('./includes/nav.ejs') %>
-<h2>Latest Flamenco News</h2>
+<h1>Latest Flamenco News</h1>
 <!-- <div class="container "> -->
     <!-- <div class="row"> -->
         <% if(newsBody) { %>
@@ -65,7 +65,7 @@
                 <!-- <div class="card "> -->
                 <!-- with api filter https* some images show as  source (unknown) and are empty strings but still show the image alt and looks bad so filter it out -->
 
-                <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="<%= newsPost.thread.title %>">
+                <img src="<%= newsPost.thread.main_image %>" class="card-img-top" alt="">
 
 
                 <!-- <div class="card-body"> -->
