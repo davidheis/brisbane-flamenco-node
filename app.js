@@ -49,6 +49,13 @@ app.get('/blog/spanish-guitar', (req, res) => {
     title = "The Spanish Flamenco Guitar"
     res.render('blog/spanish-guitar', { title: title });
 });
+app.get('/what-is-flamenco', (req, res) => {
+    res.render('what-is-flamenco');
+});
+app.get('/spanish-guitar', (req, res) => {
+    title = "The Spanish Flamenco Guitar"
+    res.render('spanish-guitar', { title: title });
+});
 // app.get('/flamenco-news', (req, res) => {
 //     const query_params = {
 //         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
