@@ -1,14 +1,19 @@
 
-#homeContainer {
+/* #homeContainer {
     display: flex;
     flex-wrap: wrap;
 flex-direction: row;
 justify-content: space-evenly;
+} */
+p{
+    margin: 40px 0;
 }
 .blurb{
-    flex-basis: 600px;
-    flex-grow: 1;
-    padding: 10px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+flex-direction: column;
+    padding: 20px;
     max-width: 1000px;
 }
 .blurb img{
