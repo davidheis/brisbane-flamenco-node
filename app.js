@@ -42,26 +42,26 @@ app.get('/capos', (req, res) => {
 app.get('/returns', (req, res) => {
     res.render('returns');
 });
-app.get('/what-is-flamenco', (req, res) => {
-    res.render('what-is-flamenco');
+app.get('/blog/what-is-flamenco', (req, res) => {
+    res.render('blog/what-is-flamenco');
 });
-app.get('/spanish-guitar', (req, res) => {
+app.get('/blog/spanish-guitar', (req, res) => {
     title = "The Spanish Flamenco Guitar"
-    res.render('spanish-guitar', { title: title });
+    res.render('blog/spanish-guitar', { title: title });
 });
-app.get('/flamenco-news', (req, res) => {
-    const query_params = {
-        "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
-        "ts": "1579180138371",
-        "sort": "published",
-        "size": "50",
-        "format": "json"
-    }
-    webhoseioClient.query('filterWebContent', query_params)
-        .then(newsBody => {
-            res.render('flamenco-news', { newsBody: newsBody.posts })
-        });
-});
+// app.get('/flamenco-news', (req, res) => {
+//     const query_params = {
+//         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
+//         "ts": "1579180138371",
+//         "sort": "published",
+//         "size": "50",
+//         "format": "json"
+//     }
+//     webhoseioClient.query('filterWebContent', query_params)
+//         .then(newsBody => {
+//             res.render('flamenco-news', { newsBody: newsBody.posts })
+//         });
+// });
 app.post('/csp', (req, res) => {
     // use date as file name to know when error occured 
     const date = new Date().toISOString();
