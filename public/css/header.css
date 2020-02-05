@@ -5,7 +5,7 @@ nav {
 }
 body {
     background: rgb(241, 240, 250);
-    line-height: 1.77;
-    font-weight: 600;
+    line-height: 1.55em;
+    /* font-weight: 600; */
 }
 
