@@ -4,7 +4,8 @@ nav {
     border-bottom: 2px solid red;
 }
 nav a {
-    margin: 20px auto;
+    margin: 20px;
+    padding: 10px;
 }
 body {
     background: rgb(241, 240, 250);
