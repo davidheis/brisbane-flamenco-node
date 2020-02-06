@@ -6,7 +6,7 @@
 #mainContainer {
     @extend %flex-column;
     margin: 200px 0;
-    padding: 5px;
+    padding: 15px;
 }
 form {
     @extend %flex-column;
@@ -31,6 +31,7 @@ form {
 }
 @media screen and (max-width:320px){
     #html_element{
-        margin-left: -5px;
+        margin-left: -15px;
+        // padding: 0;
     }
 }
