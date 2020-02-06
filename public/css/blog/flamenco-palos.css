@@ -1,6 +1,11 @@
-
+#mainContainer{
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 20px;
+}
 h1{
     text-align: center;
+    margin-bottom: 100px;
 }
 .jumbotron{
     max-width: 650px;
