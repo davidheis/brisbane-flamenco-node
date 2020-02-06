@@ -42,19 +42,22 @@ app.get('/capos', (req, res) => {
 app.get('/returns', (req, res) => {
     res.render('returns');
 });
-app.get('/blog/flamenco-palos', (req, res) => {
-    res.render('blog/flamenco-palos');
+app.get('/flamenco-blog/blog-index', (req, res) => {
+    res.render('flamenco-blog/blog-index');
 });
-app.get('/blog/what-does-flamenco-mean', (req, res) => {
-    res.render('blog/what-does-flamenco-mean');
+app.get('/flamenco-blog/flamenco-palos', (req, res) => {
+    res.render('flamenco-blog/flamenco-palos');
 });
-app.get('/blog/spanish-guitar', (req, res) => {
+app.get('/flamenco-blog/what-does-flamenco-mean', (req, res) => {
+    res.render('flamenco-blog/what-does-flamenco-mean');
+});
+app.get('/flamenco-blog/spanish-guitar', (req, res) => {
     title = "The Spanish Flamenco Guitar"
-    res.render('blog/spanish-guitar', { title: title });
+    res.render('flamenco-blog/spanish-guitar', { title: title });
 });
-app.get('/blog/paco-de-lucia', (req, res) => {
+app.get('/flamenco-blog/paco-de-lucia', (req, res) => {
     title = "The Spanish Flamenco Guitar"
-    res.render('blog/paco-de-lucia');
+    res.render('flamenco-blog/paco-de-lucia');
 });
 app.get('/what-is-flamenco', (req, res) => {
     res.render('what-is-flamenco');
