@@ -3,10 +3,13 @@ nav {
     background: #27223a;
     border-bottom: 2px solid red;
 }
+nav a {
+    margin: 20px auto;
+}
 body {
     background: rgb(241, 240, 250);
     line-height: 1.55em;
-    /* font-weight: 600; */
+    font-family: 'Montserrat', sans-serif;
 }
 p{
     margin-top: 1.7rem;
