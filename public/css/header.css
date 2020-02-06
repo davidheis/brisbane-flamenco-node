@@ -11,4 +11,8 @@ body {
 p{
     margin-top: 1.7rem;
 }
+h1,h2 {
+    margin-top: 35px;
+    margin-bottom: 30px;
+}
 

@@ -1,0 +1,12 @@
+
+h1{
+    text-align: center;
+}
+.jumbotron{
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 20px;
+}
+.jumbotron h1, .jumbotron h2  {
+    margin-bottom: 30px;
+}

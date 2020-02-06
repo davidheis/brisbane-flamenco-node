@@ -42,8 +42,11 @@ app.get('/capos', (req, res) => {
 app.get('/returns', (req, res) => {
     res.render('returns');
 });
-app.get('/blog/what-is-flamenco', (req, res) => {
-    res.render('blog/what-is-flamenco');
+app.get('/blog/flamenco-palos', (req, res) => {
+    res.render('blog/flamenco-palos');
+});
+app.get('/blog/what-does-flamenco-mean', (req, res) => {
+    res.render('blog/what-does-flamenco-mean');
 });
 app.get('/blog/spanish-guitar', (req, res) => {
     title = "The Spanish Flamenco Guitar"
