@@ -52,6 +52,10 @@ app.get('/blog/spanish-guitar', (req, res) => {
     title = "The Spanish Flamenco Guitar"
     res.render('blog/spanish-guitar', { title: title });
 });
+app.get('/blog/paco-de-lucia', (req, res) => {
+    title = "The Spanish Flamenco Guitar"
+    res.render('blog/paco-de-lucia');
+});
 app.get('/what-is-flamenco', (req, res) => {
     res.render('what-is-flamenco');
 });
