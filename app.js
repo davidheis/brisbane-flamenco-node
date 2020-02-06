@@ -3,10 +3,10 @@ const path = require('path');
 const port = 3003;
 const express = require('express');
 const bodyParser = require('body-parser');
-const request = require('request');
-const webhoseio = require('webhoseio');
+// const request = require('request');
+// const webhoseio = require('webhoseio');
 const contactsController = require('./controllers/contact')
-const webhoseioClient = webhoseio.config({ token: '592afc32-9f3a-4a8b-9ed2-027d06228fae' });
+// const webhoseioClient = webhoseio.config({ token: '592afc32-9f3a-4a8b-9ed2-027d06228fae' });
 // require('bootstrap')
 const fs = require('fs');
 // const helmet = require('helmet')
@@ -55,14 +55,14 @@ app.get('/flamenco-blog/spanish-guitar', (req, res) => {
     res.render('flamenco-blog/spanish-guitar');
 });
 app.get('/flamenco-blog/paco-de-lucia', (req, res) => {
-    title = "The Spanish Flamenco Guitar"
+    // title = "The Spanish Flamenco Guitar"
     res.render('flamenco-blog/paco-de-lucia');
 });
 app.get('/what-is-flamenco', (req, res) => {
     res.render('what-is-flamenco');
 });
 app.get('/spanish-guitar', (req, res) => {
-    title = "The Spanish Flamenco Guitar"
+    var title = "The Spanish Flamenco Guitar"
     res.render('spanish-guitar', { title: title });
 });
 // app.get('/flamenco-news', (req, res) => {

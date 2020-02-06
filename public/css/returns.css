@@ -1,3 +1,7 @@
-article.content h2{
-    margin: 50px 0;
-}
+#mainContainer {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 20px; }
+
+article.content h2 {
+  margin: 50px 0; }

@@ -3,3 +3,4 @@ node_modules
 .env
 public/favicons/old_favicons
 csp
+css_copy

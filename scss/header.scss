@@ -1,0 +1,107 @@
+%flex-row{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+body {
+    background: rgb(241, 240, 250);
+    line-height: 1.55em;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+ 
+h1,h2 {
+    margin-top: 35px;
+    margin-bottom: 30px;
+}
+
+p{
+    margin-top: 1.7rem;
+}
+#desktopNav{
+    @extend %flex-row;
+    margin-bottom: 100px;
+    background: #27223a;
+    border-bottom: 2px solid red;
+
+    justify-content: space-between;
+    a{
+        color: white;
+        margin: 20px;
+        padding: 10px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #desktopNavLinks{
+        @extend %flex-row;
+        justify-content: space-between;
+        align-content: center;
+        a{
+            color: white;
+            margin: 20px;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    }
+}
+#mobileNav, #mobileNavBtn{
+    display: none;
+}
+.logo{
+width: 50px;
+}
+
+@media screen and (max-width: 650px){
+%mobile-background{
+    background: #27223a;
+// background:
+//     radial-gradient(black 15%, transparent 16%) 0 0,
+//     radial-gradient(black 15%, transparent 16%) 8px 8px,
+//     radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+//     radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+//     background-color:#282828;
+//     background-size:16px 16px;
+}
+%flex-column{
+display: flex;
+flex-direction: column;
+}
+#desktopNav{
+display: none;
+}
+#mobileNavBtn{
+@extend %mobile-background;
+border-radius: 0;
+color: white;
+border: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 50px;
+
+}
+#mobileNav{
+@extend %mobile-background;
+@extend %flex-column;
+align-items: center;
+margin-top: -160px;
+margin-bottom: 0;
+visibility: hidden;
+font-weight: bold;
+// -webkit-transition: margin-top, 1s, ease-out 1s;
+// -moz-transition: margin-top, 1s, ease-out 1s;
+// -ms-transition: margin-top, 1s, ease-out 1s;
+// -o-transition: margin-top, 1s, ease-out 1s;
+// transition: margin-top, 1s, ease-out 1s; 
+a{
+    color: white;
+    margin: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+} 
+}
+

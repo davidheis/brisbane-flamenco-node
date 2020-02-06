@@ -2,7 +2,7 @@ const request = require('request');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env['SENDGRID_API_KEY']);
 
-exports.sendContactPageEmail = (req, res, next) => {
+exports.sendContactPageEmail = (req, res) => {
     // send captcha to get true or false for verification
     request.post(`https://www.google.com/recaptcha/api/siteverify?secret=6LdkbssUAAAAAJRmRLYCgLpS5TfbD552Tq4yFJg8&response=${req.body['g-recaptcha-response']}`,
         (err, response, body) => {
