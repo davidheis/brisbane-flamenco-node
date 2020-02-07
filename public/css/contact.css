@@ -1,6 +1,5 @@
-#mainContainer, form {
+form {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column; }
 
 #mainContainer {
@@ -25,6 +24,6 @@ form {
     font-weight: bold;
     font-size: 1em; }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 330px) {
   #html_element {
     margin-left: -15px; } }
