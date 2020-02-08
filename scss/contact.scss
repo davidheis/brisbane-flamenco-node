@@ -26,9 +26,13 @@ form {
         font-weight: bold;
         font-size: 1em;
       }
+      
 }
 @media screen and (max-width:330px){
-    #html_element{
-        margin-left: -15px;
+    #html_element{ 
+        transform:scale(0.70);
+        -webkit-transform:scale(0.70);
+        transform-origin:0 0;
+        -webkit-transform-origin:0 0;
     }
 }
