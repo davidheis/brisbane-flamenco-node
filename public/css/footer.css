@@ -19,3 +19,10 @@
   padding: 10px;
   color: white;
   text-decoration: none; }
+
+@media screen and (max-width: 650px) {
+  #footerLinkContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    align-items: center; } }
