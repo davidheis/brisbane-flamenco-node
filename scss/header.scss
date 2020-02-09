@@ -48,7 +48,7 @@ p{
         }
     }
 }
-#mobileNav, #mobileNavBtn{
+#mobileNav, #mobileNav a, #mobileNavBtn{
     display: none;
 }
 .logo{
@@ -102,6 +102,7 @@ font-weight: bold;
 // -o-transition: margin-top, 1s, ease-out 1s;
 // transition: margin-top, 1s, ease-out 1s; 
 a{
+    display: flex;
     color: white;
     margin: 20px;
     padding: 10px;

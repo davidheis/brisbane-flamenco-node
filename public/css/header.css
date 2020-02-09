@@ -41,7 +41,7 @@ p {
       text-decoration: none;
       font-weight: bold; }
 
-#mobileNav, #mobileNavBtn {
+#mobileNav, #mobileNav a, #mobileNavBtn {
   display: none; }
 
 .logo {
@@ -72,6 +72,7 @@ p {
     display: none;
     font-weight: bold; }
     #mobileNav a {
+      display: flex;
       color: white;
       margin: 20px;
       padding: 10px;
