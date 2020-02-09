@@ -75,6 +75,7 @@ display: none;
 }
 #mobileNavBtn{
 @extend %mobile-background;
+margin-bottom: 100px;
 border-radius: 0;
 color: white;
 border: 0;
