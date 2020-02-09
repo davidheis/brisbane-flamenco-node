@@ -54,9 +54,9 @@ app.get('/flamenco-blog/what-does-flamenco-mean', (req, res) => {
 app.get('/flamenco-blog/spanish-guitar', (req, res) => {
     res.render('flamenco-blog/spanish-guitar');
 });
-app.get('/flamenco-blog/paco-de-lucia', (req, res) => {
+app.get('/flamenco-blog/paco-de-lucia-timeline', (req, res) => {
     // title = "The Spanish Flamenco Guitar"
-    res.render('flamenco-blog/paco-de-lucia');
+    res.render('flamenco-blog/paco-de-lucia-timeline');
 });
 app.get('/what-is-flamenco', (req, res) => {
     res.render('what-is-flamenco');
