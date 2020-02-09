@@ -9,7 +9,9 @@ body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
 }
- 
+ a{
+     margin: 20px 0;
+ }
 h1,h2 {
     margin-top: 35px;
     margin-bottom: 30px;
@@ -99,7 +101,7 @@ font-weight: bold;
 // transition: margin-top, 1s, ease-out 1s; 
 a{
     color: white;
-    margin: 10px;
+    margin: 20px;
     padding: 10px;
     text-decoration: none;
     font-weight: bold;
