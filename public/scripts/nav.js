@@ -6,11 +6,11 @@ window.onload = function preprareNavDropdown() {
         isNavOpen = !isNavOpen;
         if (isNavOpen) {
             // show nav
-            document.getElementById("mobileNav").style = "visibility: visible;opacity:100%;margin-top: 0;"
+            document.getElementById("mobileNav").style = "display:flex;opacity:100%;"
         } 
         else {
             // hide nav
-            document.getElementById("mobileNav").style = "visibility:hidden;opacity:0;margin-top: -170px;"
+            document.getElementById("mobileNav").style = "display:none;opacity:0;"
         }
     }
 }
