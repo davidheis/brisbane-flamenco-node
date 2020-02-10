@@ -1,0 +1,24 @@
+#mainContainer {
+    margin: 200px 0;
+    padding: 15px;
+}
+#sitemapList {
+    // max-width: 300px;
+    ::marker{
+        // color: white;
+    }
+    li{
+    margin: 20px 0;
+    padding: 10px;
+    
+    text-decoration: none;
+   
+    a{
+        color: black;
+        padding-bottom: 3px;
+        text-decoration: none;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+    }
+}
+}

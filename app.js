@@ -92,7 +92,7 @@ app.post('/csp', (req, res) => {
             if (err) throw err;
         });
     }
-    res.status(204).end()
+    res.status(204).end();
 })
 // for certificate transparancy header reporting uri . logs any errors
 app.post('/expect_ct_errors', (req, res) => {
@@ -111,19 +111,11 @@ app.post('/expect_ct_errors', (req, res) => {
     }
     res.status(204).end()
 })
+app.get('/site-map', (req, res) => {
+    res.render('site-map');
+});
 app.get('/*', (req, res) => {
-    res.render('index')
-    // const query_params = {
-    //     "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
-    //     "ts": "1579180138371",
-    //     "sort": "published",
-    //     "size": "5",
-    //     "format": "json"
-    // }
-    // webhoseioClient.query('filterWebContent', query_params)
-    //     .then(newsBody => {
-    //         res.render('index', { newsBody: newsBody.posts })
-    //     });
+    res.render('index');
 });
 // Object.values() this gets the value of objects and puts them in an array 
 // Object.keys() gets keys and puts the in an array

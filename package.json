@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error no test specified\" && exit 1",
     "lint": "eslint ./",
-    "start": "npm run build-css & nodemon app.js",
-    "build-css": "node-sass -w ./scss/ -o ./public/css/"
+    "start": "npm run watch-css & nodemon app.js",
+    "build-css": "node-sass ./scss/ -o ./public/css/",
+    "watch-css": "node-sass -w ./scss/ -o ./public/css/"
   },
   "author": "",
   "license": "ISC",

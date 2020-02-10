@@ -1,0 +1,14 @@
+#mainContainer {
+  margin: 200px 0;
+  padding: 15px; }
+
+#sitemapList li {
+  margin: 20px 0;
+  padding: 10px;
+  text-decoration: none; }
+  #sitemapList li a {
+    color: black;
+    padding-bottom: 3px;
+    text-decoration: none;
+    border-bottom-style: solid;
+    border-bottom-width: 1px; }
