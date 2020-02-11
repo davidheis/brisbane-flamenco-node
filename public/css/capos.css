@@ -15,8 +15,6 @@
       flex-direction: column;
       margin-bottom: 60px;
       padding: 10px; }
-      #mainContainer #capoContainer .capoCardDiv img {
-        max-width: 100%; }
       #mainContainer #capoContainer .capoCardDiv p {
         margin: 0; }
 
