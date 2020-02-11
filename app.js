@@ -58,6 +58,10 @@ app.get('/flamenco-blog/paco-de-lucia-timeline', (req, res) => {
     // title = "The Spanish Flamenco Guitar"
     res.render('flamenco-blog/paco-de-lucia-timeline');
 });
+app.get('/flamenco-blog/flamenco-guitar-strings', (req, res) => {
+    // title = "The Spanish Flamenco Guitar"
+    res.render('flamenco-blog/flamenco-guitar-strings');
+});
 app.get('/what-is-flamenco', (req, res) => {
     res.render('what-is-flamenco');
 });
