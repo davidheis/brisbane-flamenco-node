@@ -42,6 +42,9 @@ app.get('/capos', (req, res) => {
 app.get('/returns', (req, res) => {
     res.render('returns');
 });
+app.get('/about', (req, res) => {
+    res.render('about');
+});
 app.get('/flamenco-blog/blog-index', (req, res) => {
     res.render('flamenco-blog/blog-index');
 });
