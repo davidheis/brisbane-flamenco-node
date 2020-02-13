@@ -47,7 +47,7 @@ p {
 .logo {
   width: 50px; }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 750px) {
   #mobileNavBtn, #mobileNav {
     background: #27223a; }
   #mobileNav {
