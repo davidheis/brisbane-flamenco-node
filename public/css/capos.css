@@ -17,6 +17,8 @@
       padding: 10px; }
       #mainContainer #capoContainer .capoCardDiv p {
         margin: 0; }
+      #mainContainer #capoContainer .capoCardDiv img {
+        max-width: 100%; }
 
 .capoCardDiv h3 {
   margin-bottom: 30px; }

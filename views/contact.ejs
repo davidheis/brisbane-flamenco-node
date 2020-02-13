@@ -34,7 +34,7 @@
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
 <!-- recaptcha -->
-<script type="text/javascript" src="/scripts/recaptcha.js"></script>
+<script src="/scripts/recaptcha.js"></script>
 <%- include('./includes/nav.ejs') %>
 <div id="mainContainer">
   
@@ -64,8 +64,6 @@
       <!-- <textarea type="text" class="form-control" id="message"> -->
       <textarea required class="form-control" name="message" id="message" cols="30" rows="10"></textarea>
     
-    <!-- ternary operator to display error message if captcha not clicked -->
-   
     <div id="html_element"></div>
     <br>
     <button type="submit" class="btn btn-primary">Submit</button>
