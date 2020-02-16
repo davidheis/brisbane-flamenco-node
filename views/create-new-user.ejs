@@ -1,0 +1,20 @@
+<%- include('./includes/header.ejs') %>
+<title>Create New User</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-title" content="Create New User">
+<!--FOR SEO SHOULD HAVE THIS ROOT URL-->
+<link rel="canonical" href="https://brisbaneflamenco.com.au/createNewUser">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<link rel="stylesheet" href="/css/createNewUser.css">
+<%- include('./includes/nav.ejs') %>
+<div id="mainContainer">
+  <h1>Create New User</h1>
+
+  <form action="/createNewUser" method="post">
+  <input type="email">
+  <input type="password">
+  </form>
+</div> 
+<%- include('./includes/footer.ejs') %>
+
+

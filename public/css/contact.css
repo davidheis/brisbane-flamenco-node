@@ -10,9 +10,11 @@ form {
   max-width: 500px;
   margin: 0 auto; }
   form input, form textarea {
-    margin: 10px 0;
+    margin: 0 0 30px 0;
     padding: 10px;
     border-radius: 5px; }
+  form #html_element {
+    margin-top: 30px; }
   form button {
     margin-top: 20px;
     background-color: #27223a;
@@ -24,7 +26,7 @@ form {
     font-weight: bold;
     font-size: 1em; }
 
-@media screen and (max-width: 330px) {
+@media screen and (max-width: 335px) {
   #html_element {
     transform: scale(0.7);
     -webkit-transform: scale(0.7);

@@ -20,6 +20,27 @@ let allCapos = JSON.parse(rawCapodata);
 // firebase.initializeApp(firebaseConfigFile.firebaseConfigObject);
 // // end firebase
 
+// Firebase App (the core Firebase SDK) is always required and
+// must be listed before other Firebase SDKs
+var firebase = require("firebase/app");
+
+// Add the Firebase products that you want to use
+require("firebase/auth");
+require("firebase/firestore");
+require("firebase/database");
+
+const firebaseConfigFile = require('./firebaseConfig')
+// Initialize Firebase
+firebase.initializeApp(firebaseConfigFile);
+
+var provider = new firebase.auth.GoogleAuthProvider();
+
+
+
+// var firebaseui = require('firebaseui');
+// Initialize the FirebaseUI Widget using Firebase.
+// var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
@@ -84,6 +105,24 @@ app.get('/spanish-guitar', (req, res) => {
 //         .then(newsBody => {
 //             res.render('flamenco-news', { newsBody: newsBody.posts })
 //         });
+// });
+// app.get('/createNewUser', (req, res) => {
+//     res.render('createNewUser');
+// });
+// app.post('/createNewUser', (req, res) => {
+//     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+//         // Handle Errors here.
+//         var errorCode = error.code;
+//         var errorMessage = error.message;
+//         res.send('Sorry please read this error',{ errorCode, errorMessage });
+//       });
+// });
+// app.get('/login', (req, res) => {
+    
+//     res.render('login');
+// });
+// app.post('/login', (req, res) => {
+//     firebase.auth().signInWithRedirect(provider);
 // });
 app.post('/csp', (req, res) => {
     // use date as file name to know when error occured 
