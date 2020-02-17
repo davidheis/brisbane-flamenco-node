@@ -9,7 +9,22 @@
 <div id="mainContainer">
   <h1>Login</h1>
 
-</div> 
+  <form action="/login" method="post">
+    <input id="loginEmail" name="loginEmail" type="email" placeholder="Email">
+    <input id="loginPassword" name="loginPassword" type="password" placeholder="Password">
+    <button id="btnLogin">Log in</button>
+    
+  </form>
+  
+  <!-- createNewUser form -->
+  <form action="/create-new-user" method="get">
+    <button id="btnSignup">Sign up</button>
+  </form>
+  <!-- log out form -->
+  <form id="logoutForm" action="/logout" method="post" style="display:<%= showLogOutBtn ? 'block' : 'none' %>">
+    <button >Log out</button>
+  </form>
+
+</div>
+<script src="/scripts/firebase.js"></script>
 <%- include('./includes/footer.ejs') %>
-
-

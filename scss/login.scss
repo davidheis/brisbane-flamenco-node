@@ -1,0 +1,15 @@
+#mainContainer > form {
+    max-width: 400px;
+    margin: 200px auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    input, button{
+        padding: 10px;
+        margin: 10px;
+    }
+    #logoutForm{
+        display:none;
+    }
+}

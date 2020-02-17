@@ -13,7 +13,7 @@ const fs = require('fs');
 let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
 
-// // Get a reference to the database service
+// Get a reference to the database service
 // const firebase = require('firebase');
 // const firebaseConfigFile = require('./firebaseConfig')
 // // Initialize Firebase
@@ -23,23 +23,52 @@ let allCapos = JSON.parse(rawCapodata);
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
 var firebase = require("firebase/app");
+var admin = require('firebase-admin');
 
 // Add the Firebase products that you want to use
 require("firebase/auth");
-require("firebase/firestore");
-require("firebase/database");
+// require("firebase/firestore");
+// require("firebase/database");
 
-const firebaseConfigFile = require('./firebaseConfig')
+// const firebaseConfigFile = require('./firebaseConfig')
 // Initialize Firebase
-firebase.initializeApp(firebaseConfigFile);
+// firebase.initializeApp(firebaseConfigFile);
 
-var provider = new firebase.auth.GoogleAuthProvider();
+// var provider = new firebase.auth.GoogleAuthProvider();
 
 
 
 // var firebaseui = require('firebaseui');
 // Initialize the FirebaseUI Widget using Firebase.
 // var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: 'AIzaSyCqiPzIGpB4e6Tvb41X4GF2_xGt9RPEseU',
+    authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
+    databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",
+    projectId: "brisbaneflamenco-5aee0",
+    storageBucket: "brisbaneflamenco-5aee0.appspot.com",
+    messagingSenderId: "426908606778",
+    appId: "1:426908606778:web:b0540955512553c2467003",
+    measurementId: "G-0T0V0RB3F8"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+//   firebase.analytics();
+
+
+var admin = require("firebase-admin");
+
+var serviceAccount = require(path.join(__dirname, 'firebase-admin-key.json'));
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com"
+});
+
+
+
 
 const app = express();
 // app.use(helmet())
@@ -106,24 +135,62 @@ app.get('/spanish-guitar', (req, res) => {
 //             res.render('flamenco-news', { newsBody: newsBody.posts })
 //         });
 // });
-// app.get('/createNewUser', (req, res) => {
-//     res.render('createNewUser');
-// });
-// app.post('/createNewUser', (req, res) => {
-//     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-//         // Handle Errors here.
-//         var errorCode = error.code;
-//         var errorMessage = error.message;
-//         res.send('Sorry please read this error',{ errorCode, errorMessage });
-//       });
-// });
-// app.get('/login', (req, res) => {
+app.get('/create-new-user', (req, res) => {
+    res.render('create-new-user');
+});
+app.post('/create-new-user', (req, res) => {
+    console.log(req.body)
+    // const auth = firebase.auth();
+    const signupEmail = req.body.signupEmail;
+    const signupPassword = req.body.signupPassword;
+    firebase.auth()
+    .createUserWithEmailAndPassword(signupEmail, signupPassword)
+    .then(() => {
+        res.redirect('/')
+    })
+    .catch(e => console.log(e.message));
+
+    // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    //     // Handle Errors here.
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     res.send('Sorry please read this error',{ errorCode, errorMessage });
+    //   });
+});
+app.get('/login', (req, res) => {
+
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+            res.render('login', {showLogOutBtn:true});
+        } else {
+            console.log('not logged in')
+            res.render('login', {showLogOutBtn:false});
+        }
+
+    });
     
-//     res.render('login');
-// });
-// app.post('/login', (req, res) => {
-//     firebase.auth().signInWithRedirect(provider);
-// });
+});
+app.post('/login', (req, res) => {
+    const loginEmail = req.body.loginEmail;
+    const loginPassword = req.body.loginPassword;
+    firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
+    // .then(function() {
+    //     return res.redirect('/')
+    //   })
+    .catch(e => console.log(e.message));
+});
+app.post('/logout', (req, res) => {
+    firebase.auth().signOut()
+    // .then(function() {
+    //    return res.redirect('/')
+    //   })
+      .catch(function(error) {
+        // An error happened.
+        console.log(error)
+      });
+      
+});
+
 app.post('/csp', (req, res) => {
     // use date as file name to know when error occured 
     const date = new Date().toISOString();

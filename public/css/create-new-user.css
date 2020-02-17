@@ -1,0 +1,11 @@
+#mainContainer > form {
+  max-width: 400px;
+  margin: 200px auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column; }
+  #mainContainer > form input, #mainContainer > form button {
+    padding: 10px;
+    margin: 10px; }
+  #mainContainer > form #btnLogout {
+    display: none; }
