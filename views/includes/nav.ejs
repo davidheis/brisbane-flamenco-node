@@ -9,6 +9,9 @@
         <a href="/flamenco-blog/blog-index">Blog</a>
         <a href="/contact">Contact </a>
         <a href="/about">About </a>
+        <% if(isLoggedin) { %>
+        <a href="/admin/flamenco-admin">flamenco-admin </a>
+        <% } %>
     </div>
   </nav>
   
@@ -21,4 +24,7 @@
     <a href="/flamenco-blog/blog-index">Blog</a>
     <a href="/contact">Contact </a>
     <a href="/about">About </a>
+    <% if(isLoggedin) { %>
+      <a href="/admin/flamenco-admin">flamenco-admin </a>
+      <% } %>
   </nav>

@@ -69,13 +69,15 @@ admin.initializeApp({
 
 
 
-
+let db = admin.firestore();
 const isAuthenticated = require('./middleware/isAuthenticated').isAuthenticated
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
     type: ['json', 'application/csp-report', 'application/json']
 }))
+
+app.locals.isLoggedin = false;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -148,29 +150,108 @@ app.post('/create-new-user', (req, res) => {
 app.get('/getLogin', (req, res) => {
     res.render('login', { showLogOutBtn: false });
 });
-
 // app.use(isAuthenticated.isAuthenticated);
-app.post('/flamenco-admin', (req, res) => {
+// dont need auth middleware because page will only render if logged in
+app.post('/admin/loginto-flamenco-admin', (req, res) => {
+
     const loginEmail = req.body.loginEmail;
     const loginPassword = req.body.loginPassword;
     firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
         .then(function () {
-            return res.render('admin/flamenco-admin', { showLogOutBtn:true });
+            return res.render('admin/flamenco-admin', { showLogOutBtn: true });
         })
         .catch(e => res.send(e.message));
+
 });
-app.get('/create-flamenco-blog-post', isAuthenticated, (req, res) => {
+app.get('/admin/flamenco-admin', isAuthenticated, (req, res) => {
+
+    res.render('admin/flamenco-admin', { showLogOutBtn: true });
+})
+app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
+
+    db.collection('flamenco-blog').get()
+    .then((snapshot) => {
+        let blogArr = [];
+        
+      snapshot.forEach((doc) => {
+        let id = doc.id;
+        // let h1Title = doc.data().h1Title;
+        blogArr.push({'id': id})
+        // console.log(doc.id, '=>', doc.data());
+      });
+      return blogArr
+    })
+    .then( (blogArr)=> res.render('admin/list-all-flamenco-blog-posts', {blogArr : blogArr}))
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+
+    
+});
+app.get('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
     res.render('admin/create-flamenco-blog-post');
 });
-app.post('/create-flamenco-blog-post', isAuthenticated, (req, res) => {
-    // send to firebase
+app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
+    console.log(req.body)
+
+    let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
+    docRef.set({
+        h1Title: req.body.h1Title,
+        seoFriendlyTitle: req.body.seoFriendlyTitle,
+        headerImg: req.body.headerImg,
+        heading1: req.body.heading1,
+        paragraph1: req.body.paragraph1,
+    });
+    res.render('admin/create-flamenco-blog-post');
+});
+app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+    console.log(req.body)
+
+    let docRef = db.collection('flamenco-blog').doc(req.params.id);
+    docRef.update(req.body);
+    res.redirect('/admin/list-all-flamenco-blog-posts');
+});
+app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+    let post;
+    let id;
+    db.collection('flamenco-blog').get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+          if(doc.id === req.params.id) {
+              post = doc.data();
+              id = doc.id;
+              console.log(id,post);
+              res.render('admin/edit-flamenco-blog-post', { id: id, post: post })
+          }
+      });
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+      res.send(err)
+    });
+});
+app.post('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+    let post;
+    db.collection('flamenco-blog').get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+          if(doc.id === req.params.id) {
+              post = doc.data();
+              res.render('admin/edit-flamenco-blog-post', { post: post })
+          }
+      });
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+      res.send(err)
+    });
 });
 app.post('/logout', (req, res) => {
     firebase.auth().signOut()
-        .then(function() {
+        .then(function () {
             console.log('logged out successful')
-           return res.redirect('/')
-          })
+            return res.redirect('/')
+        })
         .catch(function (error) {
             // An error happened.
             console.log(error)
@@ -178,7 +259,6 @@ app.post('/logout', (req, res) => {
         });
 
 });
-
 // app.get('/flamenco-admin', (req, res) => {
 //     res.render('flamenco-admin',{ showLogOutBtn:true });
 // });
@@ -225,8 +305,3 @@ app.get('/*', (req, res) => {
 // Object.keys() gets keys and puts the in an array
 // Object.entries(obj) makes array of key value pairs
 app.listen(port);
-
-
-
-
-
