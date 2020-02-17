@@ -63,13 +63,14 @@ var admin = require("firebase-admin");
 var serviceAccount = require(path.join(__dirname, 'firebase-admin-key.json'));
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com"
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com"
 });
 
 
 
 
+const isAuthenticated = require('./middleware/isAuthenticated').isAuthenticated
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
@@ -122,33 +123,20 @@ app.get('/spanish-guitar', (req, res) => {
     var title = "The Spanish Flamenco Guitar"
     res.render('spanish-guitar', { title: title });
 });
-// app.get('/flamenco-news', (req, res) => {
-//     const query_params = {
-//         "q": "thread.url:https* language:english thread.title:flamenco spam_score:<0.4 site_type:news",
-//         "ts": "1579180138371",
-//         "sort": "published",
-//         "size": "50",
-//         "format": "json"
-//     }
-//     webhoseioClient.query('filterWebContent', query_params)
-//         .then(newsBody => {
-//             res.render('flamenco-news', { newsBody: newsBody.posts })
-//         });
-// });
 app.get('/create-new-user', (req, res) => {
     res.render('create-new-user');
 });
 app.post('/create-new-user', (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     // const auth = firebase.auth();
     const signupEmail = req.body.signupEmail;
     const signupPassword = req.body.signupPassword;
     firebase.auth()
-    .createUserWithEmailAndPassword(signupEmail, signupPassword)
-    .then(() => {
-        res.redirect('/')
-    })
-    .catch(e => console.log(e.message));
+        .createUserWithEmailAndPassword(signupEmail, signupPassword)
+        .then(() => {
+            res.redirect('/')
+        })
+        .catch(e => console.log(e.message));
 
     // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
     //     // Handle Errors here.
@@ -157,40 +145,43 @@ app.post('/create-new-user', (req, res) => {
     //     res.send('Sorry please read this error',{ errorCode, errorMessage });
     //   });
 });
-app.get('/login', (req, res) => {
-
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-        if (firebaseUser) {
-            res.render('login', {showLogOutBtn:true});
-        } else {
-            console.log('not logged in')
-            res.render('login', {showLogOutBtn:false});
-        }
-
-    });
-    
+app.get('/getLogin', (req, res) => {
+    res.render('login', { showLogOutBtn: false });
 });
-app.post('/login', (req, res) => {
+
+// app.use(isAuthenticated.isAuthenticated);
+app.post('/flamenco-admin', (req, res) => {
     const loginEmail = req.body.loginEmail;
     const loginPassword = req.body.loginPassword;
     firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
-    // .then(function() {
-    //     return res.redirect('/')
-    //   })
-    .catch(e => console.log(e.message));
+        .then(function () {
+            return res.render('admin/flamenco-admin', { showLogOutBtn:true });
+        })
+        .catch(e => res.send(e.message));
+});
+app.get('/create-flamenco-blog-post', isAuthenticated, (req, res) => {
+    res.render('admin/create-flamenco-blog-post');
+});
+app.post('/create-flamenco-blog-post', isAuthenticated, (req, res) => {
+    // send to firebase
 });
 app.post('/logout', (req, res) => {
     firebase.auth().signOut()
-    // .then(function() {
-    //    return res.redirect('/')
-    //   })
-      .catch(function(error) {
-        // An error happened.
-        console.log(error)
-      });
-      
+        .then(function() {
+            console.log('logged out successful')
+           return res.redirect('/')
+          })
+        .catch(function (error) {
+            // An error happened.
+            console.log(error)
+            res.send(error)
+        });
+
 });
 
+// app.get('/flamenco-admin', (req, res) => {
+//     res.render('flamenco-admin',{ showLogOutBtn:true });
+// });
 app.post('/csp', (req, res) => {
     // use date as file name to know when error occured 
     const date = new Date().toISOString();

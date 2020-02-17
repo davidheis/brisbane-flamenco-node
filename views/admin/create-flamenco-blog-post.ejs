@@ -1,0 +1,56 @@
+<%- include('./../includes/header.ejs') %>
+<title>Create Flamenco Blog Post</title>
+<meta name="robots" content="noindex,nofollow">
+<!--FOR SEO SHOULD HAVE THIS ROOT URL-->
+<link rel="canonical" href="https://brisbaneflamenco.com.au/login">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<link rel="stylesheet" href="/css/login.css">
+<%- include('./../includes/nav.ejs') %>
+<div id="mainContainer">
+  <h1>Create Flamenco Blog Post</h1>
+
+  <form action="/create-flamenco-blog-post" method="POST">
+
+    <label for="h1Title">H1 Title</label>
+    <input type="text" name="h1Title">
+
+    <label for="headerImg">Image</label>
+    <input type="file" name="headerImg" accept="image/png, image/jpeg">
+
+    <label for="heading1">Heading1</label>
+    <input type="text" name="heading1">
+
+    <label for="paragraph1">Paragraph1</label>
+    <textarea type="text" name="paragraph1" rows="5" cols="33"></textarea>
+
+    <label for="heading2">Heading2</label>
+    <input type="text" name="heading2">
+
+    <label for="paragraph2">Paragraph2</label>
+    <textarea type="text" name="paragraph2" rows="5" cols="33"></textarea>
+
+    <label for="heading3">Heading3</label>
+    <input type="text" name="heading3">
+
+    <label for="paragraph3">Paragraph3</label>
+    <textarea type="text" name="paragraph3" rows="5" cols="33"></textarea>
+
+    <label for="heading4">Heading4</label>
+    <input type="text" name="heading4">
+
+    <label for="paragraph4">Paragraph4</label>
+    <textarea type="text" name="paragraph4" rows="5" cols="33"></textarea>
+
+    <label for="heading5">Heading5</label>
+    <input type="text" name="heading5">
+
+    <label for="paragraph5">Paragraph5</label>
+    <textarea type="text" name="paragraph5" rows="5" cols="33"></textarea>
+
+</form>
+
+
+
+</div>
+<!-- <script src="/scripts/firebase.js"></script> -->
+<%- include('./../includes/footer.ejs') %>

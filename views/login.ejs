@@ -9,13 +9,14 @@
 <div id="mainContainer">
   <h1>Login</h1>
 
-  <form action="/login" method="post">
+  <form action="/flamenco-admin" method="POST">
     <input id="loginEmail" name="loginEmail" type="email" placeholder="Email">
     <input id="loginPassword" name="loginPassword" type="password" placeholder="Password">
     <button id="btnLogin">Log in</button>
     
   </form>
   
+  <h2>Sign up if you are new</h2>
   <!-- createNewUser form -->
   <form action="/create-new-user" method="get">
     <button id="btnSignup">Sign up</button>
@@ -26,5 +27,5 @@
   </form>
 
 </div>
-<script src="/scripts/firebase.js"></script>
+<!-- <script src="/scripts/firebase.js"></script> -->
 <%- include('./includes/footer.ejs') %>

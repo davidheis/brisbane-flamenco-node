@@ -1,0 +1,20 @@
+<%- include('./../includes/header.ejs') %>
+<title>flamenco-admin</title>
+<meta name="robots" content="noindex,nofollow">
+<!--FOR SEO SHOULD HAVE THIS ROOT URL-->
+<link rel="canonical" href="https://brisbaneflamenco.com.au/flamenco-admin">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<link rel="stylesheet" href="/css/flamenco-admin.css">
+<%- include('./../includes/nav.ejs') %>
+<div id="mainContainer">
+  <h1>flamenco-admin</h1>
+
+  <a href="/create-flamenco-blog-post">Create Flamenco Blog Post</a>
+  <!-- log out form -->
+  <form id="logoutForm" action="/logout" method="post" style="display:<%= showLogOutBtn ? 'block' : 'none' %>">
+    <button >Log out</button>
+  </form>
+
+</div>
+<!-- <script src="/scripts/firebase.js"></script> -->
+<%- include('./../includes/footer.ejs') %>
