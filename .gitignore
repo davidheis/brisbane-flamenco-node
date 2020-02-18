@@ -4,3 +4,4 @@ node_modules
 public/favicons/old_favicons
 csp
 css_copy
+firebase-admin-key.json
