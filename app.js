@@ -97,14 +97,14 @@ app.get('/spanish-guitar', (req, res) => {
 });
 app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
 
-    db.collection('flamenco-blog').get()
+    db.collection('flamenco-blog').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
             let blogArr = [];
 
             snapshot.forEach((doc) => {
                 // let id = doc.id;
                 // let h1Title = doc.data().h1Title;
-                blogArr.push({ 'id': doc.id , 'h1Title': doc.data().h1Title})
+                blogArr.push({ 'id': doc.id, 'h1Title': doc.data().h1Title })
                 // console.log(doc.id, '=>', doc.data());
             });
             return blogArr
@@ -118,13 +118,13 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
 });
 app.get('/flamenco-blog/show/:id', (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).get()
-    .then( doc => {
-        res.render('flamenco-blog/show-flamenco-blog-item', { blog: doc.data() });
-    })
-    .catch(err => {
-        console.log('Error getting document', err);
-      });
-    
+        .then(doc => {
+            res.render('flamenco-blog/show-flamenco-blog-item', { blog: doc.data() });
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+
 });
 app.get('/create-new-user', (req, res) => {
     res.render('create-new-user');
@@ -170,14 +170,16 @@ app.get('/admin/flamenco-admin', isAuthenticated, (req, res) => {
 })
 app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
 
-    db.collection('flamenco-blog').get()
+    db.collection('flamenco-blog').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
             let blogArr = [];
 
             snapshot.forEach((doc) => {
-                let id = doc.id;
-                // let h1Title = doc.data().h1Title;
-                blogArr.push({ 'id': id })
+                // let id = doc.id;
+                let h1Title = doc.data().h1Title;
+                let authorDisplayName = doc.data().authorDisplayName;
+                let dateCreatedHumanReadable = doc.data().dateCreatedHumanReadable;
+                blogArr.push({ 'h1Title': h1Title, 'authorDisplayName': authorDisplayName, 'dateCreatedHumanReadable': dateCreatedHumanReadable })
                 // console.log(doc.id, '=>', doc.data());
             });
             return blogArr
@@ -193,54 +195,70 @@ app.get('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
     res.render('admin/create-flamenco-blog-post');
 });
 app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
+    var user = firebase.auth().currentUser;
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
+    // console.log(req.body)
+    // let blogObj = 
+    // add 20 headings and paragraphs to blogObj
+    // for(let i = 1; i< 21; i++){
+    //     let heading = 'heading' + i;
+    //     let paragraph = 'paragraph' + i;
+    //     blogObj[heading] = req.body[heading] ;
+    //     blogObj[paragraph] = req.body[paragraph];
+    // }
     docRef.set({
+        authorDisplayName: user.displayName,
+        authorUid: user.uid,
         h1Title: req.body.h1Title,
         seoFriendlyTitle: req.body.seoFriendlyTitle,
         headerImg: req.body.headerImg,
-        heading1: req.body.heading1,
-        paragraph1: req.body.paragraph1,
-        heading2: req.body.heading2,
-        paragraph2: req.body.paragraph2,
-        heading3: req.body.heading3,
-        paragraph3: req.body.paragraph3,
-        heading4: req.body.heading4,
-        paragraph4: req.body.paragraph4,
-        heading5: req.body.heading5,
-        paragraph5: req.body.paragraph5
-    });
-    res.redirect('/admin/list-all-flamenco-blog-posts');
+        keywords: req.body.keywords,
+        description: req.body.description,
+        dateCreated: new Date().toISOString(),
+        dateCreatedHumanReadable: new Date().toDateString(),
+        html: req.body.html
+    })
+        .then(() => {
+            res.redirect('/admin/list-all-flamenco-blog-posts');
+        })
+
 });
 app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    db.collection('flamenco-blog').doc(req.params.id).delete();
+    // db.collection('flamenco-blog').doc(req.params.id).delete();
+
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
+    // console.log(req.body.dateCreated.toLocaleDateString())
     docRef.set({
+        authorDisplayName: req.body.authorDisplayName,
+        authorUid: req.body.authorUid,
         h1Title: req.body.h1Title,
         seoFriendlyTitle: req.body.seoFriendlyTitle,
         headerImg: req.body.headerImg,
-        heading1: req.body.heading1,
-        paragraph1: req.body.paragraph1,
-        heading2: req.body.heading2,
-        paragraph2: req.body.paragraph2,
-        heading3: req.body.heading3,
-        paragraph3: req.body.paragraph3,
-        heading4: req.body.heading4,
-        paragraph4: req.body.paragraph4,
-        heading5: req.body.heading5,
-        paragraph5: req.body.paragraph5
+        keywords: req.body.keywords,
+        description: req.body.description,
+        dateCreated: req.body.dateCreated,
+        dateCreatedHumanReadable: new Date(req.body.dateCreated).toDateString(),
+        dateUpdatedHumanReadable: new Date().toDateString(),
+        dateUpdated: new Date().toISOString(),
+        html: req.body.html
     })
-    .then(()=> res.redirect('/admin/list-all-flamenco-blog-posts'))
-    
+        .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
+
+});
+app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+    db.collection('flamenco-blog').doc(req.params.id).delete()
+        .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
+
 });
 app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    let post;
-    let id;
+
+
     db.collection('flamenco-blog').get()
         .then((snapshot) => {
             snapshot.forEach((doc) => {
                 if (doc.id === req.params.id) {
-                    post = doc.data();
-                    id = doc.id;
+                    let post = doc.data();
+                    let id = doc.id;
                     res.render('admin/edit-flamenco-blog-post', { id: id, post: post })
                 }
             });
@@ -266,7 +284,24 @@ app.post('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
             res.send(err)
         });
 });
-app.post('/logout', (req, res) => {
+app.get('/admin/userProfile', isAuthenticated, (req, res) => {
+    var user = firebase.auth().currentUser;
+    res.render('admin/userProfile', { user: user })
+});
+app.post('/admin/userProfile', isAuthenticated, (req, res) => {
+    var user = firebase.auth().currentUser;
+    console.log(req.body)
+    user.updateProfile({
+        displayName: req.body.displayName,
+        photoURL: req.body.photoURL
+    }).then(function () {
+        res.redirect('/admin/userProfile')
+    }).catch(function (error) {
+        // An error happened.
+    });
+
+});
+app.post('/logout', isAuthenticated, (req, res) => {
     firebase.auth().signOut()
         .then(function () {
             console.log('logged out successful')

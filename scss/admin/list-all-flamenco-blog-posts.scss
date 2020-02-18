@@ -4,5 +4,14 @@
     padding: 20px;
         display: flex;
         flex-direction: column;
+        .blogs{
+            margin: 30px;
+            border: 1px solid black;
+            padding: 20px;
+            #deleteForm button{
+                background: red;
+                padding: 5px;
+            }
+        }
   
 }

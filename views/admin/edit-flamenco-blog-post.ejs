@@ -1,10 +1,10 @@
 <%- include('./../includes/header.ejs') %>
-<title>Create Flamenco Blog Post</title>
+<title>Edit Flamenco Blog Post</title>
 <meta name="robots" content="noindex,nofollow">
 <!--FOR SEO SHOULD HAVE THIS ROOT URL-->
-<link rel="canonical" href="https://brisbaneflamenco.com.au/login">
+<link rel="canonical" href="https://brisbaneflamenco.com.au/admin/edit-flamenco-blog-post">
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<link rel="stylesheet" href="/css/login.css">
+<link rel="stylesheet" href="/css/admin/edit-flamenco-blog-post.css">
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
   <a href="/admin/flamenco-admin">Admin Home</a>
@@ -14,42 +14,219 @@
 
     <label for="h1Title">H1 Title</label>
     <input type="text" name="h1Title" value="<%= post.h1Title %>">
+    
+    <label for="dateCreated">Date created</label>
+    <input readonly type="text" name="dateCreated" value="<%= post.dateCreated %>">
 
+    <label for="dateCreated">Date Updated</label>
+    <input readonly type="text" name="dateUpdated" value="<%= post.dateUpdated %>">
+
+    <label for="authorDisplayName">authorDisplayName</label>
+    <input readonly type="text" name="authorDisplayName" value="<%= post.authorDisplayName %>">
+
+    <label for="authorUid">authorUid</label>
+    <input readonly type="text" name="authorUid" value="<%= post.authorUid %>">
+    
+  
     <label for="seoFriendlyTitle">SEO Friendly Title</label>
     <input type="text" name="seoFriendlyTitle" value="<%= post.seoFriendlyTitle %>">
 
     <label for="headerImg">Image</label>
     <input type="file" name="headerImg" accept="image/png, image/jpeg">
+ 
+    <!-- <div class="headingOrParagraph"> -->
+      <label for="keywords">keywords</label>
+      <textarea name="keywords" rows="2" cols="33"><%= post.keywords %></textarea>
 
-    <label for="heading1">Heading1</label>
-    <input type="text" name="heading1" value="<%= post.h1Title %>">
+      <label for="description">description</label>
+      <textarea name="description" rows="12" cols="33"><%= post.description %></textarea>
 
-    <label for="paragraph1">Paragraph1</label>
-    <textarea type="text" name="paragraph1" rows="5" cols="33"><%= post.paragraph1 %></textarea>
+      <label for="html">html</label>
+      <textarea name="html" rows="100" cols="33"><%= post.html %></textarea>
+    <!-- </div> -->
 
-    <label for="heading2">Heading2</label>
-    <input type="text" name="heading2" value="<%= post.h2Title %>">
 
-    <label for="paragraph2">Paragraph2</label>
-    <textarea type="text" name="paragraph2" rows="5" cols="33"><%= post.paragraph2 %></textarea>
 
-    <label for="heading3">Heading3</label>
-    <input type="text" name="heading3" value="<%= post.h3Title %>">
-
-    <label for="paragraph3">Paragraph3</label>
-    <textarea type="text" name="paragraph3" rows="5" cols="33"><%= post.paragraph3 %></textarea>
-
-    <label for="heading4">Heading4</label>
-    <input type="text" name="heading4" value="<%= post.h4Title %>">
-
-    <label for="paragraph4">Paragraph4</label>
-    <textarea type="text" name="paragraph4" rows="5" cols="33"><%= post.paragraph4 %></textarea>
-
-    <label for="heading5">Heading5</label>
-    <input type="text" name="heading5" value="<%= post.h5Title %>">
-
-    <label for="paragraph5">Paragraph5</label>
-    <textarea type="text" name="paragraph5" rows="5" cols="33"><%= post.paragraph5 %></textarea>
+      <!-- <div class="headingOrParagraph"> -->
+        <!-- <h5>Section 1</h5>
+        <label for="heading1">Heading 1</label>
+        <input type="text" name="heading1" value="<%= post.heading1  %>">
+        <p>Or</p>
+        <label for="paragraph1">Paragraph 1</label>
+        <textarea type="text" name="paragraph1" rows="10" cols="33"><%= post.paragraph1   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 2</h5>
+        <label for="heading2">Heading 2</label>
+        <input type="text" name="heading2" value="<%= post.heading2  %>">
+        <p>Or</p>
+        <label for="paragraph2">Paragraph 2</label>
+        <textarea type="text" name="paragraph2" rows="10" cols="33"><%= post.paragraph2   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 3</h5>
+        <label for="heading3">Heading 3</label>
+        <input type="text" name="heading3" value="<%= post.heading3  %>">
+        <p>Or</p>
+        <label for="paragraph3">Paragraph 3</label>
+        <textarea type="text" name="paragraph3" rows="10" cols="33"><%= post.paragraph3   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 4</h5>
+        <label for="heading4">Heading 4</label>
+        <input type="text" name="heading4" value="<%= post.heading4  %>">
+        <p>Or</p>
+        <label for="paragraph4">Paragraph 4</label>
+        <textarea type="text" name="paragraph4" rows="10" cols="33"><%= post.paragraph4   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 5</h5>
+        <label for="heading5">Heading 5</label>
+        <input type="text" name="heading5" value="<%= post.heading5  %>">
+        <p>Or</p>
+        <label for="paragraph5">Paragraph 5</label>
+        <textarea type="text" name="paragraph5" rows="10" cols="33"><%= post.paragraph5   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 6</h5>
+        <label for="heading6">Heading 6</label>
+        <input type="text" name="heading6" value="<%= post.heading6  %>">
+        <p>Or</p>
+        <label for="paragraph6">Paragraph 6</label>
+        <textarea type="text" name="paragraph6" rows="10" cols="33"><%= post.paragraph6   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 7</h5>
+        <label for="heading7">Heading 7</label>
+        <input type="text" name="heading7" value="<%= post.heading7  %>">
+        <p>Or</p>
+        <label for="paragraph7">Paragraph 7</label>
+        <textarea type="text" name="paragraph7" rows="10" cols="33"><%= post.paragraph7   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 8</h5>
+        <label for="heading8">Heading 8</label>
+        <input type="text" name="heading8" value="<%= post.heading8  %>">
+        <p>Or</p>
+        <label for="paragraph8">Paragraph 8</label>
+        <textarea type="text" name="paragraph8" rows="10" cols="33"><%= post.paragraph8   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 9</h5>
+        <label for="heading9">Heading 9</label>
+        <input type="text" name="heading9" value="<%= post.heading9  %>">
+        <p>Or</p>
+        <label for="paragraph9">Paragraph 9</label>
+        <textarea type="text" name="paragraph9" rows="10" cols="33"><%= post.paragraph9   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 10</h5>
+        <label for="heading10">Heading 10</label>
+        <input type="text" name="heading10" value="<%= post.heading10  %>">
+        <p>Or</p>
+        <label for="paragraph10">Paragraph 10</label>
+        <textarea type="text" name="paragraph10" rows="10" cols="33"><%= post.paragraph10   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 11</h5>
+        <label for="heading11">Heading 11</label>
+        <input type="text" name="heading11" value="<%= post.heading11  %>">
+        <p>Or</p>
+        <label for="paragraph11">Paragraph 11</label>
+        <textarea type="text" name="paragraph11" rows="10" cols="33"><%= post.paragraph11   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 12</h5>
+        <label for="heading12">Heading 12</label>
+        <input type="text" name="heading12" value="<%= post.heading12  %>">
+        <p>Or</p>
+        <label for="paragraph12">Paragraph 12</label>
+        <textarea type="text" name="paragraph12" rows="10" cols="33"><%= post.paragraph12   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 13</h5>
+        <label for="heading13">Heading 13</label>
+        <input type="text" name="heading13" value="<%= post.heading13  %>">
+        <p>Or</p>
+        <label for="paragraph13">Paragraph 13</label>
+        <textarea type="text" name="paragraph13" rows="10" cols="33"><%= post.paragraph13   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 14</h5>
+        <label for="heading14">Heading 14</label>
+        <input type="text" name="heading14" value="<%= post.heading14  %>">
+        <p>Or</p>
+        <label for="paragraph14">Paragraph 14</label>
+        <textarea type="text" name="paragraph14" rows="10" cols="33"><%= post.paragraph14   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 15</h5>
+        <label for="heading15">Heading 15</label>
+        <input type="text" name="heading15" value="<%= post.heading15  %>">
+        <p>Or</p>
+        <label for="paragraph15">Paragraph 15</label>
+        <textarea type="text" name="paragraph15" rows="10" cols="33"><%= post.paragraph15   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 16</h5>
+        <label for="heading16">Heading 16</label>
+        <input type="text" name="heading16" value="<%= post.heading16  %>">
+        <p>Or</p>
+        <label for="paragraph16">Paragraph 16</label>
+        <textarea type="text" name="paragraph16" rows="10" cols="33"><%= post.paragraph16   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 17</h5>
+        <label for="heading17">Heading 17</label>
+        <input type="text" name="heading17" value="<%= post.heading17  %>">
+        <p>Or</p>
+        <label for="paragraph17">Paragraph 17</label>
+        <textarea type="text" name="paragraph17" rows="10" cols="33"><%= post.paragraph17   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 18</h5>
+        <label for="heading18">Heading 18</label>
+        <input type="text" name="heading18" value="<%= post.heading18  %>">
+        <p>Or</p>
+        <label for="paragraph18">Paragraph 18</label>
+        <textarea type="text" name="paragraph18" rows="10" cols="33"><%= post.paragraph18   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 19</h5>
+        <label for="heading19">Heading 19</label>
+        <input type="text" name="heading19" value="<%= post.heading19  %>">
+        <p>Or</p>
+        <label for="paragraph19">Paragraph 19</label>
+        <textarea type="text" name="paragraph19" rows="10" cols="33"><%= post.paragraph19   %></textarea>
+      </div>
+ 
+      <div class="headingOrParagraph">
+        <h5>Section 20</h5>
+        <label for="heading20">Heading 20</label>
+        <input type="text" name="heading20" value="<%= post.heading20  %>">
+        <p>Or</p>
+        <label for="paragraph20">Paragraph 20</label>
+        <textarea type="text" name="paragraph20" rows="10" cols="33"><%= post.paragraph20   %></textarea>
+      </div> -->
+ 
     <button type="submit">Submit</button>
 </form>
 

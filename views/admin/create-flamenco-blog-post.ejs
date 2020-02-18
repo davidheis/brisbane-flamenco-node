@@ -4,7 +4,7 @@
 <!--FOR SEO SHOULD HAVE THIS ROOT URL-->
 <link rel="canonical" href="https://brisbaneflamenco.com.au/login">
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<link rel="stylesheet" href="/css/login.css">
+<link rel="stylesheet" href="/css/admin/create-flamenco-blog-post.css">
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
   <a href="/admin/flamenco-admin">Admin Home</a>
@@ -16,42 +16,26 @@
     <input type="text" name="h1Title">
 
     <label for="seoFriendlyTitle">SEO Friendly Title</label>
-    <input type="text" name="seoFriendlyTitle">
+    <cite>This will be the documents id so make it unique</cite>
+    <input required type="text" name="seoFriendlyTitle">
 
     <label for="headerImg">Image</label>
     <input type="file" name="headerImg" accept="image/png, image/jpeg">
 
-    <label for="heading1">Heading1</label>
-    <input type="text" name="heading1">
+    <!-- <div class="headingOrParagraph"> -->
+      <label for="keywords">keywords</label>
+      <textarea name="keywords" rows="2" cols="33"></textarea>
 
-    <label for="paragraph1">Paragraph1</label>
-    <textarea type="text" name="paragraph1" rows="5" cols="33"></textarea>
+      <label for="description">description</label>
+      <textarea name="description" rows="12" cols="33"></textarea>
 
-    <label for="heading2">Heading2</label>
-    <input type="text" name="heading2">
+      <label for="html">html</label>
+      <textarea name="html" rows="100" cols="33"></textarea>
+    <!-- </div> -->
 
-    <label for="paragraph2">Paragraph2</label>
-    <textarea type="text" name="paragraph2" rows="5" cols="33"></textarea>
 
-    <label for="heading3">Heading3</label>
-    <input type="text" name="heading3">
-
-    <label for="paragraph3">Paragraph3</label>
-    <textarea type="text" name="paragraph3" rows="5" cols="33"></textarea>
-
-    <label for="heading4">Heading4</label>
-    <input type="text" name="heading4">
-
-    <label for="paragraph4">Paragraph4</label>
-    <textarea type="text" name="paragraph4" rows="5" cols="33"></textarea>
-
-    <label for="heading5">Heading5</label>
-    <input type="text" name="heading5">
-
-    <label for="paragraph5">Paragraph5</label>
-    <textarea type="text" name="paragraph5" rows="5" cols="33"></textarea>
     <button type="submit">Submit</button>
-</form>
+  </form>
 
 
 

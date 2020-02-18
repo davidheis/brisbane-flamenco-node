@@ -10,10 +10,20 @@
   <a href="/admin/flamenco-admin">Admin Home</a>
   <h1>list-all-flamenco-blog-posts</h1>
   <% blogArr.map( blog => { %>
-    
-<p><%= blog.id %><a href="/admin/edit-flamenco-blog-post/<%= blog.id %>">  <button>Edit</button></a></p>
-    <%  }) %>
- 
+
+ <div class="blogs">
+   <h4><%= blog.h1Title %> </h4>
+   <p>Author <%= blog.authorDisplayName %></p>
+   <p>Date Created <%= blog.dateCreatedHumanReadable %></p>
+  <p>
+    <a href="/admin/edit-flamenco-blog-post/<%= blog.id %>"> <button>Edit</button></a>
+  </p>
+
+  <form id="deleteForm" action="/admin/delete-flamenco-blog-post/<%= blog.id %>" method="post">
+    <a href="/admin/delete-flamenco-blog-post/<%= blog.id %>"> <button>Delete</button></a>
+  </form>
+ </div>
+  <%  }) %>
 </div>
-<!-- <script src="/scripts/firebase.js"></script> -->
+<script src="/scripts/confirm-blog-deletion.js"></script>
 <%- include('./../includes/footer.ejs') %>

@@ -1,0 +1,19 @@
+#mainContainer {
+  max-width: 650px;
+  padding: 15px;
+  margin: auto; }
+  #mainContainer form {
+    max-width: 650px;
+    margin: 200px auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column; }
+    #mainContainer form input, #mainContainer form button, #mainContainer form textarea {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px;
+      margin: 0 0 20px 0; }
+
+.headingOrParagraph {
+  border: 2px solid black;
+  padding: 20px; }

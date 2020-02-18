@@ -1,0 +1,23 @@
+<%- include('./../includes/header.ejs') %>
+<title>userProfile</title>
+<meta name="robots" content="noindex,nofollow">
+<!--FOR SEO SHOULD HAVE THIS ROOT URL-->
+<link rel="canonical" href="https://brisbaneflamenco.com.au/admin/userProfile">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<link rel="stylesheet" href="/css/admin/userProfile.css">
+<%- include('./../includes/nav.ejs') %>
+<div id="mainContainer">
+  <a href="/admin/flamenco-admin">Admin Home</a>
+  <h1>userProfile</h1>
+
+<form action="/admin/userProfile" method="post">
+    <label for="displayName">Edit your Display Name</label>
+<input type="text" name="displayName" value="<%= user.displayName %>">
+    <label for="photoURL">Edit your image link</label>
+<input type="text" name="photoURL" value="<%= user.photoURL %>">
+<button>Submit</button>
+</form>
+
+</div>
+<!-- <script src="/scripts/firebase.js"></script> -->
+<%- include('./../includes/footer.ejs') %>
