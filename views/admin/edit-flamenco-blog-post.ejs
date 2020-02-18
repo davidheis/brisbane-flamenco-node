@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/css/login.css">
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
+  <a href="/admin/flamenco-admin">Admin Home</a>
   <h1>Edit Flamenco Blog Post</h1>
 
   <form action="/admin/update-flamenco-blog-post/<%= id %>" method="POST">
@@ -15,7 +16,7 @@
     <input type="text" name="h1Title" value="<%= post.h1Title %>">
 
     <label for="seoFriendlyTitle">SEO Friendly Title</label>
-    <input type="text" name="seoFriendlyTitle" value="<%= post.h1Title %>">
+    <input type="text" name="seoFriendlyTitle" value="<%= post.seoFriendlyTitle %>">
 
     <label for="headerImg">Image</label>
     <input type="file" name="headerImg" accept="image/png, image/jpeg">

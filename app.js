@@ -3,46 +3,16 @@ const path = require('path');
 const port = 3003;
 const express = require('express');
 const bodyParser = require('body-parser');
-// const request = require('request');
-// const webhoseio = require('webhoseio');
 const contactsController = require('./controllers/contact')
-// const webhoseioClient = webhoseio.config({ token: '592afc32-9f3a-4a8b-9ed2-027d06228fae' });
-// require('bootstrap')
 const fs = require('fs');
 // const helmet = require('helmet')
 let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
-
-// Get a reference to the database service
-// const firebase = require('firebase');
-// const firebaseConfigFile = require('./firebaseConfig')
-// // Initialize Firebase
-// firebase.initializeApp(firebaseConfigFile.firebaseConfigObject);
-// // end firebase
-
-// Firebase App (the core Firebase SDK) is always required and
-// must be listed before other Firebase SDKs
 var firebase = require("firebase/app");
 var admin = require('firebase-admin');
 
 // Add the Firebase products that you want to use
 require("firebase/auth");
-// require("firebase/firestore");
-// require("firebase/database");
-
-// const firebaseConfigFile = require('./firebaseConfig')
-// Initialize Firebase
-// firebase.initializeApp(firebaseConfigFile);
-
-// var provider = new firebase.auth.GoogleAuthProvider();
-
-
-
-// var firebaseui = require('firebaseui');
-// Initialize the FirebaseUI Widget using Firebase.
-// var ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: 'AIzaSyCqiPzIGpB4e6Tvb41X4GF2_xGt9RPEseU',
     authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
@@ -57,7 +27,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 //   firebase.analytics();
 
-
 var admin = require("firebase-admin");
 
 var serviceAccount = require(path.join(__dirname, 'firebase-admin-key.json'));
@@ -67,17 +36,18 @@ admin.initializeApp({
     databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com"
 });
 
-
-
 let db = admin.firestore();
-const isAuthenticated = require('./middleware/isAuthenticated').isAuthenticated
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
     type: ['json', 'application/csp-report', 'application/json']
 }))
+// app.use((req, res, next) => {
+//     res.locals.isLoggedin = false;
+//     next();
+// })
 
-app.locals.isLoggedin = false;
+const isAuthenticated = require('./middleware/isAuthenticated').isAuthenticated
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -125,6 +95,37 @@ app.get('/spanish-guitar', (req, res) => {
     var title = "The Spanish Flamenco Guitar"
     res.render('spanish-guitar', { title: title });
 });
+app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
+
+    db.collection('flamenco-blog').get()
+        .then((snapshot) => {
+            let blogArr = [];
+
+            snapshot.forEach((doc) => {
+                // let id = doc.id;
+                // let h1Title = doc.data().h1Title;
+                blogArr.push({ 'id': doc.id , 'h1Title': doc.data().h1Title})
+                // console.log(doc.id, '=>', doc.data());
+            });
+            return blogArr
+        })
+        .then((blogArr) => res.render('flamenco-blog/list-all-flamenco-blog-posts', { blogArr: blogArr }))
+        .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+
+
+});
+app.get('/flamenco-blog/show/:id', (req, res) => {
+    db.collection('flamenco-blog').doc(req.params.id).get()
+    .then( doc => {
+        res.render('flamenco-blog/show-flamenco-blog-item', { blog: doc.data() });
+    })
+    .catch(err => {
+        console.log('Error getting document', err);
+      });
+    
+});
 app.get('/create-new-user', (req, res) => {
     res.render('create-new-user');
 });
@@ -170,30 +171,28 @@ app.get('/admin/flamenco-admin', isAuthenticated, (req, res) => {
 app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
 
     db.collection('flamenco-blog').get()
-    .then((snapshot) => {
-        let blogArr = [];
-        
-      snapshot.forEach((doc) => {
-        let id = doc.id;
-        // let h1Title = doc.data().h1Title;
-        blogArr.push({'id': id})
-        // console.log(doc.id, '=>', doc.data());
-      });
-      return blogArr
-    })
-    .then( (blogArr)=> res.render('admin/list-all-flamenco-blog-posts', {blogArr : blogArr}))
-    .catch((err) => {
-      console.log('Error getting documents', err);
-    });
+        .then((snapshot) => {
+            let blogArr = [];
 
-    
+            snapshot.forEach((doc) => {
+                let id = doc.id;
+                // let h1Title = doc.data().h1Title;
+                blogArr.push({ 'id': id })
+                // console.log(doc.id, '=>', doc.data());
+            });
+            return blogArr
+        })
+        .then((blogArr) => res.render('admin/list-all-flamenco-blog-posts', { blogArr: blogArr }))
+        .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+
+
 });
 app.get('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
     res.render('admin/create-flamenco-blog-post');
 });
 app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
-    console.log(req.body)
-
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
     docRef.set({
         h1Title: req.body.h1Title,
@@ -201,50 +200,71 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
         headerImg: req.body.headerImg,
         heading1: req.body.heading1,
         paragraph1: req.body.paragraph1,
+        heading2: req.body.heading2,
+        paragraph2: req.body.paragraph2,
+        heading3: req.body.heading3,
+        paragraph3: req.body.paragraph3,
+        heading4: req.body.heading4,
+        paragraph4: req.body.paragraph4,
+        heading5: req.body.heading5,
+        paragraph5: req.body.paragraph5
     });
-    res.render('admin/create-flamenco-blog-post');
+    res.redirect('/admin/list-all-flamenco-blog-posts');
 });
 app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    console.log(req.body)
-
-    let docRef = db.collection('flamenco-blog').doc(req.params.id);
-    docRef.update(req.body);
-    res.redirect('/admin/list-all-flamenco-blog-posts');
+    db.collection('flamenco-blog').doc(req.params.id).delete();
+    let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
+    docRef.set({
+        h1Title: req.body.h1Title,
+        seoFriendlyTitle: req.body.seoFriendlyTitle,
+        headerImg: req.body.headerImg,
+        heading1: req.body.heading1,
+        paragraph1: req.body.paragraph1,
+        heading2: req.body.heading2,
+        paragraph2: req.body.paragraph2,
+        heading3: req.body.heading3,
+        paragraph3: req.body.paragraph3,
+        heading4: req.body.heading4,
+        paragraph4: req.body.paragraph4,
+        heading5: req.body.heading5,
+        paragraph5: req.body.paragraph5
+    })
+    .then(()=> res.redirect('/admin/list-all-flamenco-blog-posts'))
+    
 });
 app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     let post;
     let id;
     db.collection('flamenco-blog').get()
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-          if(doc.id === req.params.id) {
-              post = doc.data();
-              id = doc.id;
-              console.log(id,post);
-              res.render('admin/edit-flamenco-blog-post', { id: id, post: post })
-          }
-      });
-    })
-    .catch((err) => {
-      console.log('Error getting documents', err);
-      res.send(err)
-    });
+        .then((snapshot) => {
+            snapshot.forEach((doc) => {
+                if (doc.id === req.params.id) {
+                    post = doc.data();
+                    id = doc.id;
+                    res.render('admin/edit-flamenco-blog-post', { id: id, post: post })
+                }
+            });
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+            res.send(err)
+        });
 });
 app.post('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     let post;
     db.collection('flamenco-blog').get()
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-          if(doc.id === req.params.id) {
-              post = doc.data();
-              res.render('admin/edit-flamenco-blog-post', { post: post })
-          }
-      });
-    })
-    .catch((err) => {
-      console.log('Error getting documents', err);
-      res.send(err)
-    });
+        .then((snapshot) => {
+            snapshot.forEach((doc) => {
+                if (doc.id === req.params.id) {
+                    post = doc.data();
+                    res.render('admin/edit-flamenco-blog-post', { post: post })
+                }
+            });
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+            res.send(err)
+        });
 });
 app.post('/logout', (req, res) => {
     firebase.auth().signOut()
@@ -299,6 +319,7 @@ app.get('/site-map', (req, res) => {
     res.render('site-map');
 });
 app.get('/*', (req, res) => {
+
     res.render('index');
 });
 // Object.values() this gets the value of objects and puts them in an array 

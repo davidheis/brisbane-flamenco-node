@@ -4,12 +4,14 @@
 <!--FOR SEO SHOULD HAVE THIS ROOT URL-->
 <link rel="canonical" href="https://brisbaneflamenco.com.au/list-all-flamenco-blog-posts">
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<link rel="stylesheet" href="/css/list-all-flamenco-blog-posts.css">
+<link rel="stylesheet" href="/css/admin/list-all-flamenco-blog-posts.css">
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
+  <a href="/admin/flamenco-admin">Admin Home</a>
   <h1>list-all-flamenco-blog-posts</h1>
   <% blogArr.map( blog => { %>
-<p><a href="/admin/edit-flamenco-blog-post/<%= blog.id %>">Edit <%= blog.id %></a></p>
+    
+<p><%= blog.id %><a href="/admin/edit-flamenco-blog-post/<%= blog.id %>">  <button>Edit</button></a></p>
     <%  }) %>
  
 </div>
