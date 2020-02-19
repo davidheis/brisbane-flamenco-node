@@ -10,27 +10,27 @@
   <a href="/admin/flamenco-admin">Admin Home</a>
   <h1>Create Flamenco Blog Post</h1>
 
-  <form action="/admin/create-flamenco-blog-post" method="POST">
+  <form action="/admin/create-flamenco-blog-post" method="POST" enctype="multipart/form-data">
 
     <label for="h1Title">H1 Title</label>
-    <input type="text" name="h1Title">
+    <input type="text" name="h1Title" required> 
 
     <label for="seoFriendlyTitle">SEO Friendly Title</label>
     <cite>This will be the documents id so make it unique</cite>
     <input required type="text" name="seoFriendlyTitle">
 
     <label for="headerImg">Image</label>
-    <input type="file" name="headerImg" accept="image/png, image/jpeg">
+    <input id="headerImg" type="file" name="headerImg" accept="image/*">
 
     <!-- <div class="headingOrParagraph"> -->
       <label for="keywords">keywords</label>
-      <textarea name="keywords" rows="2" cols="33"></textarea>
+      <textarea name="keywords" rows="2" cols="33" required></textarea>
 
       <label for="description">description</label>
-      <textarea name="description" rows="12" cols="33"></textarea>
+      <textarea name="description" rows="12" cols="33" required></textarea>
 
       <label for="html">html</label>
-      <textarea name="html" rows="100" cols="33"></textarea>
+      <textarea name="html" rows="100" cols="33" required></textarea>
     <!-- </div> -->
 
 
@@ -40,5 +40,39 @@
 
 
 </div>
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-storage.js"></script>
+
+<script>
+  const firebaseConfig = {
+  apiKey: 'AIzaSyCqiPzIGpB4e6Tvb41X4GF2_xGt9RPEseU',
+  authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
+  databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",
+  projectId: "brisbaneflamenco-5aee0",
+  storageBucket: "brisbaneflamenco-5aee0.appspot.com",
+  messagingSenderId: "426908606778",
+  appId: "1:426908606778:web:b0540955512553c2467003",
+  measurementId: "G-0T0V0RB3F8"
+};
+firebase.initializeApp(firebaseConfig);
+
+var headerImgId = document.getElementById('headerImg');
+
+headerImgId.addEventListener('change', function(e){
+  
+  var file = e.target.files[0];
+  var storageRef = firebase.storage().ref('flamenco_blog/' + file.name);
+   storageRef.put(file)
+  .then(function(snapshot) {
+    snapshot.ref.getDownloadURL().then(function(downloadURL) {
+    console.log('File available at', downloadURL);
+  });
+});
+
+});
+</script>
 <!-- <script src="/scripts/firebase.js"></script> -->
 <%- include('./../includes/footer.ejs') %>

@@ -10,9 +10,13 @@ let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
 var firebase = require("firebase/app");
 var admin = require('firebase-admin');
-
+// var multer  = require('multer')
+// var storage = multer.memoryStorage()
+// var upload = multer({storage:storage})
 // Add the Firebase products that you want to use
 require("firebase/auth");
+require("firebase/firestore");
+// require('firebase/database');
 const firebaseConfig = {
     apiKey: 'AIzaSyCqiPzIGpB4e6Tvb41X4GF2_xGt9RPEseU',
     authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
@@ -37,6 +41,7 @@ admin.initializeApp({
 });
 
 let db = admin.firestore();
+// var storageRef = firebase.storage() ;
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
@@ -54,6 +59,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
+
 
 app.post('/contact', contactsController.sendContactPageEmail);
 app.get('/contact', (req, res) => {
@@ -175,11 +182,11 @@ app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
             let blogArr = [];
 
             snapshot.forEach((doc) => {
-                // let id = doc.id;
+                let id = doc.id;
                 let h1Title = doc.data().h1Title;
                 let authorDisplayName = doc.data().authorDisplayName;
                 let dateCreatedHumanReadable = doc.data().dateCreatedHumanReadable;
-                blogArr.push({ 'h1Title': h1Title, 'authorDisplayName': authorDisplayName, 'dateCreatedHumanReadable': dateCreatedHumanReadable })
+                blogArr.push({ 'id': id, 'h1Title': h1Title, 'authorDisplayName': authorDisplayName, 'dateCreatedHumanReadable': dateCreatedHumanReadable })
                 // console.log(doc.id, '=>', doc.data());
             });
             return blogArr
@@ -195,6 +202,19 @@ app.get('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
     res.render('admin/create-flamenco-blog-post');
 });
 app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
+    // upload img
+    // var mountainsRef = storageRef.child('mountains.jpg');
+
+// console.log(req.file)
+// console.log(req.body)
+//     var file = req.file.buffer;
+//     mountainsRef.put(file).then(function(snapshot) {
+//       console.log('Uploaded a blob or file!');
+//     })
+//     .catch(err => console.log(err))
+    
+
+    // upload doc
     var user = firebase.auth().currentUser;
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
     // console.log(req.body)
@@ -211,7 +231,7 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
         authorUid: user.uid,
         h1Title: req.body.h1Title,
         seoFriendlyTitle: req.body.seoFriendlyTitle,
-        headerImg: req.body.headerImg,
+        headerImg: req.file.originalname,
         keywords: req.body.keywords,
         description: req.body.description,
         dateCreated: new Date().toISOString(),
@@ -297,7 +317,7 @@ app.post('/admin/userProfile', isAuthenticated, (req, res) => {
     }).then(function () {
         res.redirect('/admin/userProfile')
     }).catch(function (error) {
-        // An error happened.
+        res.send(error);
     });
 
 });
