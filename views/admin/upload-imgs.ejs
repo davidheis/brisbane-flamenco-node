@@ -8,22 +8,19 @@
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
     <a href="/admin/flamenco-admin">Admin Home</a>
-    <h1>upload-imgs</h1>
-
-    <!-- <input id="blogId" type="text" value="<%= blogId %>" readonly>
-    <label for="headerImg">Image</label>
-    <input id="imageInput" type="file" name="headerImg" accept="image/*"> -->
-
+    <h1>upload-imgs</h1> 
+    
     <form id="uploadImgForm" action="/admin/upload-imgs-flamenco-blog-post/<%= blogId %>" method="post" enctype="multipart/form-data">
+        <label for="blogId">blog id</label>
         <input id="blogId" type="text" value="<%= blogId %>" readonly>
-        <label for="headerImg">Image</label>
+        <label for="imageInput">Image</label>
         <input id="imageInput" type="file" name="headerImg" accept="image/*">
 
-        <!-- <label for="headerImgWidth">headerImgWidth</label>
-        <input type="number" name="headerImgWidth">
+        <label for="headerImgWidth">headerImgWidth</label>
+        <input id="headerImgWidth" type="number" name="headerImgWidth" required>
 
         <label for="headerImgHeight">headerImgHeight</label>
-        <input type="number" name="headerImgHeight"> -->
+        <input id="headerImgHeight" type="number" name="headerImgHeight" required>
         <button>Submit</button>
     </form>
 
@@ -31,12 +28,12 @@
 <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
 <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
-<script>
-    // const firebaseConfig = {
+<script> -->
+    <!-- // const firebaseConfig = {
     //     apiKey: 'AIzaSyCqiPzIGpB4e6Tvb41X4GF2_xGt9RPEseU',
     //     authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
     //     databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",
@@ -72,7 +69,7 @@
     //             });
     //         });
     //     // e.preventDefault()
-    // });
-</script>
+    // }); -->
+<!-- </script> -->
 <!-- <script src="/scripts/firebase.js"></script> -->
 <%- include('./../includes/footer.ejs') %>
