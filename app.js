@@ -117,14 +117,14 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
     db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
             let blogArr = [];
-
             snapshot.forEach((doc) => {
                 // let id = doc.id;
                 // let h1Title = doc.data().h1Title;
                 blogArr.push({ 'id': doc.id, 'h1Title': doc.data().h1Title })
                 // console.log(doc.id, '=>', doc.data());
-            });
-            return blogArr
+            })
+            return blogArr;
+            
         })
         .then((blogArr) => res.render('flamenco-blog/list-all-flamenco-blog-posts', { blogArr: blogArr }))
         .catch((err) => {
@@ -136,7 +136,13 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
 app.get('/flamenco-blog/show/:id', (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).get()
         .then(doc => {
-            res.render('flamenco-blog/show-flamenco-blog-item', { blog: doc.data() });
+            // blog must be approved, this protects article access from directly typing the url
+            if(doc.data().isApproved === 'true'){
+                res.render('flamenco-blog/show-flamenco-blog-item', { blog: doc.data() });
+            } else{
+                res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
+            }
+            
         })
         .catch(err => {
             console.log('Error getting document', err);
@@ -266,25 +272,35 @@ app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res)
 });
 app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.single('headerImg'), (req, res) => {
     var file = req.file;
-    console.log(file)
-    // google bucket with bucket name and path to credentials
-    const storage = new Storage('brisbaneflamenco-5aee0', path.join(__dirname, 'firebase-admin-key.json'));
+    // rename image to seo title plus extention so that if i upload another it overwrites the old
+    const imageExtension = path.extname(file.originalname);
+    // renamesync so google uploads correct file name
+    fs.renameSync(path.join(__dirname, file.path), path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`), (err) => {
+        if (err) throw err; 
+    }) 
+            // google bucket with bucket name and path to credentials
+            const storage = new Storage('brisbaneflamenco-5aee0', path.join(__dirname, 'firebase-admin-key.json'));
 
-    storage.bucket('brisbaneflamenco-5aee0.appspot.com')
-        .upload(path.join(__dirname, file.path), { gzip: true })
-        .then(() => {
-            // upload to firestore
-            let docRef = db.collection('flamenco-blog').doc(req.params.id);
-            docRef.update({
-                headerImgUrl: `https://storage.cloud.google.com/brisbaneflamenco-5aee0.appspot.com/${req.params.id}`,
-                isApproved: 'false',
-                headerImgWidth: req.body.headerImgWidth,
-                headerImgHeight: req.body.headerImgHeight
-            })
-                .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
-        })
-        .catch(console.error);
+            storage.bucket('brisbaneflamenco-5aee0.appspot.com')
+                .upload(path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`), { 
+                    gzip: true ,
+                    cacheControl: 'public, max-age=31536000'
 
+                })
+                .then(() => {
+                    // upload to firestore
+                    let docRef = db.collection('flamenco-blog').doc(req.params.id);
+                    docRef.update({ 
+                        headerImgUrl: `https://storage.googleapis.com/brisbaneflamenco-5aee0.appspot.com/${req.params.id}${imageExtension}`,
+                        isApproved: 'false',
+                        headerImgWidth: req.body.headerImgWidth,
+                        headerImgHeight: req.body.headerImgHeight
+                    })
+                        .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
+                })
+                .catch(console.error);
+
+ 
 
 
 
