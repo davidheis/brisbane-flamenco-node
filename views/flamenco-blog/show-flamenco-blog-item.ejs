@@ -47,7 +47,7 @@
         },
         "author": {
             "@type": "Person",
-            "name": "David Heisner"
+            "name": "<%= blog.authorDisplayName %>"
         },
         "headline": "<%= blog.h1Title %>",
         "url": "https://brisbaneflamenco.com.au/flamenco-blog/show/<%= blog.seoFriendlyTitle %>",
@@ -55,9 +55,9 @@
         "dateModified": "<%= blog.dateUpdated %>",
         "image": {
             "@type": "ImageObject",
-            "url": "https://brisbaneflamenco.com.au/images/flamenco_blog/woman-playing-guitar.jpg",
-            "width": 2000,
-            "height": 3000
+            "url": "<%= blog.headerImg %>",
+            "width": <%= blog.headerImgWidth %>,
+            "height": <%= blog.headerImgHeight %>
         },
         "keywords": "<%= blog.keywords %>",
         "description": "<%= blog.description %>",

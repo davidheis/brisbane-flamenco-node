@@ -1,0 +1,78 @@
+<%- include('./../includes/header.ejs') %>
+<title>upload-imgs</title>
+<meta name="robots" content="noindex,nofollow">
+<!--FOR SEO SHOULD HAVE THIS ROOT URL-->
+<link rel="canonical" href="https://brisbaneflamenco.com.au/admin/upload-imgs">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<link rel="stylesheet" href="/css/admin/upload-imgs.css">
+<%- include('./../includes/nav.ejs') %>
+<div id="mainContainer">
+    <a href="/admin/flamenco-admin">Admin Home</a>
+    <h1>upload-imgs</h1>
+
+    <!-- <input id="blogId" type="text" value="<%= blogId %>" readonly>
+    <label for="headerImg">Image</label>
+    <input id="imageInput" type="file" name="headerImg" accept="image/*"> -->
+
+    <form id="uploadImgForm" action="/admin/upload-imgs-flamenco-blog-post/<%= blogId %>" method="post" enctype="multipart/form-data">
+        <input id="blogId" type="text" value="<%= blogId %>" readonly>
+        <label for="headerImg">Image</label>
+        <input id="imageInput" type="file" name="headerImg" accept="image/*">
+
+        <!-- <label for="headerImgWidth">headerImgWidth</label>
+        <input type="number" name="headerImgWidth">
+
+        <label for="headerImgHeight">headerImgHeight</label>
+        <input type="number" name="headerImgHeight"> -->
+        <button>Submit</button>
+    </form>
+
+</div>
+<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
+<script>
+    // const firebaseConfig = {
+    //     apiKey: 'AIzaSyCqiPzIGpB4e6Tvb41X4GF2_xGt9RPEseU',
+    //     authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
+    //     databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",
+    //     projectId: "brisbaneflamenco-5aee0",
+    //     storageBucket: "brisbaneflamenco-5aee0.appspot.com",
+    //     messagingSenderId: "426908606778",
+    //     appId: "1:426908606778:web:b0540955512553c2467003",
+    //     measurementId: "G-0T0V0RB3F8"
+    // };
+    // firebase.initializeApp(firebaseConfig);
+    // // require("firebase/firestore");
+    // var db = firebase.firestore();
+    // // var auth = firebase.auth();
+    // var imageInput = document.getElementById('imageInput');
+    // var blogId = document.getElementById('blogId').value;
+
+    // imageInput.addEventListener('change', function (e) {
+
+    //     var file = e.target.files[0];
+    //     var storageRef = firebase.storage().ref('flamenco_blog/' + file.name);
+    //     storageRef.put(file)
+    //         .then(function (snapshot) {
+    //             snapshot.ref.getDownloadURL().then(function (downloadURL) {
+    //                 console.log('File available at', downloadURL);
+
+    //                 db.collection("flamenco-blog").doc(blogId).update({ headerImgUrl: downloadURL })
+    //                     .then(function (docRef) {
+    //                         console.log("Document written with ID: ", docRef.id);
+    //                     })
+    //                     .catch(function (error) {
+    //                         console.error("Error adding document: ", error);
+    //                     });
+    //             });
+    //         });
+    //     // e.preventDefault()
+    // });
+</script>
+<!-- <script src="/scripts/firebase.js"></script> -->
+<%- include('./../includes/footer.ejs') %>

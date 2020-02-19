@@ -9,5 +9,6 @@
     border: 1px solid black;
     padding: 20px; }
     #mainContainer .blogs #deleteForm button {
+      margin-top: 40px;
       background: red;
       padding: 5px; }

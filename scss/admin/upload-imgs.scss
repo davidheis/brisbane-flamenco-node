@@ -1,0 +1,19 @@
+#mainContainer {
+    margin: 200px auto;
+    padding: 15px;
+    max-width: 650px;
+    form {
+       
+        
+        
+        display: flex;
+        flex-direction: column;
+        // align-items: center;
+        input, button,textarea{
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            // margin: 10px;
+        }
+    }
+}

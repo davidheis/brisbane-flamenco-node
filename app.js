@@ -10,7 +10,9 @@ let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
 var firebase = require("firebase/app");
 var admin = require('firebase-admin');
-// var multer  = require('multer')
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+ 
 // var storage = multer.memoryStorage()
 // var upload = multer({storage:storage})
 // Add the Firebase products that you want to use
@@ -37,11 +39,19 @@ var serviceAccount = require(path.join(__dirname, 'firebase-admin-key.json'));
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com"
+    databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",
+    // storageBucket: "brisbaneflamenco-5aee0.appspot.com"
 });
 
 let db = admin.firestore();
 // var storageRef = firebase.storage() ;
+// Imports the Google Cloud client library
+const {Storage} = require('@google-cloud/storage');
+
+// Creates a client from a Google service account key.
+// const storage = new Storage({keyFilename: "key.json"});
+
+
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
@@ -104,7 +114,7 @@ app.get('/spanish-guitar', (req, res) => {
 });
 app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
 
-    db.collection('flamenco-blog').orderBy('dateCreated', 'desc').get()
+    db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
             let blogArr = [];
 
@@ -176,17 +186,20 @@ app.get('/admin/flamenco-admin', isAuthenticated, (req, res) => {
     res.render('admin/flamenco-admin', { showLogOutBtn: true });
 })
 app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
-
+    // get logged in user from middleware
+   const currentLoggedUserUid = req.user.uid;
     db.collection('flamenco-blog').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
             let blogArr = [];
 
             snapshot.forEach((doc) => {
                 let id = doc.id;
+                let authorUid = doc.data().authorUid;
+                let isApproved = doc.data().isApproved;
                 let h1Title = doc.data().h1Title;
                 let authorDisplayName = doc.data().authorDisplayName;
                 let dateCreatedHumanReadable = doc.data().dateCreatedHumanReadable;
-                blogArr.push({ 'id': id, 'h1Title': h1Title, 'authorDisplayName': authorDisplayName, 'dateCreatedHumanReadable': dateCreatedHumanReadable })
+                blogArr.push({ 'currentLoggedUserUid':currentLoggedUserUid, 'id': id, 'authorUid': authorUid, 'isApproved': isApproved, 'h1Title': h1Title, 'authorDisplayName': authorDisplayName, 'dateCreatedHumanReadable': dateCreatedHumanReadable })
                 // console.log(doc.id, '=>', doc.data());
             });
             return blogArr
@@ -202,33 +215,12 @@ app.get('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
     res.render('admin/create-flamenco-blog-post');
 });
 app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
-    // upload img
-    // var mountainsRef = storageRef.child('mountains.jpg');
-
-// console.log(req.file)
-// console.log(req.body)
-//     var file = req.file.buffer;
-//     mountainsRef.put(file).then(function(snapshot) {
-//       console.log('Uploaded a blob or file!');
-//     })
-//     .catch(err => console.log(err))
-    
-
-    // upload doc
     var user = firebase.auth().currentUser;
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
-    // console.log(req.body)
-    // let blogObj = 
-    // add 20 headings and paragraphs to blogObj
-    // for(let i = 1; i< 21; i++){
-    //     let heading = 'heading' + i;
-    //     let paragraph = 'paragraph' + i;
-    //     blogObj[heading] = req.body[heading] ;
-    //     blogObj[paragraph] = req.body[paragraph];
-    // }
     docRef.set({
         authorDisplayName: user.displayName,
         authorUid: user.uid,
+        isApproved: false,
         h1Title: req.body.h1Title,
         seoFriendlyTitle: req.body.seoFriendlyTitle,
         headerImg: req.file.originalname,
@@ -244,16 +236,19 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
 
 });
 app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    // db.collection('flamenco-blog').doc(req.params.id).delete();
+    db.collection('flamenco-blog').doc(req.params.id).delete();
 
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
     // console.log(req.body.dateCreated.toLocaleDateString())
     docRef.set({
         authorDisplayName: req.body.authorDisplayName,
         authorUid: req.body.authorUid,
+        isApproved: false,
         h1Title: req.body.h1Title,
         seoFriendlyTitle: req.body.seoFriendlyTitle,
-        headerImg: req.body.headerImg,
+        headerImgUrl:req.body.headerImgUrl,
+        headerImgWidth:req.body.headerImgWidth, 
+        headerImgHeight:req.body.headerImgHeight, 
         keywords: req.body.keywords,
         description: req.body.description,
         dateCreated: req.body.dateCreated,
@@ -265,8 +260,70 @@ app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => 
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
 
 });
+app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+   res.render('admin/upload-imgs',{blogId: req.params.id});
+
+});
+app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.single('headerImg'), (req, res) => {
+    var file = req.file;
+    console.log(file)
+    // var storageRef = bucket.ref('flamenco_blog/' + file.originalname);
+
+    const storage = new Storage(path.join(__dirname, 'firebase-admin-key.json'));
+       // Uploads a local file to the bucket
+//   await 
+  storage.bucket('brisbaneflamenco-5aee0.appspot.com').upload(path.join(__dirname, file.path), {
+    // Support for HTTP requests made with `Accept-Encoding: gzip`
+    gzip: true,
+    // By setting the option `destination`, you can change the name of the
+    // object you are uploading to a bucket.
+    metadata: {
+      // Enable long-lived HTTP caching headers
+      // Use only if the contents of the file will never change
+      // (If the contents will change, use cacheControl: 'no-cache')
+      cacheControl: 'public, max-age=31536000',
+    },
+  });
+
+//   console.log(`${filename} uploaded to ${bucketName}.`);
+
+
+
+    let docRef = db.collection('flamenco-blog').doc(req.params.id);
+    // console.log(req.body.dateCreated.toLocaleDateString())
+
+    
+    // storageRef.put(file)
+    //     .then(function (snapshot) {
+    //         snapshot.ref.getDownloadURL().then(function (downloadURL) {
+    //             console.log('File available at', downloadURL);
+
+    //             docRef.update({ headerImgUrl: downloadURL })
+    //                 .then(function (docRef) {
+    //                     console.log("Document written with ID: ", docRef.id);
+    //                 })
+    //                 .catch(function (error) {
+    //                     console.error("Error adding document: ", error);
+    //                 });
+    //         });
+    //     });
+
+
+    // docRef.update({ 
+    //         isApproved: 'false', 
+    //         headerImgWidth:req.body.headerImgWidth, 
+    //         headerImgHeight:req.body.headerImgHeight 
+    // })
+        // .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
+
+});
 app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).delete()
+        .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
+
+});
+app.post('/admin/approve-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+    db.collection('flamenco-blog').doc(req.params.id).update({ isApproved : req.body.isApproved })
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
 
 });
@@ -288,22 +345,22 @@ app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
             res.send(err)
         });
 });
-app.post('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    let post;
-    db.collection('flamenco-blog').get()
-        .then((snapshot) => {
-            snapshot.forEach((doc) => {
-                if (doc.id === req.params.id) {
-                    post = doc.data();
-                    res.render('admin/edit-flamenco-blog-post', { post: post })
-                }
-            });
-        })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            res.send(err)
-        });
-});
+// app.post('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+//     let post;
+//     db.collection('flamenco-blog').get()
+//         .then((snapshot) => {
+//             snapshot.forEach((doc) => {
+//                 if (doc.id === req.params.id) {
+//                     post = doc.data();
+//                     res.render('admin/edit-flamenco-blog-post', { post: post })
+//                 }
+//             });
+//         })
+//         .catch((err) => {
+//             console.log('Error getting documents', err);
+//             res.send(err)
+//         });
+// });
 app.get('/admin/userProfile', isAuthenticated, (req, res) => {
     var user = firebase.auth().currentUser;
     res.render('admin/userProfile', { user: user })
@@ -325,7 +382,7 @@ app.post('/logout', isAuthenticated, (req, res) => {
     firebase.auth().signOut()
         .then(function () {
             console.log('logged out successful')
-            return res.redirect('/')
+            return res.redirect('/getLogin')
         })
         .catch(function (error) {
             // An error happened.

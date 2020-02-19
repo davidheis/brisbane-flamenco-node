@@ -11,18 +11,30 @@
   <h1>list-all-flamenco-blog-posts</h1>
   <% blogArr.map( blog => { %>
 
- <div class="blogs">
-   <h4><%= blog.h1Title %> </h4>
-   <p>Author <%= blog.authorDisplayName %></p>
-   <p>Date Created <%= blog.dateCreatedHumanReadable %></p>
-  <p>
-    <a href="/admin/edit-flamenco-blog-post/<%= blog.id %>"> <button>Edit</button></a>
-  </p>
+  <div class="blogs">
+    <h4><%= blog.h1Title %> </h4>
+    <p>Author <%= blog.authorDisplayName %></p>
+    <p>Date Created <%= blog.dateCreatedHumanReadable %></p>
+    <p>
+      <a href="/admin/edit-flamenco-blog-post/<%= blog.id %>"> <button>Edit</button></a>
+    </p>
+    <p>
+      <a href="/admin/upload-imgs-flamenco-blog-post/<%= blog.id %>"> <button>Upload Images</button></a>
+    </p>
+    <% if(blog.authorUid === blog.currentLoggedUserUid) { %>
+    <form id="isApprovedForm" action="/admin/approve-flamenco-blog-post/<%= blog.id %>" method="post">
 
-  <form id="deleteForm" action="/admin/delete-flamenco-blog-post/<%= blog.id %>" method="post">
-    <a href="/admin/delete-flamenco-blog-post/<%= blog.id %>"> <button>Delete</button></a>
-  </form>
- </div>
+      <input id="true" type="radio" name="isApproved" value="true" > 
+      
+      <label for="true">true</label>
+      <input id="false" type="radio" name="isApproved" value="false"><label for="false">false</label>
+      <button>Approved <%= blog.isApproved %></button>
+    </form>
+    <form id="deleteForm" action="/admin/delete-flamenco-blog-post/<%= blog.id %>" method="post">
+      <button>Delete</button>
+    </form>
+    <% } %>
+  </div>
   <%  }) %>
 </div>
 <script src="/scripts/confirm-blog-deletion.js"></script>

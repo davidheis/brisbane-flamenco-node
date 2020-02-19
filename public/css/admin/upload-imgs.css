@@ -1,0 +1,11 @@
+#mainContainer {
+  margin: 200px auto;
+  padding: 15px;
+  max-width: 650px; }
+  #mainContainer form {
+    display: flex;
+    flex-direction: column; }
+    #mainContainer form input, #mainContainer form button, #mainContainer form textarea {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px; }
