@@ -19,15 +19,18 @@
       <a href="/admin/edit-flamenco-blog-post/<%= blog.id %>"> <button>Edit</button></a>
     </p>
     <p>
-      <a href="/admin/upload-imgs-flamenco-blog-post/<%= blog.id %>"> <button>Upload Images</button></a>
+      <a href="/admin/upload-imgs-flamenco-blog-post/<%= blog.id %>/<%= blog.headerImgName %>"> <button>Upload Images</button></a>
+    </p>
+    <p>
+      headerImgName <%= blog.headerImgName %>
     </p>
     <% if(blog.authorUid === blog.currentLoggedUserUid) { %>
     <form id="isApprovedForm" action="/admin/approve-flamenco-blog-post/<%= blog.id %>" method="post">
 
-      <input id="true" type="radio" name="isApproved" value="true" > 
-      
-      <label for="true">true</label>
-      <input id="false" type="radio" name="isApproved" value="false"><label for="false">false</label>
+      <input id="true<%= blog.id %>" type="radio" name="isApproved" value="true" > 
+      <!-- add ids to labels to connect to ids, this way theyre unique -->
+      <label for="true<%= blog.id %>">true</label>
+      <input id="false<%= blog.id %>" type="radio" name="isApproved" value="false"><label for="false<%= blog.id %>">false</label>
       <button>Approved <%= blog.isApproved %></button>
     </form>
     <form id="deleteForm" action="/admin/delete-flamenco-blog-post/<%= blog.id %>" method="post">

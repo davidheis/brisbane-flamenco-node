@@ -171,12 +171,22 @@ app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
 
             snapshot.forEach((doc) => {
                 let id = doc.id;
+                let headerImgName = doc.data().headerImgName;
                 let authorUid = doc.data().authorUid;
                 let isApproved = doc.data().isApproved;
                 let h1Title = doc.data().h1Title;
                 let authorDisplayName = doc.data().authorDisplayName;
                 let dateCreatedHumanReadable = doc.data().dateCreatedHumanReadable;
-                blogArr.push({ 'currentLoggedUserUid': currentLoggedUserUid, 'id': id, 'authorUid': authorUid, 'isApproved': isApproved, 'h1Title': h1Title, 'authorDisplayName': authorDisplayName, 'dateCreatedHumanReadable': dateCreatedHumanReadable })
+                blogArr.push({ 
+                    'currentLoggedUserUid': currentLoggedUserUid,
+                     'id': id,
+                      'authorUid': authorUid, 
+                      'isApproved': isApproved, 
+                      'headerImgName':headerImgName,
+                      'h1Title': h1Title,
+                       'authorDisplayName': authorDisplayName,
+                        'dateCreatedHumanReadable': dateCreatedHumanReadable 
+                    })
                 // console.log(doc.id, '=>', doc.data());
             });
             return blogArr
@@ -237,29 +247,30 @@ app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => 
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
 
 });
-app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    res.render('admin/upload-imgs', { blogId: req.params.id });
+app.get('/admin/upload-imgs-flamenco-blog-post/:id/:headerImgName', isAuthenticated, (req, res) => {
+    // TODO getcall db current image name so i can pass it to post route and delete it before uploading new image
+    res.render('admin/upload-imgs', { blogId: req.params.id , headerImgName:headerImgName});
 
 });
-app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.single('headerImg'), (req, res) => {
+app.post('/admin/upload-imgs-flamenco-blog-post/:id/:headerImgName', isAuthenticated, upload.single('headerImg'), (req, res) => {
     // multer gets file
     var file = req.file;
     // rename image to seo title plus extention so that if i upload another it overwrites the old
-    const imageExtension = path.extname(file.originalname);
+    // const imageExtension = path.extname(file.originalname);
     // renamesync so google uploads correct file name
     // const filesNewpath = path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`);
-    fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`), (err) => {
+    fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', `${file.originalname}`), (err) => {
         if (err) throw err; 
     }) 
 
-    const filesNewpath = path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`);
+    const filesNewpath = path.join(__dirname, 'uploads', `${file.originalname}`);
             // google bucket with bucket name and path to credentials
             const storage = new Storage('brisbaneflamenco-5aee0', path.join(__dirname, 'firebase-admin-key.json'));
 
             storage.bucket('brisbaneflamenco-5aee0.appspot.com')
                 .upload(filesNewpath, { 
                     gzip: true ,
-                    cacheControl: 'public, max-age=31536000'
+                    cacheControl: 'no-cache'
                 })
                 .then(() => {
                     // delete file from local system
@@ -269,7 +280,8 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
                     // upload to firestore
                     let docRef = db.collection('flamenco-blog').doc(req.params.id);
                     docRef.update({ 
-                        headerImgUrl: `https://storage.googleapis.com/brisbaneflamenco-5aee0.appspot.com/${req.params.id}${imageExtension}`,
+                        headerImgName: file.originalname,
+                        headerImgUrl: `https://storage.googleapis.com/brisbaneflamenco-5aee0.appspot.com/${file.originalname}`,
                         isApproved: 'false',
                         headerImgWidth: req.body.headerImgWidth,
                         headerImgHeight: req.body.headerImgHeight
