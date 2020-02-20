@@ -55,7 +55,7 @@
         "dateModified": "<%= blog.dateUpdated %>",
         "image": {
             "@type": "ImageObject",
-            "url": "<%= blog.headerImgUrl %>",
+            "url": "<%= protocol %>://<%= host %><%= blog.headerImgUrl %>",
             "width": <%= blog.headerImgWidth %>,
             "height": <%= blog.headerImgHeight %>
         },
