@@ -1,4 +1,4 @@
-const firebaseConfig = {
+exports.firebaseConfig = {
   apiKey: process.env['FIREBASE_API_KEY'],
   authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
   databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",

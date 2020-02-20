@@ -8,24 +8,10 @@ const fs = require('fs');
 let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
 var firebase = require("firebase/app");
-var admin = require('firebase-admin');
 var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
-// Add the Firebase products that you want to use
-require("firebase/auth");
-require("firebase/firestore");
-// require('firebase/database');
-const firebaseConfig = {
-    apiKey: 'AIzaSyCqiPzIGpB4e6Tvb41X4GF2_xGt9RPEseU',
-    authDomain: "brisbaneflamenco-5aee0.firebaseapp.com",
-    databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",
-    projectId: "brisbaneflamenco-5aee0",
-    storageBucket: "brisbaneflamenco-5aee0.appspot.com",
-    messagingSenderId: "426908606778",
-    appId: "1:426908606778:web:b0540955512553c2467003",
-    measurementId: "G-0T0V0RB3F8"
-};
 // Initialize Firebase
+const firebaseConfig = require(path.join(__dirname, 'firebaseConfig')).firebaseConfig
 firebase.initializeApp(firebaseConfig);
 var admin = require("firebase-admin");
 var serviceAccount = require(path.join(__dirname, 'firebase-admin-key.json'));
@@ -36,7 +22,7 @@ admin.initializeApp({
 });
 let db = admin.firestore();
 // Imports the Google Cloud client library
-const { Storage } = require('@google-cloud/storage');
+// const { Storage } = require('@google-cloud/storage');
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
@@ -199,7 +185,7 @@ app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => 
 app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     // get call db current image name so i can pass it to post route and delete it before uploading new image
     let docRef = db.collection('flamenco-blog').doc(req.params.id);
-    let getDoc = docRef.get()
+    docRef.get()
         .then(doc => {
             if (doc.exists) {
                 let headerImgName = doc.data().headerImgName;
@@ -224,6 +210,9 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
     let docRef = db.collection('flamenco-blog').doc(req.params.id);
     // multer gets new file
     var file = req.file;
+    var fileOriginalname = Math.round(Math.random()*10000) + file.originalname;
+    // for naming new file so theres no duplicates
+    // let randomNumber = Math.round(Math.random()*1000);
     // make flamenco_blog directory if first time
     if (!fs.existsSync('./uploads/flamenco_blog/')){
         fs.mkdirSync('./uploads/flamenco_blog/');
@@ -237,7 +226,7 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
             }
         })
         .then(headerImgName => {
-            // uploaded from previous image upload, get image path for deletion
+            // this image was uploaded from the previous image upload, get image path for deletion
             const filesOldpath = path.join(__dirname, 'uploads', 'flamenco_blog', `${headerImgName}`);
             // check old image exists otherwise errors out 
             if (fs.existsSync(filesOldpath)) {
@@ -247,13 +236,13 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
                 });
             }
             // rename+sync so uploading renamed file name  with flamenco_blog folder added
-            fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', 'flamenco_blog', `${file.originalname}`), (err) => {
+            fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', 'flamenco_blog', `${fileOriginalname}`), (err) => {
                 if (err) throw err;
             })
             // upload to firestore
             docRef.update({
-                headerImgName: file.originalname,
-                headerImgUrl: `/flamenco_blog/${file.originalname}`,
+                headerImgName: fileOriginalname,
+                headerImgUrl: `/flamenco_blog/${fileOriginalname}`,
                 isApproved: 'false',
                 headerImgWidth: req.body.headerImgWidth,
                 headerImgHeight: req.body.headerImgHeight
@@ -298,8 +287,32 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
     // .catch(console.error);
 });
 app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    db.collection('flamenco-blog').doc(req.params.id).delete()
+    
+    let docRef = db.collection('flamenco-blog').doc(req.params.id)
+    // get header image name associated with document to delete too
+    docRef.get()
+    .then(doc => {
+        if (!doc.exists) {
+            console.log('No such document!');
+        } else {
+            return doc.data().headerImgName;
+        }
+    })
+    .then(headerImgName => { 
+        const filesOldpath = path.join(__dirname, 'uploads', 'flamenco_blog', `${headerImgName}`);
+        // check old image exists otherwise errors out 
+        if (fs.existsSync(filesOldpath)) {
+            // delete old image
+            fs.unlink(filesOldpath, (err) => {
+                if (err) throw err;
+            });
+        }
+
+        docRef.delete()
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
+    })
+    
+    
 });
 app.post('/admin/approve-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).update({ isApproved: req.body.isApproved })

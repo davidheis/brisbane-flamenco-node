@@ -1,6 +1,6 @@
 var firebase = require("firebase/app");
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
 // var admin = require('firebase-admin');
 require("firebase/auth");
 exports.isAuthenticated = function (req, res, next) {
