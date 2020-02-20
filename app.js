@@ -70,8 +70,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-
-
 app.post('/contact', contactsController.sendContactPageEmail);
 app.get('/contact', (req, res) => {
     res.render('contact', { captchaboolean: true });
@@ -85,53 +83,53 @@ app.get('/returns', (req, res) => {
 app.get('/about', (req, res) => {
     res.render('about');
 });
-app.get('/flamenco-blog/blog-index', (req, res) => {
-    res.render('flamenco-blog/blog-index');
-});
-app.get('/flamenco-blog/flamenco-palos', (req, res) => {
-    res.render('flamenco-blog/flamenco-palos');
-});
-app.get('/flamenco-blog/what-does-flamenco-mean', (req, res) => {
-    res.render('flamenco-blog/what-does-flamenco-mean');
-});
-app.get('/flamenco-blog/spanish-guitar', (req, res) => {
-    res.render('flamenco-blog/spanish-guitar');
-});
-app.get('/flamenco-blog/paco-de-lucia-timeline', (req, res) => {
-    // title = "The Spanish Flamenco Guitar"
-    res.render('flamenco-blog/paco-de-lucia-timeline');
-});
-app.get('/flamenco-blog/best-nylon-strings-for-flamenco-guitar', (req, res) => {
-    // title = "The Spanish Flamenco Guitar"
-    res.render('flamenco-blog/best-nylon-strings-for-flamenco-guitar');
-});
-app.get('/what-is-flamenco', (req, res) => {
-    res.render('what-is-flamenco');
-});
-app.get('/spanish-guitar', (req, res) => {
-    var title = "The Spanish Flamenco Guitar"
-    res.render('spanish-guitar', { title: title });
-});
+// app.get('/flamenco-blog/blog-index', (req, res) => {
+//     res.render('flamenco-blog/blog-index');
+// });
+// app.get('/flamenco-blog/flamenco-palos', (req, res) => {
+//     res.render('flamenco-blog/flamenco-palos');
+// });
+// app.get('/flamenco-blog/what-does-flamenco-mean', (req, res) => {
+//     res.render('flamenco-blog/what-does-flamenco-mean');
+// });
+// app.get('/flamenco-blog/spanish-guitar', (req, res) => {
+//     res.render('flamenco-blog/spanish-guitar');
+// });
+// app.get('/flamenco-blog/paco-de-lucia-timeline', (req, res) => {
+//     // title = "The Spanish Flamenco Guitar"
+//     res.render('flamenco-blog/paco-de-lucia-timeline');
+// });
+// app.get('/flamenco-blog/best-nylon-strings-for-flamenco-guitar', (req, res) => {
+//     // title = "The Spanish Flamenco Guitar"
+//     res.render('flamenco-blog/best-nylon-strings-for-flamenco-guitar');
+// });
+// app.get('/what-is-flamenco', (req, res) => {
+//     res.render('what-is-flamenco');
+// });
+// app.get('/spanish-guitar', (req, res) => {
+//     var title = "The Spanish Flamenco Guitar"
+//     res.render('spanish-guitar', { title: title });
+// });
 app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
-
     db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
             let blogArr = [];
             snapshot.forEach((doc) => {
                 // let id = doc.id;
                 // let h1Title = doc.data().h1Title;
-                blogArr.push({ 'id': doc.id, 'h1Title': doc.data().h1Title })
+                blogArr.push({ 
+                    'id': doc.id,
+                     'h1Title': doc.data().h1Title,
+                     'dateCreatedHumanReadable': doc.data().dateCreatedHumanReadable
+                    })
                 // console.log(doc.id, '=>', doc.data());
             })
             return blogArr;
-            
         })
         .then((blogArr) => res.render('flamenco-blog/list-all-flamenco-blog-posts', { blogArr: blogArr }))
         .catch((err) => {
             console.log('Error getting documents', err);
         });
-
-
 });
 app.get('/flamenco-blog/show/:id', (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).get()
@@ -142,37 +140,10 @@ app.get('/flamenco-blog/show/:id', (req, res) => {
             } else{
                 res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             }
-            
         })
         .catch(err => {
             console.log('Error getting document', err);
         });
-
-});
-app.get('/create-new-user', (req, res) => {
-    res.render('create-new-user');
-});
-app.post('/create-new-user', (req, res) => {
-    // console.log(req.body)
-    // const auth = firebase.auth();
-    const signupEmail = req.body.signupEmail;
-    const signupPassword = req.body.signupPassword;
-    firebase.auth()
-        .createUserWithEmailAndPassword(signupEmail, signupPassword)
-        .then(() => {
-            res.redirect('/')
-        })
-        .catch(e => console.log(e.message));
-
-    // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-    //     // Handle Errors here.
-    //     var errorCode = error.code;
-    //     var errorMessage = error.message;
-    //     res.send('Sorry please read this error',{ errorCode, errorMessage });
-    //   });
-});
-app.get('/getLogin', (req, res) => {
-    res.render('login', { showLogOutBtn: false });
 });
 // app.use(isAuthenticated.isAuthenticated);
 // dont need auth middleware because page will only render if logged in
@@ -295,7 +266,6 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
                     fs.unlink(filesNewpath, (err) => {
                         if (err) throw err;
                       });
-
                     // upload to firestore
                     let docRef = db.collection('flamenco-blog').doc(req.params.id);
                     docRef.update({ 
@@ -307,18 +277,10 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
                         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
                 })
                 .catch(console.error);
-
- 
-
-
-
-
-
 });
 app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).delete()
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
-
 });
 app.post('/admin/approve-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).update({ isApproved: req.body.isApproved })
@@ -326,8 +288,6 @@ app.post('/admin/approve-flamenco-blog-post/:id', isAuthenticated, (req, res) =>
 
 });
 app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-
-
     db.collection('flamenco-blog').get()
         .then((snapshot) => {
             snapshot.forEach((doc) => {
@@ -343,29 +303,12 @@ app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
             res.send(err)
         });
 });
-// app.post('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-//     let post;
-//     db.collection('flamenco-blog').get()
-//         .then((snapshot) => {
-//             snapshot.forEach((doc) => {
-//                 if (doc.id === req.params.id) {
-//                     post = doc.data();
-//                     res.render('admin/edit-flamenco-blog-post', { post: post })
-//                 }
-//             });
-//         })
-//         .catch((err) => {
-//             console.log('Error getting documents', err);
-//             res.send(err)
-//         });
-// });
 app.get('/admin/userProfile', isAuthenticated, (req, res) => {
     var user = firebase.auth().currentUser;
     res.render('admin/userProfile', { user: user })
 });
 app.post('/admin/userProfile', isAuthenticated, (req, res) => {
     var user = firebase.auth().currentUser;
-    console.log(req.body)
     user.updateProfile({
         displayName: req.body.displayName,
         photoURL: req.body.photoURL
@@ -375,6 +318,24 @@ app.post('/admin/userProfile', isAuthenticated, (req, res) => {
         res.send(error);
     });
 
+});
+app.get('/create-new-user', (req, res) => {
+    res.render('create-new-user');
+});
+app.post('/create-new-user', (req, res) => {
+    // console.log(req.body)
+    // const auth = firebase.auth();
+    const signupEmail = req.body.signupEmail;
+    const signupPassword = req.body.signupPassword;
+    firebase.auth()
+        .createUserWithEmailAndPassword(signupEmail, signupPassword)
+        .then(() => {
+            res.redirect('/')
+        })
+        .catch(e => console.log(e.message));
+});
+app.get('/getLogin', (req, res) => {
+    res.render('login', { showLogOutBtn: false });
 });
 app.post('/logout', isAuthenticated, (req, res) => {
     firebase.auth().signOut()

@@ -6,3 +6,5 @@
 #blogList li {
   margin: 20px 0;
   padding: 20px; }
+  #blogList li cite {
+    display: block; }

@@ -39,7 +39,11 @@
     <ul id="blogList">
         <% blogArr.map( blog => { %>
 
-        <li><a href="/flamenco-blog/show/<%= blog.id %>"><%= blog.h1Title %></a></li>
+        <li>
+            <a href="/flamenco-blog/show/<%= blog.id %>"><%= blog.h1Title %></a>
+            <cite><%= blog.dateCreatedHumanReadable %></cite>
+            
+        </li>
         <%  }) %>
 
 
