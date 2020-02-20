@@ -5,3 +5,4 @@ Disallow: /createNewUser
 User-agent: *
 Allow: /
 
+Sitemap: https://brisbaneflamenco.com.au/site-map.txt

@@ -45,6 +45,7 @@ app.use(bodyParser.json({
 const isAuthenticated = require('./middleware/isAuthenticated').isAuthenticated
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -85,11 +86,18 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
         });
 });
 app.get('/flamenco-blog/show/:id', (req, res) => {
+    // get environment url so when uploading images it works in prduction and local environment
+    let protocol = req.protocol;
+    let host = req.get('host'); 
     db.collection('flamenco-blog').doc(req.params.id).get()
         .then(doc => {
             // blog must be approved, this protects article access from directly typing the url
             if (doc.data().isApproved === 'true') {
-                res.render('flamenco-blog/show-flamenco-blog-item', { blog: doc.data() });
+                res.render('flamenco-blog/show-flamenco-blog-item', { 
+                    blog: doc.data(), 
+                    protocol: protocol,
+                    host: host
+                });
             } else {
                 res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             }
@@ -155,20 +163,18 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
         isApproved: false,
         h1Title: req.body.h1Title,
         seoFriendlyTitle: req.body.seoFriendlyTitle,
-        // headerImg: req.file.originalname,
         keywords: req.body.keywords,
         description: req.body.description,
         dateCreated: new Date().toISOString(),
         dateCreatedHumanReadable: new Date().toDateString(),
         html: req.body.html
     })
-        .then(() => {
+    .then(() => {
             res.redirect('/admin/list-all-flamenco-blog-posts');
         })
 });
 app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).delete();
-
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
     // console.log(req.body.dateCreated.toLocaleDateString())
     docRef.set({
@@ -196,7 +202,6 @@ app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res)
     let getDoc = docRef.get()
         .then(doc => {
             if (doc.exists) {
-
                 let headerImgName = doc.data().headerImgName;
                 let headerImgWidth = doc.data().headerImgWidth;
                 let headerImgHeight = doc.data().headerImgHeight;
@@ -215,7 +220,6 @@ app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res)
         });
 });
 app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.single('headerImg'), (req, res) => {
- 
     // need to get image name to pass to google bucket to delete before uploading new image
     let docRef = db.collection('flamenco-blog').doc(req.params.id);
     // multer gets new file
@@ -233,35 +237,28 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
             }
         })
         .then(headerImgName => {
-
+            // uploaded from previous image upload, get image path for deletion
             const filesOldpath = path.join(__dirname, 'uploads', 'flamenco_blog', `${headerImgName}`);
             // check old image exists otherwise errors out 
             if (fs.existsSync(filesOldpath)) {
-                console.log('The path exists.');
                 // delete old image
                 fs.unlink(filesOldpath, (err) => {
                     if (err) throw err;
                 });
             }
-
-
-
-
-            // rename+sync so google uploads correct file name 
+            // rename+sync so uploading renamed file name  with flamenco_blog folder added
             fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', 'flamenco_blog', `${file.originalname}`), (err) => {
                 if (err) throw err;
             })
             // upload to firestore
             docRef.update({
                 headerImgName: file.originalname,
-                headerImgUrl: `https://brisbaneflamenco.com.au/uploads/flamenco_blog/${file.originalname}`,
+                headerImgUrl: `/flamenco_blog/${file.originalname}`,
                 isApproved: 'false',
                 headerImgWidth: req.body.headerImgWidth,
                 headerImgHeight: req.body.headerImgHeight
             })
                 .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
-
-
         })
         .catch(err => {
             console.log('Error getting document', err);
@@ -401,7 +398,7 @@ app.post('/expect_ct_errors', (req, res) => {
     }
     res.status(204).end()
 })
-app.get('/site-map', (req, res) => {
+app.get('/site-map.txt', (req, res) => {
     let sitemap = 'https://brisbaneflamenco.com.au/\nhttps://brisbaneflamenco.com.au/capos/\nhttps://brisbaneflamenco.com.au/contact/\nhttps://brisbaneflamenco.com.au/about/\nhttps://brisbaneflamenco.com.au/flamenco-blog/blog-index/\n';
     db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
     .then((snapshot) => {
@@ -419,7 +416,6 @@ app.get('/site-map', (req, res) => {
     }); 
 });
 app.get('/*', (req, res) => {
-    
     res.render('index');
 });
 // Object.values() this gets the value of objects and puts them in an array 
