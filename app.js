@@ -229,7 +229,7 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
         isApproved: false,
         h1Title: req.body.h1Title,
         seoFriendlyTitle: req.body.seoFriendlyTitle,
-        headerImg: req.file.originalname,
+        // headerImg: req.file.originalname,
         keywords: req.body.keywords,
         description: req.body.description,
         dateCreated: new Date().toISOString(),
@@ -271,23 +271,31 @@ app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res)
 
 });
 app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.single('headerImg'), (req, res) => {
+    // multer gets file
     var file = req.file;
     // rename image to seo title plus extention so that if i upload another it overwrites the old
     const imageExtension = path.extname(file.originalname);
     // renamesync so google uploads correct file name
-    fs.renameSync(path.join(__dirname, file.path), path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`), (err) => {
+    // const filesNewpath = path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`);
+    fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`), (err) => {
         if (err) throw err; 
     }) 
+
+    const filesNewpath = path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`);
             // google bucket with bucket name and path to credentials
             const storage = new Storage('brisbaneflamenco-5aee0', path.join(__dirname, 'firebase-admin-key.json'));
 
             storage.bucket('brisbaneflamenco-5aee0.appspot.com')
-                .upload(path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`), { 
+                .upload(filesNewpath, { 
                     gzip: true ,
                     cacheControl: 'public, max-age=31536000'
-
                 })
                 .then(() => {
+                    // delete file from local system
+                    fs.unlink(filesNewpath, (err) => {
+                        if (err) throw err;
+                      });
+
                     // upload to firestore
                     let docRef = db.collection('flamenco-blog').doc(req.params.id);
                     docRef.update({ 

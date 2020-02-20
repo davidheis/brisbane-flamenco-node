@@ -53,7 +53,14 @@
     <button type="submit">Submit</button>
 </form>
 
-
+<div id="mainContainerHtmlRenderedView">
+  <h4>HTML rendered view</h4>
+  <time datetime="<%= post.dateCreated %>"><%= post.dateCreatedHumanReadable %></time>
+  <h1><%= post.h1Title %></h1>
+  <!-- <p>Author <%= post.authorDisplayName %></p> -->
+  <img src="<%= post.headerImgUrl %>" alt="">
+  <%- post.html %>
+</div>
 
 </div>
 
