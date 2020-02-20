@@ -73,17 +73,19 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
 });
 app.get('/flamenco-blog/show/:id', (req, res) => {
     // get environment url so when uploading images it works in prduction and local environment
+    // need this protocol logic too because protocol doesnt get the 's' for secure https
     let protocol = 'https'
-    let host = req.get('host'); 
-    if(host === 'localhost:3003'){
+    let host = req.get('host');
+
+    if (host === 'localhost:3003') {
         protocol = 'http';
     }
     db.collection('flamenco-blog').doc(req.params.id).get()
         .then(doc => {
             // blog must be approved, this protects article access from directly typing the url
             if (doc.data().isApproved === 'true') {
-                res.render('flamenco-blog/show-flamenco-blog-item', { 
-                    blog: doc.data(), 
+                res.render('flamenco-blog/show-flamenco-blog-item', {
+                    blog: doc.data(),
                     protocol: protocol,
                     host: host
                 });
@@ -158,7 +160,7 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
         dateCreatedHumanReadable: new Date().toDateString(),
         html: req.body.html
     })
-    .then(() => {
+        .then(() => {
             res.redirect('/admin/list-all-flamenco-blog-posts');
         })
 });
@@ -213,11 +215,11 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
     let docRef = db.collection('flamenco-blog').doc(req.params.id);
     // multer gets new file
     var file = req.file;
-    var fileOriginalname = Math.round(Math.random()*10000) + file.originalname;
+    var fileOriginalname = Math.round(Math.random() * 10000) + file.originalname;
     // for naming new file so theres no duplicates
     // let randomNumber = Math.round(Math.random()*1000);
     // make flamenco_blog directory if first time
-    if (!fs.existsSync('./uploads/flamenco_blog/')){
+    if (!fs.existsSync('./uploads/flamenco_blog/')) {
         fs.mkdirSync('./uploads/flamenco_blog/');
     }
     docRef.get()
@@ -290,32 +292,32 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
     // .catch(console.error);
 });
 app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
-    
+
     let docRef = db.collection('flamenco-blog').doc(req.params.id)
     // get header image name associated with document to delete too
     docRef.get()
-    .then(doc => {
-        if (!doc.exists) {
-            console.log('No such document!');
-        } else {
-            return doc.data().headerImgName;
-        }
-    })
-    .then(headerImgName => { 
-        const filesOldpath = path.join(__dirname, 'uploads', 'flamenco_blog', `${headerImgName}`);
-        // check old image exists otherwise errors out 
-        if (fs.existsSync(filesOldpath)) {
-            // delete old image
-            fs.unlink(filesOldpath, (err) => {
-                if (err) throw err;
-            });
-        }
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                return doc.data().headerImgName;
+            }
+        })
+        .then(headerImgName => {
+            const filesOldpath = path.join(__dirname, 'uploads', 'flamenco_blog', `${headerImgName}`);
+            // check old image exists otherwise errors out 
+            if (fs.existsSync(filesOldpath)) {
+                // delete old image
+                fs.unlink(filesOldpath, (err) => {
+                    if (err) throw err;
+                });
+            }
 
-        docRef.delete()
-        .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
-    })
-    
-    
+            docRef.delete()
+                .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
+        })
+
+
 });
 app.post('/admin/approve-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).update({ isApproved: req.body.isApproved })
@@ -417,19 +419,19 @@ app.post('/expect_ct_errors', (req, res) => {
 app.get('/site-map.txt', (req, res) => {
     let sitemap = 'https://brisbaneflamenco.com.au/\nhttps://brisbaneflamenco.com.au/capos/\nhttps://brisbaneflamenco.com.au/contact/\nhttps://brisbaneflamenco.com.au/about/\nhttps://brisbaneflamenco.com.au/flamenco-blog/blog-index/\n';
     db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
-    .then((snapshot) => {
-        snapshot.forEach((doc) => {
-            sitemap += `https://brisbaneflamenco.com.au/flamenco-blog/show/${doc.id}/\n`;
+        .then((snapshot) => {
+            snapshot.forEach((doc) => {
+                sitemap += `https://brisbaneflamenco.com.au/flamenco-blog/show/${doc.id}/\n`;
+            })
+            return sitemap;
         })
-        return sitemap;
-    })
-    .then((sitemap) => {
-        res.type('.txt')
-        res.send(sitemap)
-    })
-    .catch((err) => {
-        console.log('Error getting documents', err);
-    }); 
+        .then((sitemap) => {
+            res.type('.txt')
+            res.send(sitemap)
+        })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+        });
 });
 app.get('/*', (req, res) => {
     res.render('index');
