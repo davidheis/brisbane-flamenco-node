@@ -19,11 +19,8 @@
       <a href="/admin/edit-flamenco-blog-post/<%= blog.id %>"> <button>Edit</button></a>
     </p>
     <p>
-      <a href="/admin/upload-imgs-flamenco-blog-post/<%= blog.id %>/<%= blog.headerImgName %>"> <button>Upload Images</button></a>
-    </p>
-    <p>
-      headerImgName <%= blog.headerImgName %>
-    </p>
+      <a href="/admin/upload-imgs-flamenco-blog-post/<%= blog.id %>"> <button>Upload Images</button></a>
+    </p> 
     <% if(blog.authorUid === blog.currentLoggedUserUid) { %>
     <form id="isApprovedForm" action="/admin/approve-flamenco-blog-post/<%= blog.id %>" method="post">
 

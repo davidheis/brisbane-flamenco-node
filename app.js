@@ -5,16 +5,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const contactsController = require('./controllers/contact')
 const fs = require('fs');
-// const helmet = require('helmet')
 let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
 var firebase = require("firebase/app");
 var admin = require('firebase-admin');
 var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
-
-// var storage = multer.memoryStorage()
-// var upload = multer({storage:storage})
 // Add the Firebase products that you want to use
 require("firebase/auth");
 require("firebase/firestore");
@@ -31,39 +27,22 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-//   firebase.analytics();
-
 var admin = require("firebase-admin");
-
 var serviceAccount = require(path.join(__dirname, 'firebase-admin-key.json'));
-
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://brisbaneflamenco-5aee0.firebaseio.com",
     // storageBucket: "brisbaneflamenco-5aee0.appspot.com"
 });
-
 let db = admin.firestore();
-// var storageRef = firebase.storage() ;
 // Imports the Google Cloud client library
 const { Storage } = require('@google-cloud/storage');
-
-// Creates a client from a Google service account key.
-// const storage = new Storage({keyFilename: "key.json"});
-
-
 const app = express();
 // app.use(helmet())
 app.use(bodyParser.json({
     type: ['json', 'application/csp-report', 'application/json']
 }))
-// app.use((req, res, next) => {
-//     res.locals.isLoggedin = false;
-//     next();
-// })
-
 const isAuthenticated = require('./middleware/isAuthenticated').isAuthenticated
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -83,33 +62,6 @@ app.get('/returns', (req, res) => {
 app.get('/about', (req, res) => {
     res.render('about');
 });
-// app.get('/flamenco-blog/blog-index', (req, res) => {
-//     res.render('flamenco-blog/blog-index');
-// });
-// app.get('/flamenco-blog/flamenco-palos', (req, res) => {
-//     res.render('flamenco-blog/flamenco-palos');
-// });
-// app.get('/flamenco-blog/what-does-flamenco-mean', (req, res) => {
-//     res.render('flamenco-blog/what-does-flamenco-mean');
-// });
-// app.get('/flamenco-blog/spanish-guitar', (req, res) => {
-//     res.render('flamenco-blog/spanish-guitar');
-// });
-// app.get('/flamenco-blog/paco-de-lucia-timeline', (req, res) => {
-//     // title = "The Spanish Flamenco Guitar"
-//     res.render('flamenco-blog/paco-de-lucia-timeline');
-// });
-// app.get('/flamenco-blog/best-nylon-strings-for-flamenco-guitar', (req, res) => {
-//     // title = "The Spanish Flamenco Guitar"
-//     res.render('flamenco-blog/best-nylon-strings-for-flamenco-guitar');
-// });
-// app.get('/what-is-flamenco', (req, res) => {
-//     res.render('what-is-flamenco');
-// });
-// app.get('/spanish-guitar', (req, res) => {
-//     var title = "The Spanish Flamenco Guitar"
-//     res.render('spanish-guitar', { title: title });
-// });
 app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
     db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
@@ -117,11 +69,12 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
             snapshot.forEach((doc) => {
                 // let id = doc.id;
                 // let h1Title = doc.data().h1Title;
-                blogArr.push({ 
+                blogArr.push({
                     'id': doc.id,
-                     'h1Title': doc.data().h1Title,
-                     'dateCreatedHumanReadable': doc.data().dateCreatedHumanReadable
-                    })
+                    'h1Title': doc.data().h1Title,
+                    'headerImgName': doc.data().headerImgName,
+                    'dateCreatedHumanReadable': doc.data().dateCreatedHumanReadable
+                })
                 // console.log(doc.id, '=>', doc.data());
             })
             return blogArr;
@@ -135,9 +88,9 @@ app.get('/flamenco-blog/show/:id', (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).get()
         .then(doc => {
             // blog must be approved, this protects article access from directly typing the url
-            if(doc.data().isApproved === 'true'){
+            if (doc.data().isApproved === 'true') {
                 res.render('flamenco-blog/show-flamenco-blog-item', { blog: doc.data() });
-            } else{
+            } else {
                 res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             }
         })
@@ -145,10 +98,8 @@ app.get('/flamenco-blog/show/:id', (req, res) => {
             console.log('Error getting document', err);
         });
 });
-// app.use(isAuthenticated.isAuthenticated);
 // dont need auth middleware because page will only render if logged in
 app.post('/admin/loginto-flamenco-admin', (req, res) => {
-
     const loginEmail = req.body.loginEmail;
     const loginPassword = req.body.loginPassword;
     firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
@@ -156,10 +107,8 @@ app.post('/admin/loginto-flamenco-admin', (req, res) => {
             return res.render('admin/flamenco-admin', { showLogOutBtn: true });
         })
         .catch(e => res.send(e.message));
-
 });
 app.get('/admin/flamenco-admin', isAuthenticated, (req, res) => {
-
     res.render('admin/flamenco-admin', { showLogOutBtn: true });
 })
 app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
@@ -168,7 +117,6 @@ app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').orderBy('dateCreated', 'desc').get()
         .then((snapshot) => {
             let blogArr = [];
-
             snapshot.forEach((doc) => {
                 let id = doc.id;
                 let headerImgName = doc.data().headerImgName;
@@ -177,17 +125,16 @@ app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
                 let h1Title = doc.data().h1Title;
                 let authorDisplayName = doc.data().authorDisplayName;
                 let dateCreatedHumanReadable = doc.data().dateCreatedHumanReadable;
-                blogArr.push({ 
+                blogArr.push({
                     'currentLoggedUserUid': currentLoggedUserUid,
-                     'id': id,
-                      'authorUid': authorUid, 
-                      'isApproved': isApproved, 
-                      'headerImgName':headerImgName,
-                      'h1Title': h1Title,
-                       'authorDisplayName': authorDisplayName,
-                        'dateCreatedHumanReadable': dateCreatedHumanReadable 
-                    })
-                // console.log(doc.id, '=>', doc.data());
+                    'id': id,
+                    'authorUid': authorUid,
+                    'isApproved': isApproved,
+                    'headerImgName': headerImgName,
+                    'h1Title': h1Title,
+                    'authorDisplayName': authorDisplayName,
+                    'dateCreatedHumanReadable': dateCreatedHumanReadable
+                })
             });
             return blogArr
         })
@@ -195,8 +142,6 @@ app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
         .catch((err) => {
             console.log('Error getting documents', err);
         });
-
-
 });
 app.get('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
     res.render('admin/create-flamenco-blog-post');
@@ -220,7 +165,6 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
         .then(() => {
             res.redirect('/admin/list-all-flamenco-blog-posts');
         })
-
 });
 app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).delete();
@@ -245,50 +189,116 @@ app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => 
         html: req.body.html
     })
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
-
 });
-app.get('/admin/upload-imgs-flamenco-blog-post/:id/:headerImgName', isAuthenticated, (req, res) => {
-    // TODO getcall db current image name so i can pass it to post route and delete it before uploading new image
-    res.render('admin/upload-imgs', { blogId: req.params.id , headerImgName:headerImgName});
+app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+    // get call db current image name so i can pass it to post route and delete it before uploading new image
+    let docRef = db.collection('flamenco-blog').doc(req.params.id);
+    let getDoc = docRef.get()
+        .then(doc => {
+            if (doc.exists) {
 
+                let headerImgName = doc.data().headerImgName;
+                let headerImgWidth = doc.data().headerImgWidth;
+                let headerImgHeight = doc.data().headerImgHeight;
+                res.render('admin/upload-imgs', {
+                    blogId: req.params.id,
+                    headerImgName: headerImgName,
+                    headerImgWidth: headerImgWidth,
+                    headerImgHeight: headerImgHeight
+                });
+            } else {
+                console.log('No such document!');
+            }
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
 });
-app.post('/admin/upload-imgs-flamenco-blog-post/:id/:headerImgName', isAuthenticated, upload.single('headerImg'), (req, res) => {
-    // multer gets file
+app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.single('headerImg'), (req, res) => {
+ 
+    // need to get image name to pass to google bucket to delete before uploading new image
+    let docRef = db.collection('flamenco-blog').doc(req.params.id);
+    // multer gets new file
     var file = req.file;
-    // rename image to seo title plus extention so that if i upload another it overwrites the old
+    // make flamenco_blog directory if first time
+    if (!fs.existsSync('./uploads/flamenco_blog/')){
+        fs.mkdirSync('./uploads/flamenco_blog/');
+    }
+    docRef.get()
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                return doc.data().headerImgName;
+            }
+        })
+        .then(headerImgName => {
+
+            const filesOldpath = path.join(__dirname, 'uploads', 'flamenco_blog', `${headerImgName}`);
+            // check old image exists otherwise errors out 
+            if (fs.existsSync(filesOldpath)) {
+                console.log('The path exists.');
+                // delete old image
+                fs.unlink(filesOldpath, (err) => {
+                    if (err) throw err;
+                });
+            }
+
+
+
+
+            // rename+sync so google uploads correct file name 
+            fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', 'flamenco_blog', `${file.originalname}`), (err) => {
+                if (err) throw err;
+            })
+            // upload to firestore
+            docRef.update({
+                headerImgName: file.originalname,
+                headerImgUrl: `https://brisbaneflamenco.com.au/uploads/flamenco_blog/${file.originalname}`,
+                isApproved: 'false',
+                headerImgWidth: req.body.headerImgWidth,
+                headerImgHeight: req.body.headerImgHeight
+            })
+                .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
+
+
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+    // WHAT I NEEDED TO UPLOAD TO GOOGLE BUCKET
+
+    // google bucket with bucket name and path to credentials
+    //  const storage = new Storage('brisbaneflamenco-5aee0', path.join(__dirname, 'firebase-admin-key.json'));
+    //  const bucketName = 'brisbaneflamenco-5aee0.appspot.com';
     // const imageExtension = path.extname(file.originalname);
-    // renamesync so google uploads correct file name
-    // const filesNewpath = path.join(__dirname, 'uploads', `${req.params.id}${imageExtension}`);
-    fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', `${file.originalname}`), (err) => {
-        if (err) throw err; 
-    }) 
 
-    const filesNewpath = path.join(__dirname, 'uploads', `${file.originalname}`);
-            // google bucket with bucket name and path to credentials
-            const storage = new Storage('brisbaneflamenco-5aee0', path.join(__dirname, 'firebase-admin-key.json'));
+    // const filesNewpath = path.join(__dirname, 'uploads', `${file.originalname}`);
+    // async function deleteFile() {
+    //     // Deletes the file from the bucket
+    //     await storage
+    //         .bucket(bucketName)
+    //         .file(headerImgName)
+    //         .delete();
 
-            storage.bucket('brisbaneflamenco-5aee0.appspot.com')
-                .upload(filesNewpath, { 
-                    gzip: true ,
-                    cacheControl: 'no-cache'
-                })
-                .then(() => {
-                    // delete file from local system
-                    fs.unlink(filesNewpath, (err) => {
-                        if (err) throw err;
-                      });
-                    // upload to firestore
-                    let docRef = db.collection('flamenco-blog').doc(req.params.id);
-                    docRef.update({ 
-                        headerImgName: file.originalname,
-                        headerImgUrl: `https://storage.googleapis.com/brisbaneflamenco-5aee0.appspot.com/${file.originalname}`,
-                        isApproved: 'false',
-                        headerImgWidth: req.body.headerImgWidth,
-                        headerImgHeight: req.body.headerImgHeight
-                    })
-                        .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
-                })
-                .catch(console.error);
+    //     console.log(`gs://${bucketName}/${headerImgName} deleted.`);
+    // }
+
+    // deleteFile().catch(console.error);
+    // storage.bucket(bucketName)
+    //     .upload(filesNewpath, {
+    //         gzip: true,
+    //         cacheControl: 'no-cache'
+    //     })
+    //     .then(() => {
+    // delete file from local system
+    // fs.unlink(filesNewpath, (err) => {
+    //     if (err) throw err;
+    // });
+    // upload to firestore
+
+    // })
+    // .catch(console.error);
 });
 app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).delete()
@@ -329,7 +339,6 @@ app.post('/admin/userProfile', isAuthenticated, (req, res) => {
     }).catch(function (error) {
         res.send(error);
     });
-
 });
 app.get('/create-new-user', (req, res) => {
     res.render('create-new-user');
@@ -360,11 +369,7 @@ app.post('/logout', isAuthenticated, (req, res) => {
             console.log(error)
             res.send(error)
         });
-
 });
-// app.get('/flamenco-admin', (req, res) => {
-//     res.render('flamenco-admin',{ showLogOutBtn:true });
-// });
 app.post('/csp', (req, res) => {
     // use date as file name to know when error occured 
     const date = new Date().toISOString();
@@ -373,7 +378,6 @@ app.post('/csp', (req, res) => {
         fs.appendFile(path.join(__dirname, 'csp', date), cspObj, (err) => {
             if (err) throw err;
         });
-
     } else {
         fs.appendFile(path.join(__dirname, 'csp', date), 'CSP Violation: No data received!', (err) => {
             if (err) throw err;
@@ -390,7 +394,6 @@ app.post('/expect_ct_errors', (req, res) => {
         fs.appendFile(path.join(__dirname, 'expect_ct_header_errors', date), cspObj, (err) => {
             if (err) throw err;
         });
-
     } else {
         fs.appendFile(path.join(__dirname, 'expect_ct_header_errors', date), 'CSP Violation: No data received!', (err) => {
             if (err) throw err;
@@ -399,10 +402,24 @@ app.post('/expect_ct_errors', (req, res) => {
     res.status(204).end()
 })
 app.get('/site-map', (req, res) => {
-    res.render('site-map');
+    let sitemap = 'https://brisbaneflamenco.com.au/\nhttps://brisbaneflamenco.com.au/capos/\nhttps://brisbaneflamenco.com.au/contact/\nhttps://brisbaneflamenco.com.au/about/\nhttps://brisbaneflamenco.com.au/flamenco-blog/blog-index/\n';
+    db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
+    .then((snapshot) => {
+        snapshot.forEach((doc) => {
+            sitemap += `https://brisbaneflamenco.com.au/flamenco-blog/show/${doc.id}/\n`;
+        })
+        return sitemap;
+    })
+    .then((sitemap) => {
+        res.type('.txt')
+        res.send(sitemap)
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+    }); 
 });
 app.get('/*', (req, res) => {
-
+    
     res.render('index');
 });
 // Object.values() this gets the value of objects and puts them in an array 

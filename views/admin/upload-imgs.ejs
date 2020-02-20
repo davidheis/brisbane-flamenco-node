@@ -10,17 +10,17 @@
     <a href="/admin/flamenco-admin">Admin Home</a>
     <h1>upload-imgs</h1> 
     
-    <form id="uploadImgForm" action="/admin/upload-imgs-flamenco-blog-post/<%= blogId %>/<%= headerImgName %>" method="post" enctype="multipart/form-data">
+    <form id="uploadImgForm" action="/admin/upload-imgs-flamenco-blog-post/<%= blogId %>" method="post" enctype="multipart/form-data">
         <label for="blogId">blog id</label>
         <input id="blogId" type="text" value="<%= blogId %>" readonly>
         <label for="imageInput">Image</label>
-        <input id="imageInput" type="file" name="headerImg" accept="image/*">
+        <input id="imageInput" type="file" name="headerImg" accept="image/*" required>
 
         <label for="headerImgWidth">Img Width</label>
-        <input id="headerImgWidth" type="number" name="headerImgWidth" required>
+        <input id="headerImgWidth" type="number" name="headerImgWidth" value="<%= headerImgWidth %>" required>
 
         <label for="headerImgHeight">Img Height</label>
-        <input id="headerImgHeight" type="number" name="headerImgHeight" required>
+        <input id="headerImgHeight" type="number" name="headerImgHeight" value="<%= headerImgHeight %>" required>
         <button>Submit</button>
     </form>
 
