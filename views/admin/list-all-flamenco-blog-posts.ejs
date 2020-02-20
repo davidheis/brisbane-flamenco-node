@@ -15,13 +15,19 @@
     <h4><%= blog.h1Title %> </h4>
     <p>Author <%= blog.authorDisplayName %></p>
     <p>Date Created <%= blog.dateCreatedHumanReadable %></p>
+<!-- allow blog owner to edit and upload and also me -->
+    <% if(blog.authorUid === blog.currentLoggedUserUid || 'YnakLXc4V7ZVuRIAoG79Hj1Q33t1' === blog.currentLoggedUserUid) { %>
     <p>
       <a href="/admin/edit-flamenco-blog-post/<%= blog.id %>"> <button>Edit</button></a>
     </p>
     <p>
       <a href="/admin/upload-imgs-flamenco-blog-post/<%= blog.id %>"> <button>Upload Images</button></a>
-    </p> 
-    <% if(blog.authorUid === blog.currentLoggedUserUid) { %>
+    </p>
+    <% } %>
+
+<!-- only I can approve and delete -->
+    <% if('YnakLXc4V7ZVuRIAoG79Hj1Q33t1' === blog.currentLoggedUserUid) { %>
+      
     <form id="isApprovedForm" action="/admin/approve-flamenco-blog-post/<%= blog.id %>" method="post">
 
       <input id="true<%= blog.id %>" type="radio" name="isApproved" value="true" > 
@@ -34,6 +40,8 @@
       <button>Delete</button>
     </form>
     <% } %>
+
+
   </div>
   <%  }) %>
 </div>

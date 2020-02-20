@@ -375,8 +375,7 @@ app.get('/getLogin', (req, res) => {
 });
 app.post('/logout', isAuthenticated, (req, res) => {
     firebase.auth().signOut()
-        .then(function () {
-            console.log('logged out successful')
+        .then(function () { 
             return res.redirect('/getLogin')
         })
         .catch(function (error) {
