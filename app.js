@@ -73,8 +73,11 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
 });
 app.get('/flamenco-blog/show/:id', (req, res) => {
     // get environment url so when uploading images it works in prduction and local environment
-    let protocol = req.protocol;
+    let protocol = 'https'
     let host = req.get('host'); 
+    if(host === 'localhost:3003'){
+        protocol = 'http';
+    }
     db.collection('flamenco-blog').doc(req.params.id).get()
         .then(doc => {
             // blog must be approved, this protects article access from directly typing the url
