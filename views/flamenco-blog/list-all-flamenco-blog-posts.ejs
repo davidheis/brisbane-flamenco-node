@@ -36,23 +36,17 @@
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
     <h1 id="h1title">Flamenco Blog</h1>
-    <ul id="blogList">
+    <div id="blogList">
         <% blogArr.map( blog => { %>
 
-        <li>
-            <a href="/flamenco-blog/show/<%= blog.id %>"><%= blog.h1Title %></a>
-            <cite><%= blog.dateCreatedHumanReadable %></cite>
+        <div class="blogCard">
+            <a href="/flamenco-blog/show/<%= blog.id %>"><img src="<%= blog.data.headerImgUrl %>" alt=""></a>
             
-        </li>
-        <%  }) %>
-
-
-        <!-- <li><a href="/flamenco-blog/best-nylon-strings-for-flamenco-guitar">Best Nylon Strings For Flamenco Guitar</a></li>
-            <li><a href="/flamenco-blog/what-does-flamenco-mean">What Does Flamenco Mean?</a></li>
-            <li><a href="/flamenco-blog/flamenco-palos">Flamenco Palos With A Short Description</a></li>
-           
-            <li><a href="/flamenco-blog/spanish-guitar">The Spanish Guitar</a></li>
-            <li><a href="/flamenco-blog/paco-de-lucia-timeline">Paco De Lucia Timeline</a></li> -->
-    </ul>
+            <a href="/flamenco-blog/show/<%= blog.id %>"><h2><%= blog.data.h1Title %></h2></a>
+            <cite><%= blog.data.dateCreatedHumanReadable %></cite>
+            <p><%= blog.data.html.slice(0,300).replace(/(<[^>]*(>|.)|<)/g,'') %> ...</p>
+        </div>
+        <%  }) %> 
+    </div>
 </div>
 <%- include('./../includes/footer.ejs') %>

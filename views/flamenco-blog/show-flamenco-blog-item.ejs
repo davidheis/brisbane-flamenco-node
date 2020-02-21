@@ -55,7 +55,7 @@
         "dateModified": "<%= blog.dateUpdated %>",
         "image": {
             "@type": "ImageObject",
-            "url": "<%= protocol %>://<%= host %><%= blog.headerImgUrl %>",
+            "url": "<%= blog.headerImgUrl %>",
             "width": <%= blog.headerImgWidth %>,
             "height": <%= blog.headerImgHeight %>
         },
@@ -72,7 +72,7 @@
     <time datetime="<%= blog.dateCreated %>"><%= blog.dateCreatedHumanReadable %></time>
     <h1><%= blog.h1Title %></h1>
     <!-- <p>Author <%= blog.authorDisplayName %></p> -->
-    <img src="<%= protocol %>://<%= host %><%= blog.headerImgUrl %>" alt="">
+    <img src="<%= blog.headerImgUrl %>" alt="">
     <%- blog.html %>
 </div>
   <%- include('./../includes/footer.ejs') %>

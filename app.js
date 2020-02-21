@@ -55,12 +55,10 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
             let blogArr = [];
             snapshot.forEach((doc) => {
                 // let id = doc.id;
-                // let h1Title = doc.data().h1Title;
+                // let h1Title = doc.data().h1Title; 
                 blogArr.push({
                     'id': doc.id,
-                    'h1Title': doc.data().h1Title,
-                    'headerImgName': doc.data().headerImgName,
-                    'dateCreatedHumanReadable': doc.data().dateCreatedHumanReadable
+                    'data': doc.data()
                 })
                 // console.log(doc.id, '=>', doc.data());
             })
@@ -74,26 +72,25 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
 app.get('/flamenco-blog/show/:id', (req, res) => {
     // get environment url so when uploading images it works in prduction and local environment
     // need this protocol logic too because protocol doesnt get the 's' for secure https
-    let protocol = 'https'
-    let host = req.get('host');
+    // let protocol = 'https'
+    // let host = req.get('host');
 
-    if (host === 'localhost:3003') {
-        protocol = 'http';
-    }
+    // if (host === 'localhost:3003') {
+    //     protocol = 'http';
+    // }
     db.collection('flamenco-blog').doc(req.params.id).get()
         .then(doc => {
             // blog must be approved, this protects article access from directly typing the url
             if (doc.data().isApproved === 'true') {
                 res.render('flamenco-blog/show-flamenco-blog-item', {
-                    blog: doc.data(),
-                    protocol: protocol,
-                    host: host
+                    blog: doc.data()
                 });
             } else {
                 res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             }
         })
         .catch(err => {
+            res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             console.log('Error getting document', err);
         });
 });
@@ -247,7 +244,7 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
             // upload to firestore
             docRef.update({
                 headerImgName: fileOriginalname,
-                headerImgUrl: `/flamenco_blog/${fileOriginalname}`,
+                headerImgUrl: `https://brisbaneflamenco.com.au/flamenco_blog/${fileOriginalname}`,
                 isApproved: 'false',
                 headerImgWidth: req.body.headerImgWidth,
                 headerImgHeight: req.body.headerImgHeight

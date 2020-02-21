@@ -4,9 +4,22 @@
     padding: 20px;
 }
 #blogList{
-    li{
-        margin: 20px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+    .blogCard{ 
         padding: 20px;
+        img{
+            max-width: 100%;
+        }
+        a{
+            text-decoration: none;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
         cite{
             display: block;
         }
