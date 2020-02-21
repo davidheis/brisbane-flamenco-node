@@ -31,6 +31,29 @@ flex-direction: column;
         max-width: 100%;
     }
 }
+#blogList{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
+    .blogCard{ 
+        padding: 20px;
+        img{
+            max-width: 100%;
+        }
+        a{
+            text-decoration: none;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
+        cite{
+            display: block;
+        }
+        }
+}
 @media screen and (max-width:880px) {
     .newsItems{
         max-width: 100%;

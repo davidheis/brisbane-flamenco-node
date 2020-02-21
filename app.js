@@ -430,7 +430,24 @@ app.get('/site-map.txt', (req, res) => {
         });
 });
 app.get('/*', (req, res) => {
-    res.render('index');
+    db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
+        .then((snapshot) => {
+            let blogArr = [];
+            snapshot.forEach((doc) => {
+                // let id = doc.id;
+                // let h1Title = doc.data().h1Title; 
+                blogArr.push({
+                    'id': doc.id,
+                    'data': doc.data()
+                })
+                // console.log(doc.id, '=>', doc.data());
+            })
+            return blogArr;
+        })
+        .then((blogArr) => res.render('index', { blogArr: blogArr }))
+        .catch((err) => {
+            console.log('Error getting documents', err);
+        }); 
 });
 // Object.values() this gets the value of objects and puts them in an array 
 // Object.keys() gets keys and puts the in an array

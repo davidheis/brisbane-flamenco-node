@@ -20,6 +20,24 @@
   .blurb img {
     max-width: 100%; }
 
+#blogList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 400px;
+  margin: 0 auto; }
+  #blogList .blogCard {
+    padding: 20px; }
+    #blogList .blogCard img {
+      max-width: 100%; }
+    #blogList .blogCard a {
+      text-decoration: none; }
+    #blogList .blogCard a:hover {
+      text-decoration: underline; }
+    #blogList .blogCard cite {
+      display: block; }
+
 @media screen and (max-width: 880px) {
   .newsItems {
     max-width: 100%; }
