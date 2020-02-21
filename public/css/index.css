@@ -26,17 +26,25 @@
   flex-wrap: wrap;
   justify-content: center;
   max-width: 400px;
-  margin: 0 auto; }
-  #blogList .blogCard {
-    padding: 20px; }
-    #blogList .blogCard img {
-      max-width: 100%; }
-    #blogList .blogCard a {
-      text-decoration: none; }
-    #blogList .blogCard a:hover {
-      text-decoration: underline; }
-    #blogList .blogCard cite {
-      display: block; }
+  margin: 0 auto;
+  padding: 20px; }
+  #blogList #seeMoreLink {
+    text-decoration: none;
+    margin: 0;
+    padding: 16px;
+    background: #27223a;
+    color: white;
+    border-radius: 5px; }
+  #blogList #seeMoreLink:hover {
+    text-decoration: underline; }
+  #blogList .blogCard img {
+    max-width: 100%; }
+  #blogList .blogCard a {
+    text-decoration: none; }
+  #blogList .blogCard a:hover {
+    text-decoration: underline; }
+  #blogList .blogCard cite {
+    display: block; }
 
 @media screen and (max-width: 880px) {
   .newsItems {
