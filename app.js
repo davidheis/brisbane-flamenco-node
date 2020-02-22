@@ -100,7 +100,24 @@ app.post('/admin/loginto-flamenco-admin', (req, res) => {
     const loginPassword = req.body.loginPassword;
     firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
         .then(function () {
-            return res.render('admin/flamenco-admin', { showLogOutBtn: true });
+            if (firebase.auth().currentUser.emailVerified) {
+                db.collection('users').doc(user.uid).update({ 
+                    emailVerified: true
+                })
+                return res.render('admin/flamenco-admin', { showLogOutBtn: true });
+            } else {
+                firebase.auth().signOut()
+                    .then(function () {
+                        res.send('You need to verify your email.')
+                        // return res.redirect('/getLogin')
+                    })
+                    .catch(function (error) {
+                        // An error happened.
+                        console.log(error)
+                        res.send(error)
+                    });
+                
+            }
         })
         .catch(e => res.send(e.message));
 });
@@ -358,21 +375,53 @@ app.get('/create-new-user', (req, res) => {
 app.post('/create-new-user', (req, res) => {
     // console.log(req.body)
     // const auth = firebase.auth();
+    var auth = firebase.auth()
     const signupEmail = req.body.signupEmail;
     const signupPassword = req.body.signupPassword;
-    firebase.auth()
+    auth
         .createUserWithEmailAndPassword(signupEmail, signupPassword)
         .then(() => {
-            res.redirect('/')
+            var user = auth.currentUser;
+            // console.log(user)
+            // create user
+            db.collection('users').doc(user.uid).set({
+                uid: user.uid,
+                email: user.email,
+                emailVerified: false
+            })
+
+
+            // verify email
+
+            user.sendEmailVerification().then(function () {
+                firebase.auth().signOut()
+                    .then(function () {
+                        res.render('admin/confirm-signup')
+                        // return res.redirect('/getLogin')
+                    })
+                    .catch(function (error) {
+                        // An error happened.
+                        console.log(error)
+                        res.send(error)
+                    });
+                // Email sent.
+
+            }).catch(function (error) {
+                res.send(error.message)
+            });
+
+
+
+
         })
-        .catch(e => console.log(e.message));
+        .catch(error => res.send(error.message));
 });
 app.get('/getLogin', (req, res) => {
     res.render('login', { showLogOutBtn: false });
 });
 app.post('/logout', isAuthenticated, (req, res) => {
     firebase.auth().signOut()
-        .then(function () { 
+        .then(function () {
             return res.redirect('/getLogin')
         })
         .catch(function (error) {
@@ -447,7 +496,7 @@ app.get('/*', (req, res) => {
         .then((blogArr) => res.render('index', { blogArr: blogArr }))
         .catch((err) => {
             console.log('Error getting documents', err);
-        }); 
+        });
 });
 // Object.values() this gets the value of objects and puts them in an array 
 // Object.keys() gets keys and puts the in an array
