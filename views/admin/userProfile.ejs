@@ -9,17 +9,24 @@
 <div id="mainContainer">
   <a href="/admin/flamenco-admin">Admin Home</a>
   <h1>User Profile</h1>
-  <h2>UID: <%= user.uid %></h2>
-  <h2>Display Name: <%= user.displayName %></h2>
-  <h2>Email: <%= user.email %></h2>
-  <h2>Photo </h2>
-  <img src="<%= user.photoURL %>" alt="">
+  <!-- <h2>UID: <%= user.uid %></h2> -->
+  <p>Display Name: <%= user.displayName %></p>
+  <p>Email: <%= user.email %></p>
+  <p>Profile Image</p>
+  <img src="<%= user.profileImgUrl %>" alt="">
+    
+  <form id="uploadImgForm" action="/admin/upload-profile-img/<%= user.uid %>" method="post" enctype="multipart/form-data"> 
+    <label for="profileImg">Profile Image</label>
+    <input id="profileImg" type="file" name="profileImg" accept="image/*" required> 
+    <button>Submit New Profile Image</button>
+</form>
+
 
 <form action="/admin/userProfile" method="post">
     <label for="displayName">Edit your Display Name</label>
 <input type="text" name="displayName" value="<%= user.displayName %>">
-    <label for="photoURL">Edit your image link</label>
-<input type="text" name="photoURL" value="<%= user.photoURL %>">
+    <!-- <label for="photoURL">Edit your image link</label>
+<input type="text" name="photoURL" value="<%= user.photoURL %>"> -->
 <button>Submit</button>
 </form>
 

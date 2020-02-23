@@ -98,13 +98,13 @@ app.get('/flamenco-blog/show/:id', isLoggedIn, (req, res) => {
                             blogId: doc.id,
                             blog: doc.data(),
                             user: user,
-                            commentsArr:commentsArr
+                            commentsArr: commentsArr
                         });
                     })
 
 
 
-               
+
             } else {
                 res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             }
@@ -368,13 +368,13 @@ app.post('/blog/comment/:blogId', isAuthenticated, commentNotification, (req, re
         dateCreated: new Date().toISOString(),
         dateCreatedHumanReadable: new Date().toGMTString()
     })
-    .then(() => {
-        // TODO send notification to me about a new comment
-        res.redirect('/flamenco-blog/show/' + blogId)
-    })
-    .catch(function (error) {
-        res.render('admin/error', { error: error });
-    });
+        .then(() => {
+            // TODO send notification to me about a new comment
+            res.redirect('/flamenco-blog/show/' + blogId)
+        })
+        .catch(function (error) {
+            res.render('admin/error', { error: error });
+        });
     // userDoc.get()
     // .then(doc => {
     //     const user = doc.data();
@@ -409,6 +409,52 @@ app.post('/admin/userProfile', isAuthenticated, (req, res) => {
     }).catch(function (error) {
         res.render('admin/error', { error: error });
     });
+});
+app.post('/admin/upload-profile-img/:id', isAuthenticated, upload.single('profileImg'), (req, res) => {
+    // need to get image name to pass to google bucket to delete before uploading new image
+    let docRef = db.collection('users').doc(req.params.id);
+    // multer gets new file
+    var file = req.file;
+    var fileOriginalname = Math.round(Math.random() * 10000) + file.originalname;
+    // for naming new file so theres no duplicates
+    // let randomNumber = Math.round(Math.random()*1000);
+    // make flamenco_blog directory if first time
+    if (!fs.existsSync('./uploads/users/')) {
+        fs.mkdirSync('./uploads/users/');
+    }
+    docRef.get()
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                return doc.data().profileImg;
+            }
+        })
+        .then(profileImg => {
+            // this image was uploaded from the previous image upload, get image path for deletion
+            const filesOldpath = path.join(__dirname, 'uploads', 'users', `${profileImg}`);
+            // check old image exists otherwise errors out 
+            if (fs.existsSync(filesOldpath)) {
+                // delete old image
+                fs.unlink(filesOldpath, (err) => {
+                    if (err) throw err;
+                });
+            }
+            // rename+sync so uploading renamed file name  with flamenco_blog folder added
+            fs.renameSync(path.join(__dirname, 'uploads', file.filename), path.join(__dirname, 'uploads', 'users', `${fileOriginalname}`), (err) => {
+                if (err) throw err;
+            })
+            // upload to firestore
+            docRef.update({
+                profileImg: fileOriginalname,
+                profileImgUrl: `https://brisbaneflamenco.com.au/users/${fileOriginalname}`
+            })
+                .then(() => res.redirect('/admin/userProfile'))
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+            res.render('admin/error', { error: error })
+        });
 });
 
 app.get('/getLogin', (req, res) => {
@@ -480,13 +526,14 @@ app.post('/create-new-user', (req, res) => {
         .createUserWithEmailAndPassword(signupEmail, signupPassword)
         .then(() => {
             var user = auth.currentUser;
-            // console.log(user)
             // create user
             db.collection('users').doc(user.uid).set({
                 uid: user.uid,
                 email: user.email,
                 emailVerified: false,
-                isAdmin: false
+                isAdmin: false,
+                dateCreated: new Date().toISOString(),
+                dateCreatedHumanReadable: new Date().toDateString()
             })
             // verify email 
             user.sendEmailVerification().then(function () {

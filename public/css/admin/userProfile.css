@@ -2,7 +2,10 @@
   margin: 200px auto;
   padding: 15px;
   max-width: 650px; }
+  #mainContainer img {
+    max-width: 100px; }
   #mainContainer form {
+    margin: 100px 0;
     display: flex;
     flex-direction: column; }
     #mainContainer form input, #mainContainer form button, #mainContainer form textarea {

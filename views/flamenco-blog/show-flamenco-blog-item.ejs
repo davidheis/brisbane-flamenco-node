@@ -94,7 +94,14 @@
         <button>Comment</button>
     </form>
     <% } else { %>
-    <a href="/getLogin"> Sign In To Comment </a>
+        <form action="/getLogin" method="get">
+            <!-- <label for="blogComment">Comment</label> -->
+            <textarea name="blogComment" id="blogComment" cols="30" rows="5"></textarea>
+    
+            <!-- <a href="/getLogin"> Sign In To Comment </a> -->
+            <button>Sign In To Comment</button>
+        </form>
+    
     <% } %>
 </div>
 <%- include('./../includes/footer.ejs') %>
