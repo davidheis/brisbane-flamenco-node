@@ -11,8 +11,10 @@
 
  <div id="menu">
   <a href="/admin/userProfile">userProfile</a>
+  <% if(user.isAdmin) { %>
   <a href="/admin/create-flamenco-blog-post">Create Flamenco Blog Post</a>
   <a href="/admin/list-all-flamenco-blog-posts">List All Flamenco Blog Posts</a>
+  <% } %>
   <!-- log out form -->
   <form id="logoutForm" action="/logout" method="post" style="display:<%= showLogOutBtn ? 'block' : 'none' %>">
     <button >Log out</button>

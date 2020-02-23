@@ -8,5 +8,7 @@
     #mainContainer form input, #mainContainer form button {
       padding: 10px;
       margin: 10px; }
-    #mainContainer form #logoutForm {
-      display: none; }
+    #mainContainer form #matchError {
+      visibility: hidden;
+      color: #700000;
+      text-decoration: underline; }

@@ -7,6 +7,17 @@
   #mainContainer li {
     margin: 20px 0;
     padding: 20px; }
+  #mainContainer form {
+    display: flex;
+    flex-direction: column; }
+    #mainContainer form input, #mainContainer form button, #mainContainer form textarea {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px;
+      margin: 0 0 20px 0; }
+  #mainContainer .commentDiv {
+    padding: 10px;
+    margin: 25px 0; }
 
 h1 {
   text-align: center;

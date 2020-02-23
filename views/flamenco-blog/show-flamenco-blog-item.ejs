@@ -74,5 +74,27 @@
     <!-- <p>Author <%= blog.authorDisplayName %></p> -->
     <img src="<%= blog.headerImgUrl %>" alt="">
     <%- blog.html %>
+
+    <br>
+    <h3>Comments</h3>
+
+    <% commentsArr.map(comment => {  %>
+    <div class="commentDiv">
+        <p><%= comment.message %></p>
+        <p><%= comment.authorDisplayName %></p>
+        <cite><%= comment.dateCreated %></cite>
+    </div>
+
+    <% }) %>
+    <% if(user.uid) { %>
+    <form action="/blog/comment/<%= blogId %>" method="post">
+        <!-- <label for="blogComment">Comment</label> -->
+        <textarea name="blogComment" id="blogComment" cols="30" rows="5"></textarea>
+
+        <button>Comment</button>
+    </form>
+    <% } else { %>
+    <a href="/getLogin"> Sign In To Comment </a>
+    <% } %>
 </div>
-  <%- include('./../includes/footer.ejs') %>
+<%- include('./../includes/footer.ejs') %>

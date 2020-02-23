@@ -8,9 +8,38 @@
     li{
         margin: 20px 0;
         padding: 20px;
+    }
+    // a{
+    //     display: flex;
+    //     justify-content: center;
+    //     box-sizing: border-box;
+    //     width: 100%;
+    //     text-decoration: none;
+    //     padding: 20px;
+    //     background: white;
+    //     border-radius: 5px;  
+    // }
+    // a:visited {
+    //     color: black;
+    //   }
+        form {
+        
+            display: flex;
+            flex-direction: column;
+            // align-items: center;
+            input, button,textarea{
+                box-sizing: border-box;
+                width: 100%;
+                padding: 10px;
+                margin: 0 0 20px 0;
+            }
+        }
+        .commentDiv{
+            padding: 10px;
+            margin: 25px 0;
         }
 }
 h1{
     text-align: center;
     margin-bottom: 100px;
-}
+} 

@@ -4,6 +4,7 @@ const port = 3003;
 const express = require('express');
 const bodyParser = require('body-parser');
 const contactsController = require('./controllers/contact')
+const commentNotification = require('./controllers/commentNotification').commentNotification
 const fs = require('fs');
 let rawCapodata = fs.readFileSync('database/shop.json');
 let allCapos = JSON.parse(rawCapodata);
@@ -29,6 +30,8 @@ app.use(bodyParser.json({
     type: ['json', 'application/csp-report', 'application/json']
 }))
 const isAuthenticated = require('./middleware/isAuthenticated').isAuthenticated
+const isAdmin = require('./middleware/isAdmin').isAdmin;
+const isLoggedIn = require('./middleware/isLoggedIn').isLoggedIn;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
@@ -67,64 +70,58 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
         .then((blogArr) => res.render('flamenco-blog/list-all-flamenco-blog-posts', { blogArr: blogArr }))
         .catch((err) => {
             console.log('Error getting documents', err);
+            res.render('admin/error', { error: error })
         });
 });
-app.get('/flamenco-blog/show/:id', (req, res) => {
-    // get environment url so when uploading images it works in prduction and local environment
-    // need this protocol logic too because protocol doesnt get the 's' for secure https
-    // let protocol = 'https'
-    // let host = req.get('host');
-
-    // if (host === 'localhost:3003') {
-    //     protocol = 'http';
-    // }
-    db.collection('flamenco-blog').doc(req.params.id).get()
+app.get('/flamenco-blog/show/:id', isLoggedIn, (req, res) => {
+    const user = req.user || '';
+    const flamencoBlogRef = db.collection('flamenco-blog').doc(req.params.id);
+    flamencoBlogRef.get()
         .then(doc => {
             // blog must be approved, this protects article access from directly typing the url
             if (doc.data().isApproved === 'true') {
-                res.render('flamenco-blog/show-flamenco-blog-item', {
-                    blog: doc.data()
-                });
+                // now get comments
+                flamencoBlogRef.collection('comments').orderBy('dateCreated', 'desc').get()
+                    .then((snapshot) => {
+                        let commentsArr = [];
+                        snapshot.forEach((doc) => {
+                            const comment = {
+                                dateCreated: doc.data().dateCreated,
+                                authorDisplayName: doc.data().authorDisplayName,
+                                message: doc.data().message
+                            }
+                            commentsArr.push(comment)
+                        })
+                        return commentsArr;
+                    }).then(commentsArr => {
+                        res.render('flamenco-blog/show-flamenco-blog-item', {
+                            blogId: doc.id,
+                            blog: doc.data(),
+                            user: user,
+                            commentsArr:commentsArr
+                        });
+                    })
+
+
+
+               
             } else {
                 res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             }
         })
         .catch(err => {
-            res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
+            res.render('admin/error', { error: error })
             console.log('Error getting document', err);
         });
 });
-// dont need auth middleware because page will only render if logged in
-app.post('/admin/loginto-flamenco-admin', (req, res) => {
-    const loginEmail = req.body.loginEmail;
-    const loginPassword = req.body.loginPassword;
-    firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
-        .then(function () {
-            if (firebase.auth().currentUser.emailVerified) {
-                db.collection('users').doc(user.uid).update({ 
-                    emailVerified: true
-                })
-                return res.render('admin/flamenco-admin', { showLogOutBtn: true });
-            } else {
-                firebase.auth().signOut()
-                    .then(function () {
-                        res.send('You need to verify your email.')
-                        // return res.redirect('/getLogin')
-                    })
-                    .catch(function (error) {
-                        // An error happened.
-                        console.log(error)
-                        res.send(error)
-                    });
-                
-            }
-        })
-        .catch(e => res.send(e.message));
-});
-app.get('/admin/flamenco-admin', isAuthenticated, (req, res) => {
-    res.render('admin/flamenco-admin', { showLogOutBtn: true });
+
+app.get('/admin/flamenco-admin', isAdmin, (req, res) => {
+    res.render('admin/flamenco-admin', {
+        showLogOutBtn: true,
+        user: req.user
+    });
 })
-app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
+app.get('/admin/list-all-flamenco-blog-posts', isAdmin, (req, res) => {
     // get logged in user from middleware
     const currentLoggedUserUid = req.user.uid;
     db.collection('flamenco-blog').orderBy('dateCreated', 'desc').get()
@@ -154,13 +151,14 @@ app.get('/admin/list-all-flamenco-blog-posts', isAuthenticated, (req, res) => {
         .then((blogArr) => res.render('admin/list-all-flamenco-blog-posts', { blogArr: blogArr }))
         .catch((err) => {
             console.log('Error getting documents', err);
+            res.render('admin/error', { error: error })
         });
 });
-app.get('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
+app.get('/admin/create-flamenco-blog-post', isAdmin, (req, res) => {
     res.render('admin/create-flamenco-blog-post');
 });
-app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
-    var user = firebase.auth().currentUser;
+app.post('/admin/create-flamenco-blog-post', isAdmin, (req, res) => {
+    var user = req.user;
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
     docRef.set({
         authorDisplayName: user.displayName,
@@ -178,7 +176,7 @@ app.post('/admin/create-flamenco-blog-post', isAuthenticated, (req, res) => {
             res.redirect('/admin/list-all-flamenco-blog-posts');
         })
 });
-app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+app.post('/admin/update-flamenco-blog-post/:id', isAdmin, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).delete();
     let docRef = db.collection('flamenco-blog').doc(req.body.seoFriendlyTitle);
     // console.log(req.body.dateCreated.toLocaleDateString())
@@ -201,7 +199,7 @@ app.post('/admin/update-flamenco-blog-post/:id', isAuthenticated, (req, res) => 
     })
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'))
 });
-app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAdmin, (req, res) => {
     // get call db current image name so i can pass it to post route and delete it before uploading new image
     let docRef = db.collection('flamenco-blog').doc(req.params.id);
     docRef.get()
@@ -218,13 +216,15 @@ app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, (req, res)
                 });
             } else {
                 console.log('No such document!');
+                res.render('admin/error', { error: { message: 'No such document' } })
             }
         })
         .catch(err => {
             console.log('Error getting document', err);
+            res.render('admin/error', { error: error })
         });
 });
-app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.single('headerImg'), (req, res) => {
+app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAdmin, upload.single('headerImg'), (req, res) => {
     // need to get image name to pass to google bucket to delete before uploading new image
     let docRef = db.collection('flamenco-blog').doc(req.params.id);
     // multer gets new file
@@ -270,6 +270,7 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
         })
         .catch(err => {
             console.log('Error getting document', err);
+            res.render('admin/error', { error: error })
         });
     // WHAT I NEEDED TO UPLOAD TO GOOGLE BUCKET
 
@@ -305,7 +306,7 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAuthenticated, upload.si
     // })
     // .catch(console.error);
 });
-app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+app.post('/admin/delete-flamenco-blog-post/:id', isAdmin, (req, res) => {
 
     let docRef = db.collection('flamenco-blog').doc(req.params.id)
     // get header image name associated with document to delete too
@@ -333,12 +334,12 @@ app.post('/admin/delete-flamenco-blog-post/:id', isAuthenticated, (req, res) => 
 
 
 });
-app.post('/admin/approve-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+app.post('/admin/approve-flamenco-blog-post/:id', isAdmin, (req, res) => {
     db.collection('flamenco-blog').doc(req.params.id).update({ isApproved: req.body.isApproved })
         .then(() => res.redirect('/admin/list-all-flamenco-blog-posts'));
 
 });
-app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
+app.get('/admin/edit-flamenco-blog-post/:id', isAdmin, (req, res) => {
     db.collection('flamenco-blog').get()
         .then((snapshot) => {
             snapshot.forEach((doc) => {
@@ -351,26 +352,123 @@ app.get('/admin/edit-flamenco-blog-post/:id', isAuthenticated, (req, res) => {
         })
         .catch((err) => {
             console.log('Error getting documents', err);
-            res.send(err)
+            res.render('admin/error', { error: error })
         });
 });
+app.post('/blog/comment/:blogId', isAuthenticated, commentNotification, (req, res) => {
+    var user = req.user;
+    // var userId = req.params.userId;
+    var blogId = req.params.blogId;
+    // const userDoc = db.collection('users').doc(user.uid);
+    const blogDoc = db.collection('flamenco-blog').doc(blogId);
+    blogDoc.collection('comments').add({
+        message: req.body.blogComment,
+        author: user.uid,
+        authorDisplayName: user.displayName,
+        dateCreated: new Date().toISOString(),
+        dateCreatedHumanReadable: new Date().toGMTString()
+    })
+    .then(() => {
+        // TODO send notification to me about a new comment
+        res.redirect('/flamenco-blog/show/' + blogId)
+    })
+    .catch(function (error) {
+        res.render('admin/error', { error: error });
+    });
+    // userDoc.get()
+    // .then(doc => {
+    //     const user = doc.data();
+    //     res.render('admin/userProfile', { user: user })
+    // })
+
+});
 app.get('/admin/userProfile', isAuthenticated, (req, res) => {
-    var user = firebase.auth().currentUser;
-    res.render('admin/userProfile', { user: user })
+    var user = req.user;
+    const userDoc = db.collection('users').doc(user.uid);
+    userDoc.get()
+        .then(doc => {
+            const user = doc.data();
+            res.render('admin/userProfile', { user: user })
+        })
+
 });
 app.post('/admin/userProfile', isAuthenticated, (req, res) => {
-    var user = firebase.auth().currentUser;
+    var user = req.user;
+    const userDoc = db.collection('users').doc(user.uid);
     user.updateProfile({
         displayName: req.body.displayName,
         photoURL: req.body.photoURL
     }).then(function () {
+        // update the db user
+        userDoc
+            .update({
+                displayName: req.body.displayName,
+                photoURL: req.body.photoURL
+            })
         res.redirect('/admin/userProfile')
     }).catch(function (error) {
-        res.send(error);
+        res.render('admin/error', { error: error });
     });
 });
+
+app.get('/getLogin', (req, res) => {
+    res.render('getLogin', { showLogOutBtn: false });
+});
+// dont need auth middleware because page will only render if logged in
+app.post('/admin/loginto-flamenco-admin', (req, res) => {
+    const loginEmail = req.body.loginEmail;
+    const loginPassword = req.body.loginPassword;
+    const userCollection = db.collection('users');
+    const firebaseAuth = firebase.auth();
+    firebaseAuth.signInWithEmailAndPassword(loginEmail, loginPassword)
+        .then(function () {
+            const firebaseCurrentUser = firebaseAuth.currentUser;
+            const firebaseCurrentUserUid = firebaseCurrentUser.uid;
+            const firebaseCurrentUserDoc = userCollection.doc(firebaseCurrentUserUid);
+            // 1st check if email is verified on auth side of firebase to continue
+
+            if (firebaseCurrentUser.emailVerified) {
+                firebaseCurrentUserDoc.get()
+                    .then((user) => {
+                        const userDoc = user.data();
+                        // then 2nd check if emailVerified is written in db to avoid writing everytime to db
+                        if (userDoc.emailVerified) {
+                            // console.log(req.user)
+                            return res.render('admin/flamenco-admin', {
+                                showLogOutBtn: true,
+                                user: userDoc
+                            })
+                        } else {
+                            // else means its the first time logging in so write to db that email is verified
+                            firebaseCurrentUserDoc.update({ emailVerified: true })
+                                .then(() => res.render('admin/flamenco-admin', {
+                                    showLogOutBtn: true,
+                                    user: userDoc
+                                }))
+                        }
+                    }).catch(e => res.render('admin/error', { error: error }))
+            } else {
+                firebaseAuth.signOut()
+                    .then(function () {
+                        res.render('admin/confirm-signup');
+                        // return res.redirect('/getLogin')
+                    })
+                    .catch(function (error) {
+                        // An error happened.
+                        console.log(error)
+                        res.render('admin/error', { error: error })
+                    });
+            }
+        })
+        .catch(e => {
+            // loggin in with wrong email
+            console.log(e.message)
+            res.render('admin/error', { error: error })
+
+        });
+});
 app.get('/create-new-user', (req, res) => {
-    res.render('create-new-user');
+    res.render('admin/create-new-user');
 });
 app.post('/create-new-user', (req, res) => {
     // console.log(req.body)
@@ -387,13 +485,12 @@ app.post('/create-new-user', (req, res) => {
             db.collection('users').doc(user.uid).set({
                 uid: user.uid,
                 email: user.email,
-                emailVerified: false
+                emailVerified: false,
+                isAdmin: false
             })
-
-
-            // verify email
-
+            // verify email 
             user.sendEmailVerification().then(function () {
+                // sign out and wait for user to verify email
                 firebase.auth().signOut()
                     .then(function () {
                         res.render('admin/confirm-signup')
@@ -402,22 +499,13 @@ app.post('/create-new-user', (req, res) => {
                     .catch(function (error) {
                         // An error happened.
                         console.log(error)
-                        res.send(error)
+                        res.render('admin/error', { error: error })
                     });
-                // Email sent.
-
             }).catch(function (error) {
-                res.send(error.message)
+                res.render('admin/error', { error: error })
             });
-
-
-
-
         })
-        .catch(error => res.send(error.message));
-});
-app.get('/getLogin', (req, res) => {
-    res.render('login', { showLogOutBtn: false });
+        .catch(error => res.render('admin/error', { error: error }));
 });
 app.post('/logout', isAuthenticated, (req, res) => {
     firebase.auth().signOut()
@@ -427,7 +515,7 @@ app.post('/logout', isAuthenticated, (req, res) => {
         .catch(function (error) {
             // An error happened.
             console.log(error)
-            res.send(error)
+            res.render('admin/error', { error: error })
         });
 });
 app.post('/csp', (req, res) => {
@@ -476,6 +564,7 @@ app.get('/site-map.txt', (req, res) => {
         })
         .catch((err) => {
             console.log('Error getting documents', err);
+            res.render('admin/error', { error: error })
         });
 });
 app.get('/*', (req, res) => {
@@ -496,6 +585,7 @@ app.get('/*', (req, res) => {
         .then((blogArr) => res.render('index', { blogArr: blogArr }))
         .catch((err) => {
             console.log('Error getting documents', err);
+            res.render('admin/error', { error: error })
         });
 });
 // Object.values() this gets the value of objects and puts them in an array 

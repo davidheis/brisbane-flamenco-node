@@ -8,7 +8,12 @@
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
   <a href="/admin/flamenco-admin">Admin Home</a>
-  <h1>userProfile</h1>
+  <h1>User Profile</h1>
+  <h2>UID: <%= user.uid %></h2>
+  <h2>Display Name: <%= user.displayName %></h2>
+  <h2>Email: <%= user.email %></h2>
+  <h2>Photo </h2>
+  <img src="<%= user.photoURL %>" alt="">
 
 <form action="/admin/userProfile" method="post">
     <label for="displayName">Edit your Display Name</label>
@@ -17,6 +22,8 @@
 <input type="text" name="photoURL" value="<%= user.photoURL %>">
 <button>Submit</button>
 </form>
+
+<!-- TODO implement account deletion -->
 
 </div>
 <!-- <script src="/scripts/firebase.js"></script> -->
