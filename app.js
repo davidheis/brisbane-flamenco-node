@@ -35,22 +35,23 @@ const isLoggedIn = require('./middleware/isLoggedIn').isLoggedIn;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
+app.use(isLoggedIn);
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.post('/contact', contactsController.sendContactPageEmail);
 app.get('/contact', (req, res) => {
-    res.render('contact', { captchaboolean: true });
+    res.render('contact', { captchaboolean: true,user:req.user });
 });
 app.get('/capos', (req, res) => {
-    res.render('capos', { caposArray: Object.values(allCapos) });
+    res.render('capos', { caposArray: Object.values(allCapos),user:req.user });
 });
 app.get('/returns', (req, res) => {
-    res.render('returns');
+    res.render('returns',{user:req.user});
 });
 app.get('/about', (req, res) => {
-    res.render('about');
+    res.render('about',{user:req.user});
 });
 app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
     db.collection('flamenco-blog').where('isApproved', '==', 'true').orderBy('dateCreated', 'desc').get()
@@ -67,13 +68,13 @@ app.get('/flamenco-blog/list-all-flamenco-blog-posts', (req, res) => {
             })
             return blogArr;
         })
-        .then((blogArr) => res.render('flamenco-blog/list-all-flamenco-blog-posts', { blogArr: blogArr }))
+        .then((blogArr) => res.render('flamenco-blog/list-all-flamenco-blog-posts', { blogArr: blogArr, user:req.user}))
         .catch((err) => {
             console.log('Error getting documents', err);
-            res.render('admin/error', { error: error })
+            res.render('admin/error', { error: error,user:req.user })
         });
 });
-app.get('/flamenco-blog/show/:id', isLoggedIn, (req, res) => {
+app.get('/flamenco-blog/show/:id', (req, res) => {
     const user = req.user || '';
     const flamencoBlogRef = db.collection('flamenco-blog').doc(req.params.id);
     flamencoBlogRef.get()
@@ -101,17 +102,13 @@ app.get('/flamenco-blog/show/:id', isLoggedIn, (req, res) => {
                             commentsArr: commentsArr
                         });
                     })
-
-
-
-
             } else {
                 res.redirect('/flamenco-blog/list-all-flamenco-blog-posts');
             }
         })
         .catch(err => {
-            res.render('admin/error', { error: error })
             console.log('Error getting document', err);
+            res.render('admin/error', { error: error, user:req.user })
         });
 });
 
@@ -148,14 +145,14 @@ app.get('/admin/list-all-flamenco-blog-posts', isAdmin, (req, res) => {
             });
             return blogArr
         })
-        .then((blogArr) => res.render('admin/list-all-flamenco-blog-posts', { blogArr: blogArr }))
+        .then((blogArr) => res.render('admin/list-all-flamenco-blog-posts', { blogArr: blogArr, user:req.user }))
         .catch((err) => {
             console.log('Error getting documents', err);
-            res.render('admin/error', { error: error })
+            res.render('admin/error', { error: error,user:req.user })
         });
 });
 app.get('/admin/create-flamenco-blog-post', isAdmin, (req, res) => {
-    res.render('admin/create-flamenco-blog-post');
+    res.render('admin/create-flamenco-blog-post',{user:req.user});
 });
 app.post('/admin/create-flamenco-blog-post', isAdmin, (req, res) => {
     var user = req.user;
@@ -212,16 +209,17 @@ app.get('/admin/upload-imgs-flamenco-blog-post/:id', isAdmin, (req, res) => {
                     blogId: req.params.id,
                     headerImgName: headerImgName,
                     headerImgWidth: headerImgWidth,
-                    headerImgHeight: headerImgHeight
+                    headerImgHeight: headerImgHeight,
+                    user:req.user
                 });
             } else {
                 console.log('No such document!');
-                res.render('admin/error', { error: { message: 'No such document' } })
+                res.render('admin/error', { error: { message: 'No such document' } ,user:req.user})
             }
         })
         .catch(err => {
             console.log('Error getting document', err);
-            res.render('admin/error', { error: error })
+            res.render('admin/error', { error: error, user:req.user})
         });
 });
 app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAdmin, upload.single('headerImg'), (req, res) => {
@@ -270,7 +268,7 @@ app.post('/admin/upload-imgs-flamenco-blog-post/:id', isAdmin, upload.single('he
         })
         .catch(err => {
             console.log('Error getting document', err);
-            res.render('admin/error', { error: error })
+            res.render('admin/error', { error: error,user:req.user })
         });
     // WHAT I NEEDED TO UPLOAD TO GOOGLE BUCKET
 
@@ -346,13 +344,13 @@ app.get('/admin/edit-flamenco-blog-post/:id', isAdmin, (req, res) => {
                 if (doc.id === req.params.id) {
                     let post = doc.data();
                     let id = doc.id;
-                    res.render('admin/edit-flamenco-blog-post', { id: id, post: post })
+                    res.render('admin/edit-flamenco-blog-post', { id: id, post: post,user:req.user })
                 }
             });
         })
         .catch((err) => {
             console.log('Error getting documents', err);
-            res.render('admin/error', { error: error })
+            res.render('admin/error', { error: error, user:req.user})
         });
 });
 app.post('/blog/comment/:blogId', isAuthenticated, commentNotification, (req, res) => {
@@ -373,7 +371,7 @@ app.post('/blog/comment/:blogId', isAuthenticated, commentNotification, (req, re
             res.redirect('/flamenco-blog/show/' + blogId)
         })
         .catch(function (error) {
-            res.render('admin/error', { error: error });
+            res.render('admin/error', { error: error, user:req.user});
         });
     // userDoc.get()
     // .then(doc => {
@@ -407,7 +405,7 @@ app.post('/admin/userProfile', isAuthenticated, (req, res) => {
             })
         res.redirect('/admin/userProfile')
     }).catch(function (error) {
-        res.render('admin/error', { error: error });
+        res.render('admin/error', { error: error,user:req.user });
     });
 });
 app.post('/admin/upload-profile-img/:id', isAuthenticated, upload.single('profileImg'), (req, res) => {
@@ -453,12 +451,12 @@ app.post('/admin/upload-profile-img/:id', isAuthenticated, upload.single('profil
         })
         .catch(err => {
             console.log('Error getting document', err);
-            res.render('admin/error', { error: error })
+            res.render('admin/error', { error: error,user:req.user })
         });
 });
 
 app.get('/getLogin', (req, res) => {
-    res.render('getLogin', { showLogOutBtn: false });
+    res.render('getLogin', { showLogOutBtn: false,user:req.user });
 });
 // dont need auth middleware because page will only render if logged in
 app.post('/admin/loginto-flamenco-admin', (req, res) => {
@@ -492,29 +490,29 @@ app.post('/admin/loginto-flamenco-admin', (req, res) => {
                                     user: userDoc
                                 }))
                         }
-                    }).catch(e => res.render('admin/error', { error: error }))
+                    }).catch(e => res.render('admin/error', { error: error,user:req.user }))
             } else {
                 firebaseAuth.signOut()
                     .then(function () {
-                        res.render('admin/confirm-signup');
+                        res.render('admin/confirm-signup',{user:req.user});
                         // return res.redirect('/getLogin')
                     })
                     .catch(function (error) {
                         // An error happened.
                         console.log(error)
-                        res.render('admin/error', { error: error })
+                        res.render('admin/error', { error: error,user:req.user})
                     });
             }
         })
-        .catch(e => {
+        .catch(error => {
             // loggin in with wrong email
-            console.log(e.message)
-            res.render('admin/error', { error: error })
+            console.log(error.message)
+            res.render('admin/error', { error: error,user:req.user })
 
         });
 });
 app.get('/create-new-user', (req, res) => {
-    res.render('admin/create-new-user');
+    res.render('admin/create-new-user',{user:req.user});
 });
 app.post('/create-new-user', (req, res) => {
     // console.log(req.body)
@@ -540,16 +538,16 @@ app.post('/create-new-user', (req, res) => {
                 // sign out and wait for user to verify email
                 firebase.auth().signOut()
                     .then(function () {
-                        res.render('admin/confirm-signup')
+                        res.render('admin/confirm-signup',{user:req.user})
                         // return res.redirect('/getLogin')
                     })
                     .catch(function (error) {
                         // An error happened.
                         console.log(error)
-                        res.render('admin/error', { error: error })
+                        res.render('admin/error', { error: error,user:req.user })
                     });
             }).catch(function (error) {
-                res.render('admin/error', { error: error })
+                res.render('admin/error', { error: error,user:req.user })
             });
         })
         .catch(error => res.render('admin/error', { error: error }));
@@ -562,7 +560,7 @@ app.post('/logout', isAuthenticated, (req, res) => {
         .catch(function (error) {
             // An error happened.
             console.log(error)
-            res.render('admin/error', { error: error })
+            res.render('admin/error', { error: error,user:req.user })
         });
 });
 app.post('/csp', (req, res) => {
@@ -629,7 +627,7 @@ app.get('/*', (req, res) => {
             })
             return blogArr;
         })
-        .then((blogArr) => res.render('index', { blogArr: blogArr }))
+        .then((blogArr) => res.render('index', { blogArr: blogArr,user:req.user }))
         .catch((err) => {
             console.log('Error getting documents', err);
             res.render('admin/error', { error: error })

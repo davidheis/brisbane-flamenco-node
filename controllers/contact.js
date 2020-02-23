@@ -39,7 +39,7 @@ exports.sendContactPageEmail = (req, res) => {
                 }
                 ]
                 sgMail.send(emails)
-                    .then(() => { res.redirect('/') })
+                    .then(() => { res.redirect('/'),{user:req.user} })
                     .catch(err => console.log(err))
 
 

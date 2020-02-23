@@ -13,11 +13,14 @@ exports.isAdmin = function (req, res, next) {
           const user = doc.data();
           req.user = user;
           next();
-        })
+        })  
     } else {
-      res.render('getLogin', { showLogOutBtn: false });
+      // res.render('getLogin', { showLogOutBtn: false, user : '' });
+      next();
     }
   } else {
-    res.render('getLogin', { showLogOutBtn: false });
+
+    next();
+    // res.render('getLogin', { showLogOutBtn: false, user : '' });
   }
 }
