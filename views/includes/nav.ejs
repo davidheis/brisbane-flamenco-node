@@ -10,6 +10,8 @@
         <a href="/about">About </a>
        <% if( currentUser){ %>
         <a href="/admin/flamenco-admin">Admin</a>
+       <% } else { %>
+        <a href="/getLogin">Login </a>
        <% } %>
     </div>
   </nav>
@@ -25,5 +27,7 @@
     <a href="/about">About </a>
     <% if( currentUser){ %>
       <a href="/admin/flamenco-admin">Admin</a>
-     <% } %>
+      <% } else { %>
+        <a href="/getLogin">Login </a>
+       <% } %>
   </nav>
