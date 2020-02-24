@@ -4,9 +4,8 @@
   padding: 15px; }
   #mainContainer form {
     display: flex;
-    flex-direction: column; }
+    flex-direction: column;
+    margin-bottom: 55px; }
     #mainContainer form input, #mainContainer form button {
       padding: 10px;
       margin: 10px; }
-    #mainContainer form #logoutForm {
-      display: none; }
