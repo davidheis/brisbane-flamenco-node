@@ -382,6 +382,7 @@ app.post('/blog/comment/:blogId', isAuthenticated, commentNotification, (req, re
 });
 app.get('/admin/userProfile', isAuthenticated, (req, res) => {
     var user = req.user;
+    
     const userDoc = db.collection('users').doc(user.uid);
     userDoc.get()
         .then(doc => {
@@ -394,14 +395,12 @@ app.post('/admin/userProfile', isAuthenticated, (req, res) => {
     var user = req.user;
     const userDoc = db.collection('users').doc(user.uid);
     user.updateProfile({
-        displayName: req.body.displayName,
-        photoURL: req.body.photoURL
+        displayName: req.body.displayName
     }).then(function () {
         // update the db user
         userDoc
             .update({
-                displayName: req.body.displayName,
-                photoURL: req.body.photoURL
+                displayName: req.body.displayName
             })
         res.redirect('/admin/userProfile')
     }).catch(function (error) {
@@ -456,7 +455,7 @@ app.post('/admin/upload-profile-img/:id', isAuthenticated, upload.single('profil
 });
 
 app.get('/getLogin', (req, res) => {
-    res.render('getLogin', { showLogOutBtn: false,user:req.user });
+    res.render('getLogin', { showLogOutBtn: false, user:req.user });
 });
 // dont need auth middleware because page will only render if logged in
 app.post('/admin/loginto-flamenco-admin', (req, res) => {
@@ -508,7 +507,6 @@ app.post('/admin/loginto-flamenco-admin', (req, res) => {
             // loggin in with wrong email
             console.log(error.message)
             res.render('admin/error', { error: error,user:req.user })
-
         });
 });
 app.get('/create-new-user', (req, res) => {

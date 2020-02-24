@@ -4,11 +4,19 @@
   max-width: 650px; }
   #mainContainer img {
     max-width: 100px; }
-  #mainContainer form {
+  #mainContainer #uploadImgForm {
     margin: 100px 0;
     display: flex;
     flex-direction: column; }
-    #mainContainer form input, #mainContainer form button, #mainContainer form textarea {
+    #mainContainer #uploadImgForm input, #mainContainer #uploadImgForm button, #mainContainer #uploadImgForm textarea {
       box-sizing: border-box;
-      width: 100%;
+      width: 50%;
+      padding: 10px; }
+  #mainContainer #displayNameForm {
+    margin: 100px 0;
+    display: flex;
+    flex-direction: column; }
+    #mainContainer #displayNameForm input, #mainContainer #displayNameForm button, #mainContainer #displayNameForm textarea {
+      box-sizing: border-box;
+      width: 50%;
       padding: 10px; }

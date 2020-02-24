@@ -8,7 +8,7 @@
 <%- include('./../includes/nav.ejs') %>
 <div id="mainContainer">
   <a href="/admin/flamenco-admin">Admin Home</a>
-  <h1>User Profile</h1>
+  <h1>Profile</h1>
   <!-- <h2>UID: <%= user.uid %></h2> -->
   <p>Display Name: <%= user.displayName %></p>
   <p>Email: <%= user.email %></p>
@@ -22,7 +22,7 @@
 </form>
 
 
-<form action="/admin/userProfile" method="post">
+<form id="displayNameForm" action="/admin/userProfile" method="post">
     <label for="displayName">Edit your Display Name</label>
 <input type="text" name="displayName" value="<%= user.displayName %>">
     <!-- <label for="photoURL">Edit your image link</label>
