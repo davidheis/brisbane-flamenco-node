@@ -86,9 +86,8 @@
     </div>
 
     <% }) %>
-    <% if(user.uid) { %>
-    <form action="/blog/comment/<%= blogId %>" method="post">
-        <!-- <label for="blogComment">Comment</label> -->
+    <% if(currentUser.uid) { %>
+    <form action="/blog/comment/<%= blogId %>" method="post"> 
         <textarea name="blogComment" id="blogComment" cols="30" rows="5"></textarea>
 
         <button>Comment</button>
@@ -96,7 +95,7 @@
     <% } else { %>
         <form action="/getLogin" method="get">
             <!-- <label for="blogComment">Comment</label> -->
-            <textarea name="blogComment" id="blogComment" cols="30" rows="5"></textarea>
+            <textarea id="blogComment" cols="30" rows="5" readonly></textarea>
     
             <!-- <a href="/getLogin"> Sign In To Comment </a> -->
             <button>Sign In To Comment</button>

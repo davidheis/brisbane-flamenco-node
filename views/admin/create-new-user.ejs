@@ -10,13 +10,15 @@
 <div id="mainContainer">
   <h1>Create New User</h1>
   <form id="signUpForm" action="/create-new-user" method="post">
+    <label for="displayName">User Name</label>
+    <input id="displayName" name="displayName" type="text" placeholder="User Name" required>
     <label for="signupEmail">Email</label>
     <input id="signupEmail" name="signupEmail" type="email" placeholder="Email" required>
     <p id="matchError">Passwords don't match, try again</p>
 
     <label for="signupPassword">Password</label>
 
-    <input id="signupPassword" name="signupPassword" type="password" placeholder="Password" required>
+    <input id="signupPassword" name="signupPassword" type="password" placeholder="Password" minlength="12" required>
 
     <label for="confirmPassword">Confirm Password</label>
 

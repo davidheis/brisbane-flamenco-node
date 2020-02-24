@@ -26,20 +26,20 @@
 
     <label for="authorUid">AuthorUid</label>
     <input readonly type="text" name="authorUid" value="<%= post.authorUid %>">
-    <label for="headerImgUrl">headerImgUrl</label>
+    <!-- <label for="headerImgUrl">headerImgUrl</label>
     <input readonly type="text" name="headerImgUrl" value="<%= post.headerImgUrl %>">
   
     <label for="headerImgWidth">headerImgWidth</label>
     <input readonly type="text" name="headerImgWidth" value="<%= post.headerImgWidth %>">
   
     <label for="headerImgHeight">headerImgHeight</label>
-    <input readonly type="text" name="headerImgHeight" value="<%= post.headerImgHeight %>">
+    <input readonly type="text" name="headerImgHeight" value="<%= post.headerImgHeight %>"> -->
   
   
   
     <label for="seoFriendlyTitle">SEO Friendly Title</label>
     <cite>This will be the documents id so make it unique. Dont change after a while because will affect SEO and then I'll have to make redirect 301</cite>
-    <input type="text" name="seoFriendlyTitle" value="<%= post.seoFriendlyTitle %>">
+    <input type="text" name="seoFriendlyTitle" value="<%= post.seoFriendlyTitle %>" readonly>
 
       <label for="keywords">Keywords</label>
       <textarea name="keywords" rows="2" cols="33"><%= post.keywords %></textarea>

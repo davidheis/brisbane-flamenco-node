@@ -11,7 +11,7 @@
 
  <div id="menu">
   <a href="/admin/userProfile">My Profile</a>
-  <% if(user.isAdmin) { %>
+  <% if(currentUser.isAdmin) { %>
   <a href="/admin/create-flamenco-blog-post">Create Flamenco Blog Post</a>
   <a href="/admin/list-all-flamenco-blog-posts">List All Flamenco Blog Posts</a>
   <% } %>
