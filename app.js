@@ -44,7 +44,7 @@ app.post('/contact', contactsController.sendContactPageEmail);
 app.get('/contact', (req, res) => {
     res.render('contact', { captchaboolean: true, currentUser: req.user });
 });
-app.get('/capos', (req, res) => {
+app.get('/flamenco-guitar-capos', (req, res) => {
     res.render('capos', { caposArray: Object.values(allCapos), currentUser: req.user });
 });
 app.get('/returns', (req, res) => {
