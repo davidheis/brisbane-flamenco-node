@@ -1,5 +1,4 @@
 <%- include('./includes/header.ejs') %>
-<link rel="stylesheet" href="/css/index.css">
 <title>Brisbane Flamenco - Blog - Events - Lessons</title>
 <meta name="apple-mobile-web-app-title" content="Brisbane Flamenco - Blog - Events - Lessons">
 <!--apple-mobile-web-app-capable no browser URL text field at the top of the screen or button bar at the bottom of the screen-->
@@ -28,10 +27,9 @@
 <meta name="twitter:title" content="Brisbane Flamenco - Blog - Events - Lessons">
 <meta name="twitter:description"
   content="I provide regular content about flamenco and advice to help people just getting into it. If you need a flamenco event, we'd love to assist you.">
-<!-- <meta name="twitter:image" content="/assets/ilovehoney-logo.jpg"> -->
+<meta name="twitter:image" content="/assets/ilovehoney-logo.jpg">
 <!--FOR SEO SHOULD HAVE THIS ROOT URL-->
-<link rel="canonical" href="https://brisbaneflamenco.com.au/">
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<link rel="canonical" href="https://www.brisbaneflamenco.com.au/images/android-icon-72x72.png">
 <!-- <script type="application/ld+json">
     {
       "@context": "http://schema.org/",
@@ -54,6 +52,7 @@
   }
     }
   </script> -->
+<link rel="stylesheet" href="/css/index.css">
 <%- include('./includes/nav.ejs') %>
 <div class="blurb">
   <h1>Brisbane Flamenco</h1>
@@ -61,29 +60,7 @@
   <p>
     If you need a flamenco show, we'd love to organise something to your requirements. From a small birthday celebration to a festival. It can include flamenco dance, singing, guitar and percussion. 
   </p>
-  <!-- <ul id="sitemapList">
-    <li><a href="/capos">Capo Shop </a></li>
-    <li><a href="/flamenco-blog/blog-index">Blog</a>
-      <ul>
-        <li><a href="/flamenco-blog/best-nylon-strings-for-flamenco-guitar">Best Nylon Strings For Flamenco Guitar</a></li>
-        <li><a href="/flamenco-blog/what-does-flamenco-mean">What Does Flamenco Mean?</a></li>
-        <li><a href="/flamenco-blog/flamenco-palos">Flamenco Palos With A Short Description</a></li>
-       
-        <li><a href="/flamenco-blog/spanish-guitar">The Spanish Guitar</a></li>
-        <li><a href="/flamenco-blog/paco-de-lucia-timeline">Paco De Lucia Timeline</a></li>
-      </ul>
-    </li>
-    <li><a href="/contact">Contact </a></li>
-    <li><a href="/returns">Returns Policy</a></li>
-  </ul> -->
-
-  <!-- <img src="./images/flamenco-dancer.jpg" alt="flamenco dancer">
-  <cite>Flamenco Show</cite> -->
- 
-
 </div>
-
-
 <div id="blogList">
   <h2>Latest Flamenco Blogs</h2>
   <% blogArr.slice(0, 3).map( blog => { %>
@@ -98,6 +75,4 @@
   <%  }) %> 
   <a id="seeMoreLink" href="/flamenco-blog/list-all-flamenco-blog-posts">See More Posts</a>
 </div>
-
-
 <%- include('./includes/footer.ejs') %>

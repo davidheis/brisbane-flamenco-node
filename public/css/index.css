@@ -37,14 +37,16 @@
     border-radius: 5px; }
   #blogList #seeMoreLink:hover {
     text-decoration: underline; }
-  #blogList .blogCard img {
-    max-width: 100%; }
-  #blogList .blogCard a {
-    text-decoration: none; }
-  #blogList .blogCard a:hover {
-    text-decoration: underline; }
-  #blogList .blogCard cite {
-    display: block; }
+  #blogList .blogCard {
+    margin: 60px 0; }
+    #blogList .blogCard img {
+      max-width: 100%; }
+    #blogList .blogCard a {
+      text-decoration: none; }
+    #blogList .blogCard a:hover {
+      text-decoration: underline; }
+    #blogList .blogCard cite {
+      display: block; }
 
 @media screen and (max-width: 880px) {
   .newsItems {
