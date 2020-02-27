@@ -15,12 +15,12 @@ exports.isAdmin = function (req, res, next) {
           next();
         })  
     } else {
-      res.render('getLogin', { showLogOutBtn: false, user : '' });
+      res.render('getLogin', { showLogOutBtn: false, currentUser : '' });
       // next();
     }
   } else {
 
     // next();
-    res.render('getLogin', { showLogOutBtn: false, user : '' });
+    res.render('getLogin', { showLogOutBtn: false, currentUser : '' });
   }
 }
