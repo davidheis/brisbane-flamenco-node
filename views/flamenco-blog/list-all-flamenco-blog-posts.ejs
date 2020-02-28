@@ -44,7 +44,7 @@
             
             <a href="/flamenco-blog/show/<%= blog.id %>"><h2><%= blog.data.h1Title %></h2></a>
             <cite><%= blog.data.dateCreatedHumanReadable %></cite>
-            <p><%= blog.data.html.slice(0,300).replace(/(<[^>]*(>|.)|<)/g,'') %> ...</p>
+            <p><%= blog.data.html.slice(0,300).replace(/<style(.|\n)*?style>|(<[^>]*(>|.)|<)/g,'') %> ...</p>
         </div>
         <%  }) %> 
     </div>

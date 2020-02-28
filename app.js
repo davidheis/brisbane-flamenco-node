@@ -114,15 +114,10 @@ app.get('/flamenco-blog/show/:id', (req, res) => {
 });
 
 app.get('/admin/flamenco-admin', isAdmin, (req, res) => {
-    if (req.user !== '') {
         res.render('admin/flamenco-admin', {
             showLogOutBtn: true,
             currentUser: req.user
         });
-    } else {
-        res.redirect('/getLogin');
-    }
-
 })
 app.get('/admin/list-all-flamenco-blog-posts', isAdmin, (req, res) => {
     // get logged in user from middleware

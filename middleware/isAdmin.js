@@ -15,8 +15,9 @@ exports.isAdmin = function (req, res, next) {
           next();
         })  
     } else {
-      res.render('getLogin', { showLogOutBtn: false, currentUser : '' });
-      // next();
+      // res.render('getLogin', { showLogOutBtn: false, currentUser : '' });
+      req.user = '';
+      next();
     }
   } else {
 
