@@ -4,6 +4,8 @@
   padding: 20px; }
   #mainContainer img {
     max-width: 100%; }
+  #mainContainer .adviceImg {
+    height: 200px; }
   #mainContainer li {
     margin: 20px 0;
     padding: 20px; }

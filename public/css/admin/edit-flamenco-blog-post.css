@@ -24,6 +24,8 @@
   padding: 20px; }
   #mainContainerHtmlRenderedView img {
     max-width: 100%; }
+  #mainContainerHtmlRenderedView .adviceImg {
+    height: 200px; }
   #mainContainerHtmlRenderedView li {
     margin: 20px 0;
     padding: 20px; }
