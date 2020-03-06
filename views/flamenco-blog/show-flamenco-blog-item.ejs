@@ -76,7 +76,7 @@
     <%- blog.html %>
 
     <br>
-    <h3>Comments</h3>
+    <!-- <h3>Comments</h3>
 
     <% commentsArr.map(comment => {  %>
     <div class="commentDiv">
@@ -93,14 +93,12 @@
         <button>Comment</button>
     </form>
     <% } else { %>
-        <form action="/getLogin" method="get">
-            <!-- <label for="blogComment">Comment</label> -->
+        <form action="/getLogin" method="get"> 
             <textarea id="blogComment" cols="30" rows="5" readonly></textarea>
-    
-            <!-- <a href="/getLogin"> Sign In To Comment </a> -->
+     
             <button>Sign In To Comment</button>
         </form>
     
-    <% } %>
+    <% } %> -->
 </div>
 <%- include('./../includes/footer.ejs') %>
