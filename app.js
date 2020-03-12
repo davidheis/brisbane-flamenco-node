@@ -355,32 +355,32 @@ app.get('/admin/edit-flamenco-blog-post/:id', isAdmin, (req, res) => {
             res.render('admin/error', { error: error, currentUser: req.user })
         });
 });
-app.post('/blog/comment/:blogId', isAuthenticated, commentNotification, (req, res) => {
-    var user = req.user;
-    // var userId = req.params.userId;
-    var blogId = req.params.blogId;
-    // const userDoc = db.collection('users').doc(user.uid);
-    const blogDoc = db.collection('flamenco-blog').doc(blogId);
-    blogDoc.collection('comments').add({
-        message: req.body.blogComment,
-        authorUid: user.uid,
-        authorDisplayName: user.displayName,
-        dateCreated: new Date().toISOString(),
-        dateCreatedHumanReadable: new Date().toGMTString()
-    })
-        .then(() => {
-            res.redirect('/flamenco-blog/show/' + blogId)
-        })
-        .catch(function (error) {
-            res.render('admin/error', { error: error, currentUser: req.user });
-        });
-    // userDoc.get()
-    // .then(doc => {
-    //     const user = doc.data();
-    //     res.render('admin/userProfile', { currentUser: user })
-    // })
+// app.post('/blog/comment/:blogId', isAuthenticated, commentNotification, (req, res) => {
+//     var user = req.user;
+//     // var userId = req.params.userId;
+//     var blogId = req.params.blogId;
+//     // const userDoc = db.collection('users').doc(user.uid);
+//     const blogDoc = db.collection('flamenco-blog').doc(blogId);
+//     blogDoc.collection('comments').add({
+//         message: req.body.blogComment,
+//         authorUid: user.uid,
+//         authorDisplayName: user.displayName,
+//         dateCreated: new Date().toISOString(),
+//         dateCreatedHumanReadable: new Date().toGMTString()
+//     })
+//         .then(() => {
+//             res.redirect('/flamenco-blog/show/' + blogId)
+//         })
+//         .catch(function (error) {
+//             res.render('admin/error', { error: error, currentUser: req.user });
+//         });
+//     // userDoc.get()
+//     // .then(doc => {
+//     //     const user = doc.data();
+//     //     res.render('admin/userProfile', { currentUser: user })
+//     // })
 
-});
+// });
 app.get('/admin/userProfile', isAuthenticated, (req, res) => {
     var user = req.user;
 
